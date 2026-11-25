@@ -1,0 +1,4689 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1,viewport-fit=cover">
+
+<style>
+
+:root {
+  color-scheme:dark;
+  --bg:#11131c;
+  --card:#1c202d;
+  --line:#303647;
+  --text:#f3f4fa;
+  --muted:#969eb3;
+  --green:#65d6a5;
+  --red:#f08090;
+  --blue:#8faaff;
+  --gold:#f2c879;
+}
+
+* {
+  box-sizing:border-box;
+}
+
+body {
+  margin:0;
+  padding:
+    calc(18px + env(safe-area-inset-top))
+    14px
+    calc(110px + env(safe-area-inset-bottom));
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,
+    BlinkMacSystemFont,sans-serif;
+  font-size:14px;
+}
+
+h1,h2,h3,p {
+  margin:0;
+}
+
+h1 {
+  font-size:24px;
+}
+
+h2 {
+  font-size:17px;
+  margin-bottom:10px;
+}
+
+h3 {
+  font-size:15px;
+}
+
+p {
+  line-height:1.6;
+}
+
+header {
+  margin-bottom:18px;
+}
+
+.subtitle {
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--muted);
+  margin-top:5px;
+}
+
+.badge {
+  background:#30384f;
+  color:var(--blue);
+  border-radius:10px;
+  padding:9px;
+  font-size:12px;
+  white-space:nowrap;
+}
+
+.card {
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:14px;
+  margin-bottom:12px;
+}
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.stat {
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px 4px;
+  text-align:center;
+}
+
+.stat strong {
+  display:block;
+  font-size:28px;
+  margin-bottom:5px;
+}
+
+small,.muted {
+  color:var(--muted);
+}
+
+small,.small {
+  font-size:12px;
+}
+
+.green {
+  color:var(--green);
+}
+
+.red {
+  color:var(--red);
+}
+
+.blue {
+  color:var(--blue);
+}
+
+.gold {
+  color:var(--gold);
+}
+
+.row {
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.between {
+  justify-content:space-between;
+}
+
+.grow {
+  flex:1;
+  min-width:0;
+}
+
+.toolbar {
+  margin-bottom:12px;
+}
+
+button,input,textarea,select {
+  font:inherit;
+  color:var(--text);
+}
+
+button {
+  border:0;
+  background:#30374b;
+  border-radius:10px;
+  padding:12px;
+  font-weight:600;
+  touch-action:manipulation;
+  cursor:pointer;
+}
+
+button:active {
+  opacity:.65;
+}
+
+.primary {
+  background:#5269b8;
+  color:white;
+}
+
+.success {
+  background:#21483e;
+  color:var(--green);
+}
+
+.danger {
+  background:#492a37;
+  color:var(--red);
+}
+
+.mini {
+  font-size:12px;
+  padding:9px 10px;
+  white-space:nowrap;
+}
+
+.full {
+  width:100%;
+  margin-top:9px;
+}
+
+input,select,textarea {
+  background:#141722;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px;
+  width:100%;
+  margin:6px 0 12px;
+  font-size:16px;
+}
+
+textarea {
+  min-height:80px;
+}
+
+label {
+  color:var(--muted);
+  font-size:13px;
+}
+
+.check {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 0;
+}
+
+.check input {
+  width:22px;
+  height:22px;
+  margin:0;
+}
+
+.count {
+  width:75px;
+  margin:0;
+}
+
+.item {
+  border-bottom:1px solid var(--line);
+  padding:12px 0;
+}
+
+.item:last-child {
+  border-bottom:0;
+}
+
+.avatar {
+  width:39px;
+  height:39px;
+  border-radius:11px;
+  background:#30374b;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:21px;
+  flex-shrink:0;
+}
+
+.dead .avatar,
+.dead .playerName {
+  opacity:.45;
+}
+
+.dead .playerName {
+  text-decoration:line-through;
+}
+
+.speech {
+  background:#141722;
+  border-left:3px solid var(--blue);
+  border-radius:8px;
+  padding:14px;
+  margin:12px 0;
+  line-height:1.7;
+}
+
+.progress {
+  height:6px;
+  border-radius:8px;
+  background:#303647;
+  overflow:hidden;
+  margin:10px 0;
+}
+
+.progress div {
+  height:100%;
+  background:var(--green);
+}
+
+.timer {
+  font-size:48px;
+  text-align:center;
+  font-weight:750;
+  font-variant-numeric:tabular-nums;
+  padding:16px;
+}
+
+.voteNumber {
+  min-width:28px;
+  text-align:center;
+  font-size:20px;
+}
+
+nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  display:flex;
+  background:#191d29;
+  border-top:1px solid var(--line);
+  padding:8px 5px
+    calc(10px + env(safe-area-inset-bottom));
+  z-index:10;
+}
+
+nav button {
+  flex:1;
+  padding:5px 0;
+  background:transparent;
+  color:var(--muted);
+  font-size:10px;
+}
+
+nav button.active {
+  color:var(--blue);
+}
+
+nav span {
+  display:block;
+  font-size:22px;
+  margin-bottom:4px;
+}
+
+.overlay {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+
+.modal {
+  width:100%;
+  max-width:480px;
+  max-height:75vh;
+  overflow:auto;
+  background:#222736;
+  border:1px solid #41495d;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 15px 50px #0008;
+}
+
+.modalButtons {
+  margin-top:15px;
+}
+
+.modalButtons button {
+  min-height:44px;
+}
+
+.notice {
+  color:var(--gold);
+  font-size:12px;
+  line-height:1.6;
+  margin:10px 0;
+}
+
+.notice.red {
+  color:var(--red);
+}
+
+.empty {
+  color:var(--muted);
+  text-align:center;
+  padding:25px 5px;
+}
+
+
+.clearArea {
+  border-top:1px solid var(--line);
+  margin-top:16px;
+  padding-top:14px;
+}
+
+.clearButton {
+  width:100%;
+  background:transparent;
+  border:1px solid #70404b;
+  color:#f08090;
+  border-radius:10px;
+  padding:12px;
+  font-size:13px;
+  font-weight:500;
+}
+
+.clearButton:active {
+  background:#492a37;
+}
+
+
+.clearRoleButton {
+  width:100%;
+  background:transparent;
+  border:1px solid #5269b8;
+  color:#8faaff;
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:10px;
+  font-size:13px;
+  font-weight:500;
+}
+
+.clearRoleButton:active {
+  background:#30384f;
+}
+
+</style>
+
+    <title>WerewolfMaster V2.0</title>
+
+    <meta name="theme-color"
+      content="#11131c">
+
+    <meta name="apple-mobile-web-app-capable"
+      content="yes">
+
+    <meta name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent">
+
+    <meta name="apple-mobile-web-app-title"
+      content="Werewolf">
+
+    <link rel="manifest"
+      href="./manifest.json">
+
+    <link rel="apple-touch-icon"
+      href="./icon.png">
+
+    </head>
+    
+
+<body>
+
+<div id="app"></div>
+<div id="modal"></div>
+
+<script>
+    const roles =
+      [{"id":"wolf","name":"หมาป่า","icon":"🐺","team":"wolf","order":20,"action":"kill","speech":"หมาป่าลืมตา เลือกเหยื่อหนึ่งคน"},{"id":"guard","name":"ผู้พิทักษ์","icon":"🛡️","team":"village","order":10,"action":"protect","speech":"ผู้พิทักษ์ลืมตา เลือกคนที่ต้องการปกป้อง"},{"id":"seer","name":"ผู้หยั่งรู้","icon":"🔮","team":"village","order":30,"action":"inspect","speech":"ผู้หยั่งรู้ลืมตา เลือกคนที่ต้องการตรวจสอบ"},{"id":"witch","name":"แม่มด","icon":"🧪","team":"village","order":40,"action":"witch","speech":"แม่มดลืมตา เลือกใช้ยารักษาหรือยาพิษ"},{"id":"hunter","name":"นายพราน","icon":"🏹","team":"village","order":0,"action":"none","speech":"นายพรานเลือกผู้เล่นที่จะยิง"},{"id":"villager","name":"ชาวบ้าน","icon":"👨‍🌾","team":"village","order":0,"action":"none","speech":""},{"id":"cupid","name":"กามเทพ","icon":"💘","team":"village","order":1,"action":"custom","firstOnly":true,"speech":"กามเทพลืมตา เลือกคู่รักสองคน"},{"id":"littleGirl","name":"เด็กหญิง","icon":"👧","team":"village","order":0,"action":"none","speech":""},{"id":"jester","name":"ตัวตลก","icon":"🤡","team":"neutral","order":0,"action":"none","speech":""},{"id":"minion","name":"สมุนรับใช้","icon":"🕴️","team":"wolf","order":2,"firstOnly":true,"action":"revealWolves","speech":"สมุนรับใช้ลืมตา ผู้ดำเนินเกมชี้ให้เห็นมนุษย์หมาป่า","description":"รู้ว่าใครเป็นหมาป่า แต่ไม่ตื่นร่วมกับหมาป่า","balance":-6},{"id":"wolfCub","name":"ลูกมนุษย์หมาป่า","icon":"🐺","team":"wolf","order":0,"action":"none","speech":"","description":"เมื่อตาย หมาป่ากำจัดผู้เล่นได้สองคนในคืนถัดไป","balance":-8},{"id":"spellcaster","name":"จอมเวท","icon":"🤫","team":"village","order":50,"action":"silence","speech":"จอมเวทลืมตา เลือกผู้เล่นที่ห้ามพูดในวันถัดไป","description":"เลือกผู้เล่นหนึ่งคนให้ห้ามพูดในวันถัดไป","balance":1},{"id":"cursed","name":"ผู้ต้องคำสาป","icon":"🌘","team":"village","order":0,"action":"none","speech":"","description":"เมื่อถูกหมาป่ากำจัด จะกลายเป็นหมาป่าแทน","balance":-3},{"id":"revealer","name":"ผู้เผยตัวตน","icon":"⚔️","team":"village","order":60,"action":"reveal","speech":"ผู้เผยตัวตนลืมตา เลือกผู้เล่นหนึ่งคน","description":"ถ้าเลือกหมาป่า เป้าหมายจะตาย หากไม่ใช่จะตายเอง","balance":4},{"id":"doppelganger","name":"ภูตจำแลง","icon":"🎭","team":"village","order":3,"firstOnly":true,"action":"copy","speech":"ภูตจำแลงลืมตา เลือกผู้เล่นที่จะสวมรอย","description":"เมื่อผู้เล่นที่เลือกตาย จะได้รับบทบาทนั้น","balance":-2},{"id":"toughGuy","name":"หนุ่มถึก","icon":"💪","team":"village","order":0,"action":"none","speech":"","description":"เมื่อถูกหมาป่ากำจัด จะรอดชีวิตจนถึงคืนถัดไป"},{"id":"diseased","name":"ผู้ป่วยติดเชื้อ","icon":"🦠","team":"village","order":0,"action":"none","speech":"","description":"เมื่อถูกหมาป่ากำจัด หมาป่าจะโจมตีไม่ได้ในคืนถัดไป"},{"id":"prince","name":"เจ้าชาย","icon":"🤴","team":"village","order":0,"action":"none","speech":"","description":"รอดจากการโหวตครั้งแรก โดยเปิดเผยบทบาท"}];
+
+    function fresh() {
+  return {
+    version:1.3,
+    players:[],
+    roles:JSON.parse(JSON.stringify(roles)),
+    phase:"setup",
+    night:0,
+    step:0,
+    queue:[],
+    actions:{},
+    potions:{heal:true,poison:true},
+    votes:{},
+    history:[],
+    deaths:[],
+    undo:[],
+    timerEnd:0,
+    voted:false,
+    result:""
+  };
+}
+
+    function dashboard(initial) {
+
+  let S = initial;
+
+    S.roles.forEach(r => {
+      if (
+        r.id === "revealer" ||
+        r.name.includes("ผู้เผยตัวตน")
+      ) {
+        r.order = 0;
+        r.firstOnly = false;
+        r.action = "none";
+        r.speech =
+          "ใช้พลังกลางวันได้ครั้งเดียวตลอดเกม";
+      }
+    });
+  let tab = "home";
+  let modalAction = null;
+  let pending = null;
+  let wake = null;
+  let status = "บันทึกแล้ว";
+
+  const $ = id => document.getElementById(id);
+
+  const uid = () =>
+    Date.now().toString(36) +
+    Math.random().toString(36).slice(2,9);
+
+  const esc = v => String(v ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#39;");
+
+  const role = id =>
+    S.roles.find(r=>r.id===id) ||
+    {
+      id:"",
+      name:"ยังไม่กำหนด",
+      icon:"❔",
+      team:"none",
+      action:"none"
+    };
+
+  const player = id =>
+    S.players.find(p=>p.id===id);
+
+  const alive = () =>
+    S.players.filter(p=>p.alive);
+
+  const nameOf = id =>
+    player(id)?.name || "ไม่มี";
+
+  const teamName = t => ({
+    wolf:"หมาป่า",
+    village:"ชาวบ้าน",
+    neutral:"อิสระ"
+  }[t] || "ไม่กำหนด");
+
+  function snapshot() {
+    const copy = JSON.parse(JSON.stringify(S));
+    delete copy.undo;
+
+    S.undo = S.undo || [];
+    S.undo.push(copy);
+
+    if(S.undo.length>40) S.undo.shift();
+  }
+
+  function log(text) {
+    S.history.unshift({
+      id:uid(),
+      night:S.night,
+      phase:S.phase,
+      time:new Date().toLocaleTimeString("th-TH"),
+      text:text
+    });
+  }
+
+  // =========================
+  // AUTO SAVE
+  // =========================
+
+  
+    function commit() {
+      try {
+        localStorage.setItem(
+          "WerewolfMasterV2",
+          JSON.stringify(S)
+        );
+        status = "บันทึกแล้ว";
+      } catch(e) {
+        status = "บันทึกไม่สำเร็จ";
+      }
+
+      render();
+      window.saveStatus(
+        status === "บันทึกแล้ว"
+      );
+    }
+
+    window.waitForSave = function(cb) {
+    if(pending !== null) {
+      const data = pending;
+      pending = null;
+      cb(data);
+    } else {
+      wake = cb;
+    }
+  };
+
+  window.getGame = () => JSON.stringify(S);
+
+  window.saveStatus = function(ok) {
+    status = ok ? "บันทึกแล้ว" : "บันทึกไม่สำเร็จ";
+
+    const el = $("saveStatus");
+
+    if(el) {
+      el.textContent = "● "+status;
+      el.style.color = ok
+        ? "#65d6a5"
+        : "#f08090";
+    }
+  };
+
+  // =========================
+  // UI HELPERS
+  // =========================
+
+  function btn(text,action,cls="") {
+    return `<button class="${cls}"
+      onclick="${esc(action)}">
+      ${esc(text)}
+    </button>`;
+  }
+
+  function call(fn,...args) {
+    return fn+"("+
+      args.map(a=>JSON.stringify(a)).join(",")+
+      ")";
+  }
+
+  function card(content) {
+    return `<section class="card">
+      ${content}
+    </section>`;
+  }
+
+  // =========================
+  // CUSTOM DIALOG
+  // ไม่ใช้ alert / confirm
+  // =========================
+
+  function showModal(
+    title,body,action=null,
+    buttonText="บันทึก"
+  ) {
+    modalAction = action;
+
+    $("modal").innerHTML = `
+      <div class="overlay">
+        <div class="modal">
+          <div class="row between">
+            <h2>${esc(title)}</h2>
+            ${btn("✕","closeModal()","mini")}
+          </div>
+
+          ${body}
+
+          ${action?`
+            <div class="row modalButtons">
+              ${btn("ยกเลิก",
+                "closeModal()","grow")}
+              ${btn(buttonText,
+                "submitModal()","primary grow")}
+            </div>
+          `:""}
+        </div>
+      </div>`;
+  }
+
+  function closeModal() {
+    $("modal").innerHTML = "";
+    modalAction = null;
+  }
+
+  function submitModal() {
+    const action = modalAction;
+    if(action) action();
+  }
+
+  function notice(message,title="แจ้งเตือน") {
+    showModal(
+      title,
+      `<div class="speech">
+        ${esc(message)}
+      </div>
+      ${btn("ตกลง",
+        "closeModal()","primary full")}`
+    );
+  }
+
+  // แจ้งข้อผิดพลาดโดยไม่ปิดฟอร์ม
+  function formError(message) {
+    let el = $("formError");
+
+    if(!el) {
+      el = document.createElement("div");
+      el.id = "formError";
+      el.className = "notice red";
+
+      const box = document.querySelector(".modal");
+
+      if(box) {
+        box.appendChild(el);
+      } else {
+        notice(message);
+        return;
+      }
+    }
+
+    el.textContent = message;
+    el.scrollIntoView({block:"nearest"});
+  }
+
+  function ask(message,action) {
+    showModal(
+      "ยืนยันการทำงาน",
+      `<div class="speech">
+        ${esc(message)}
+      </div>`,
+      ()=>{
+        closeModal();
+        action();
+      },
+      "ยืนยัน"
+    );
+  }
+
+  // =========================
+  // UNDO
+  // =========================
+
+  function undo() {
+    if(!S.undo?.length) {
+      return notice("ไม่มีรายการให้ย้อนกลับ");
+    }
+
+    ask("ย้อนกลับรายการล่าสุด?",()=>{
+      const stack = S.undo;
+      S = stack.pop();
+      S.undo = stack;
+      tab = "home";
+      commit();
+    });
+  }
+
+  function roleOptions(selected="") {
+    return `<option value="">
+      ยังไม่กำหนด
+    </option>`+
+    S.roles.map(r=>`
+      <option value="${esc(r.id)}"
+        ${r.id===selected?"selected":""}>
+        ${esc(r.icon+" "+r.name)}
+      </option>
+    `).join("");
+  }
+
+  function targets(
+    selected="",
+    filter=()=>true
+  ) {
+    return `<option value="">
+      ไม่เลือก / ข้าม
+    </option>`+
+    alive().filter(filter).map(p=>`
+      <option value="${esc(p.id)}"
+        ${p.id===selected?"selected":""}>
+        ${esc(p.name)}
+      </option>
+    `).join("");
+  }
+
+  // =========================
+  // PLAYERS
+  // =========================
+
+  function editPlayer(id="") {
+    const p = player(id);
+
+    if(!p && S.phase!=="setup") {
+      return notice("เพิ่มผู้เล่นก่อนเริ่มเกม");
+    }
+
+    showModal(
+      p?"แก้ไขผู้เล่น":"เพิ่มผู้เล่น",
+      `
+      <label>ชื่อผู้เล่น</label>
+      <input id="pname"
+        value="${esc(p?.name||"")}"
+        placeholder="ชื่อเพื่อน">
+
+      <label>บทบาท</label>
+      <select id="prole">
+        ${roleOptions(p?.roleId||"")}
+      </select>
+      `,
+      ()=>{
+        const name = $("pname").value.trim();
+        const rid = $("prole").value;
+
+        if(!name) {
+          return formError("กรุณากรอกชื่อ");
+        }
+
+        if(S.players.some(x=>
+          x.name===name && x.id!==id
+        )) {
+          return formError("ชื่อนี้มีอยู่แล้ว");
+        }
+
+        if(S.phase!=="setup" && !rid) {
+          return formError("กรุณากำหนดบทบาท");
+        }
+
+        snapshot();
+
+        if(p) {
+          p.name = name;
+          p.roleId = rid;
+        } else {
+          S.players.push({
+            id:uid(),
+            name:name,
+            roleId:rid,
+            alive:true
+          });
+        }
+
+        closeModal();
+        commit();
+      }
+    );
+  }
+
+  function quickAdd() {
+    if(S.phase!=="setup") {
+      return notice("กรุณาเริ่มเกมใหม่ก่อน");
+    }
+
+    showModal(
+      "เพิ่มผู้เล่นหลายคน",
+      `
+      <label>หนึ่งชื่อต่อหนึ่งบรรทัด</label>
+      <textarea id="names"
+        placeholder="ส้ม&#10;บอย&#10;เอ">
+      </textarea>
+      `,
+      ()=>{
+        const names = $("names").value
+          .split(/\n|,/)
+          .map(x=>x.trim())
+          .filter(Boolean);
+
+        if(!names.length) {
+          return formError("กรุณากรอกชื่อ");
+        }
+
+        snapshot();
+
+        names.forEach(name=>{
+          if(!S.players.some(p=>p.name===name)) {
+            S.players.push({
+              id:uid(),
+              name:name,
+              roleId:"",
+              alive:true
+            });
+          }
+        });
+
+        closeModal();
+        commit();
+      }
+    );
+  }
+
+  function deletePlayer(id) {
+    if(S.phase==="night" ||
+       S.phase==="day") {
+      return notice(
+        "ระหว่างเกมให้ใช้ปุ่มตายแทนการลบ"
+      );
+    }
+
+    ask("ต้องการลบ "+nameOf(id)+"?",()=>{
+      snapshot();
+
+      S.players = S.players.filter(
+        p=>p.id!==id
+      );
+
+      delete S.votes[id];
+
+      commit();
+    });
+  }
+
+  
+  function isWolf(p) {
+    return !!p && (
+      p.roleId==="wolf" ||
+      p.roleId==="wolfCub"
+    );
+  }
+
+  function clearPlayers() {
+    ask(
+      "ล้างผู้เล่นทั้งหมดและเริ่มตั้งค่าเกมใหม่? ตัวละครเดิมจะยังอยู่",
+      ()=>{
+        snapshot();
+
+        S.players = [];
+        delete S.registration;
+        S.specialNotices = [];
+        S.wolfBlockedNight = 0;
+        S.lovers = [];
+        S.loveNotices = [];
+        S.copyNotices = [];
+        S.cursedNotices = [];
+        S.phase = "setup";
+        S.night = 0;
+      S.hunterPending = [];
+      S.revealerUsed = false;
+        S.step = 0;
+        S.queue = [];
+        S.actions = {};
+        S.votes = {};
+        S.history = [];
+        S.deaths = [];
+        S.result = "";
+        S.timerEnd = 0;
+        S.voted = false;
+        S.cubPending = false;
+        S.doubleAttack = false;
+        S.silenced = "";
+        S.potions = {
+          heal:true,
+          poison:true
+        };
+
+        tab = "players";
+        commit();
+      }
+    );
+  }
+
+  
+
+  function killPlayer(p,reason) {
+
+    if(
+      p &&
+      p.alive &&
+      p.roleId==="prince" &&
+      reason==="ถูกโหวต" &&
+      !p.princeRevealed
+    ) {
+
+      p.princeRevealed = true;
+
+      specialAlert(
+        "🤴 เจ้าชายเปิดเผยตัวตน",
+        p.name+
+        " ถูกโหวต แต่รอดชีวิต "+
+        "กรุณาให้ผู้เล่นเปิดเผยการ์ดเจ้าชาย"
+      );
+
+      return "";
+    }
+
+
+    const wasAlive =
+      Boolean(p && p.alive);
+
+    const result =
+      killPlayerBeforeCupid(p,reason);
+
+    let extra = "";
+
+    if (
+      wasAlive &&
+      p &&
+      !p.alive
+    ) {
+
+      extra = loverDeath(p);
+
+    }
+
+    return [result,extra]
+      .filter(Boolean)
+      .join(" / ");
+  }
+
+  function killPlayerBeforeCupid(p,reason) {
+
+    const wasAlive = Boolean(
+      p && p.alive
+    );
+
+    const result = originalKillPlayer(
+      p,reason
+    );
+
+    if (
+      wasAlive &&
+      p &&
+      !p.alive &&
+      isHunter(p)
+    ) {
+
+      if (
+        !hunterQueue().includes(p.id)
+      ) {
+
+        hunterQueue().push(p.id);
+
+        log(
+          "🏹 "+p.name+
+          " รอเลือกเป้าหมาย"
+        );
+      }
+
+      scheduleHunter();
+
+      return "";
+    }
+
+    return result;
+  }
+
+  function originalKillPlayer(p,reason) {
+    if(!p || !p.alive) return "";
+
+    
+    p.alive = false;
+
+    if(p.roleId==="wolfCub") {
+      S.cubPending = true;
+      log("คืนถัดไปหมาป่ากำจัดได้ 2 คน");
+    }
+
+    transformDoppelganger(p);
+    
+    delete S.votes[p.id];
+
+    log(p.name+" เสียชีวิต: "+reason);
+
+    if(p.roleId==="hunter") {
+      log("นายพรานรอใช้ความสามารถ");
+      return "🏹 "+p.name+
+        " เป็นนายพราน กรุณาจัดการการยิง";
+    }
+
+    if(p.roleId==="jester" &&
+       reason==="ถูกโหวต") {
+      return "🤡 ตัวตลกถูกโหวต กรุณาตรวจสอบเงื่อนไขชนะ";
+    }
+
+    return "";
+  }
+
+  function changeLife(id) {
+    const p = player(id);
+
+    if(!p) return;
+
+    ask(
+      (p.alive?"กำจัด ":"ชุบชีวิต ")+
+      p.name+"?",
+      ()=>{
+        snapshot();
+
+        let message = "";
+
+        if(p.alive) {
+          message = killPlayer(
+            p,"ผู้ดำเนินเกมกำหนด"
+          );
+        } else {
+          p.alive = true;
+          log(p.name+" กลับมามีชีวิต");
+        }
+
+        commit();
+
+        if(message) notice(message);
+      }
+    );
+  }
+
+  function shuffleRoles() {
+    if(S.phase!=="setup") {
+      return notice("สุ่มได้ก่อนเริ่มเกม");
+    }
+
+    const n = S.players.length;
+
+    if(!n) return notice("เพิ่มผู้เล่นก่อน");
+
+    const counts = {};
+
+    
+      S.players.forEach(p=>{
+        p.originalRoleId = p.roleId;
+    
+      counts[p.roleId] =
+        (counts[p.roleId]||0)+1;
+    });
+
+    showModal(
+      "สุ่มบทบาท",
+      `
+      <p class="muted">
+        ผู้เล่นทั้งหมด ${n} คน
+      </p>
+
+      ${S.roles.map(r=>`
+        <div class="item row between">
+          <span>${esc(r.icon+" "+r.name)}</span>
+          <input type="number"
+            class="count"
+            min="0" max="${n}"
+            id="count_${esc(r.id)}"
+            value="${counts[r.id]||0}">
+        </div>
+      `).join("")}
+
+      <p class="notice">
+        จำนวนที่เหลือจะเติมชาวบ้านให้อัตโนมัติ
+      </p>
+      `,
+      ()=>{
+        const deck = [];
+
+        for(const r of S.roles) {
+          const count = Number(
+            $("count_"+r.id).value
+          );
+
+          if(!Number.isInteger(count) ||
+             count<0 || count>n) {
+            return formError(
+              "จำนวนบทบาทไม่ถูกต้อง"
+            );
+          }
+
+          for(let i=0;i<count;i++) {
+            deck.push(r.id);
+          }
+        }
+
+        if(deck.length>n) {
+          return formError(
+            "ตัวละครมากกว่าผู้เล่น"
+          );
+        }
+
+        while(deck.length<n) {
+          deck.push("villager");
+        }
+
+        for(let i=deck.length-1;i>0;i--) {
+          const j = Math.floor(
+            Math.random()*(i+1)
+          );
+
+          [deck[i],deck[j]] =
+            [deck[j],deck[i]];
+        }
+
+        snapshot();
+
+        S.players.forEach((p,i)=>{
+          p.roleId = deck[i];
+          p.alive = true;
+        });
+
+        log("สุ่มบทบาทเรียบร้อย");
+        closeModal();
+        commit();
+      },
+      "สุ่มบทบาท"
+    );
+  }
+
+  // =========================
+  // ROLES
+  // =========================
+
+  function editRole(id="") {
+
+    if(S.phase==="night" ||
+       S.phase==="day") {
+      return notice(
+        "แก้ไขตัวละครได้ก่อนเริ่มเกมหรือหลังจบเกม"
+      );
+    }
+
+    const r = S.roles.find(x=>x.id===id);
+
+    showModal(
+      r?"แก้ไขตัวละคร":"เพิ่มตัวละคร",
+      `
+      <label>ชื่อบทบาท</label>
+      <input id="rname"
+        value="${esc(r?.name||"")}">
+
+      <label>ไอคอน Emoji</label>
+      <input id="ricon"
+        value="${esc(r?.icon||"🎭")}">
+
+      <label>ฝ่าย</label>
+      <select id="rteam">
+        ${["village","wolf","neutral"].map(t=>`
+          <option value="${t}"
+            ${r?.team===t?"selected":""}>
+            ${teamName(t)}
+          </option>
+        `).join("")}
+      </select>
+
+      <label>ลำดับการตื่น (0 = ไม่ตื่น)</label>
+      <input type="number"
+        id="rorder" min="0"
+        value="${r?.order||0}">
+
+      <label class="check">
+        <input type="checkbox"
+          id="firstOnly"
+          ${r?.firstOnly?"checked":""}>
+        ตื่นเฉพาะคืนแรก
+      </label>
+
+      <label>บทพูดผู้ดำเนินเกม</label>
+      <textarea id="rspeech">${esc(
+        r?.speech||""
+      )}</textarea>
+
+      <p class="notice">
+        ตัวละครใหม่ใช้การบันทึกผลแบบ Manual
+      </p>
+      `,
+      ()=>{
+        const name = $("rname").value.trim();
+        const order = Number($("rorder").value);
+
+        if(!name ||
+           !Number.isInteger(order) ||
+           order<0) {
+          return formError(
+            "กรุณากรอกข้อมูลให้ถูกต้อง"
+          );
+        }
+
+        snapshot();
+
+        const data = {
+          name:name,
+          icon:$("ricon").value||"🎭",
+          team:$("rteam").value,
+          order:order,
+          firstOnly:$("firstOnly").checked,
+          speech:$("rspeech").value,
+          action:r?.action||"custom"
+        };
+
+        if(r) {
+          Object.assign(r,data);
+        } else {
+          S.roles.push({
+            id:uid(),
+            ...data
+          });
+        }
+
+        closeModal();
+        commit();
+      }
+    );
+  }
+
+  function deleteRole(id) {
+    if(S.phase==="night" ||
+       S.phase==="day") {
+      return notice("ไม่สามารถลบระหว่างเกม");
+    }
+
+    if([
+      "wolf","seer","guard",
+      "witch","hunter","villager"
+    ].includes(id)) {
+      return notice(
+        "ไม่สามารถลบตัวละครพื้นฐาน"
+      );
+    }
+
+    if(S.players.some(p=>p.roleId===id)) {
+      return notice(
+        "ยังมีผู้เล่นใช้ตัวละครนี้"
+      );
+    }
+
+    ask("ลบ "+role(id).name+"?",()=>{
+      snapshot();
+
+      S.roles = S.roles.filter(
+        r=>r.id!==id
+      );
+
+      commit();
+    });
+  }
+
+  // =========================
+  // START GAME
+  // =========================
+
+  function startGame() {
+
+      if(S.registration) {
+        return notice(
+          "กรุณาลงทะเบียนบทบาทให้เสร็จ "+
+          "หรือยกเลิกก่อนเริ่มเกม"
+        );
+      }
+
+    if(S.phase!=="setup") {
+      return notice("เกมเริ่มแล้ว");
+    }
+
+    if(S.players.length<3) {
+      return notice(
+        "ต้องมีผู้เล่นอย่างน้อย 3 คน"
+      );
+    }
+
+    if(S.players.some(p=>!role(p.roleId).id)) {
+      return notice(
+        "กำหนดบทบาทให้ครบทุกคนก่อน"
+      );
+    }
+
+    if(!S.players.some(p=>isWolf(p))) {
+      return notice(
+        "ต้องมีหมาป่าอย่างน้อย 1 คน"
+      );
+    }
+
+    if(!S.players.some(p=>
+      role(p.roleId).team==="village"
+    )) {
+      return notice("ต้องมีฝ่ายชาวบ้าน");
+    }
+
+    ask("เริ่มเกมคืนที่ 1?",()=>{
+      snapshot();
+
+      
+      S.players.forEach(p=>{
+        p.alive = true;
+        p.originalRoleId = p.roleId;
+
+        delete p.copyTarget;
+        delete p.silenced;
+        delete p.toughDueNight;
+        delete p.princeRevealed;
+        delete p.transformedFrom;
+        delete p.transformedNight;
+        delete p.cursedConverted;
+        delete p.cursedNight;
+      });
+
+      S.cubPending = false;
+      S.doubleAttack = false;
+      S.silenced = "";
+    
+      S.night = 0;
+      S.specialNotices = [];
+      S.wolfBlockedNight = 0;
+      S.lovers = [];
+      S.loveNotices = [];
+      S.cursedNotices = [];
+      S.copyNotices = [];
+      S.hunterPending = [];
+      S.revealerUsed = false;
+      S.history = [];
+      S.result = "";
+      S.potions = {
+        heal:true,
+        poison:true
+      };
+
+      beginNight();
+      tab = "home";
+      commit();
+    });
+  }
+
+  function beginNight() {
+    
+    S.doubleAttack = !!S.cubPending;
+    S.cubPending = false;
+    S.silenced = "";
+
+    S.night++;
+    
+    S.phase = "night";
+    S.step = 0;
+    S.actions = {};
+    S.votes = {};
+    S.deaths = [];
+    S.timerEnd = 0;
+    S.voted = false;
+
+    S.queue = S.roles
+      .filter(r=>
+        r.order>0 &&
+
+        !(
+          r.id==="wolf" &&
+          S.wolfBlockedNight===S.night
+        ) &&
+
+        (!r.firstOnly||S.night===1) &&
+        
+        alive().some(p=>
+          r.id==="wolf"
+            ?isWolf(p)
+            :p.roleId===r.id
+        )
+    
+      )
+      .sort((a,b)=>a.order-b.order)
+      .map(r=>r.id);
+
+    log("เริ่มคืนที่ "+S.night);
+
+    if(S.wolfBlockedNight===S.night) {
+
+      specialAlert(
+        "🦠 คืนนี้หมาป่างดโจมตี",
+        "หมาป่าติดเชื้อ "+
+        "ระบบข้ามลำดับการโจมตีให้อัตโนมัติ"
+      );
+    }
+  }
+
+  function nextNight() {
+
+    if (hasPendingHunter()) {
+      return openHunter();
+    }
+
+    if(S.phase!=="day") return;
+
+    ask(
+      S.voted
+        ?"เข้าสู่คืนถัดไป?"
+        :"ยังไม่ได้โหวต ต้องการข้ามหรือไม่?",
+      ()=>{
+        snapshot();
+        beginNight();
+        tab = "home";
+        commit();
+      }
+    );
+  }
+
+  // =========================
+  // NIGHT ACTIONS
+  // =========================
+
+  function nightAction(skip=false) {
+
+    if (hasPendingHunter()) {
+      return openHunter();
+    }
+
+    if(S.phase!=="night") return;
+
+    const r = role(S.queue[S.step]);
+
+    if(!r.id) return;
+
+    const data = {skip:skip};
+
+    if(!skip) {
+
+      
+      if(r.id==="cupid") {
+
+        data.lover1 =
+          $("lover1")?.value || "";
+
+        data.lover2 =
+          $("lover2")?.value || "";
+
+        if (
+          !player(data.lover1)?.alive ||
+          !player(data.lover2)?.alive
+        ) {
+          return notice(
+            "กรุณาเลือกคู่รักให้ครบ 2 คน"
+          );
+        }
+
+        if (
+          data.lover1===data.lover2
+        ) {
+          return notice(
+            "ไม่สามารถเลือกคนเดียวกันได้"
+          );
+        }
+
+        data.note =
+          nameOf(data.lover1)+
+          " ❤️ "+
+          nameOf(data.lover2);
+
+      } else if(r.action==="revealWolves") {
+        data.note = alive()
+          .filter(isWolf)
+          .map(p=>p.name).join(", ");
+
+      } else if(r.action==="witch") {
+
+        data.heal = Boolean(
+          $("heal")?.checked &&
+          S.potions.heal
+        );
+
+        data.poison = S.potions.poison
+          ?$("poison")?.value||""
+          :"";
+
+        if(data.heal &&
+           !S.actions.wolf?.target) {
+          return notice(
+            "ไม่มีเหยื่อให้รักษา"
+          );
+        }
+
+      } else if(
+        r.action==="custom" ||
+        r.action==="none"
+      ) {
+        data.note =
+          $("customNote")?.value||"";
+
+      } else {
+        data.target =
+          $("target")?.value||"";
+
+        
+        if(r.action==="kill" &&
+           S.doubleAttack) {
+
+          data.target2 =
+            $("target2")?.value||"";
+
+          if(data.target2 &&
+             data.target2===data.target) {
+            return notice(
+              "ต้องเลือกเหยื่อคนละคน"
+            );
+          }
+        }
+
+        if(r.action==="copy") {
+          const actors = alive().filter(
+            p=>p.roleId===r.id
+          );
+
+          if(actors.length!==1) {
+            return notice(
+              "ระบบรองรับภูตจำแลงหนึ่งคนต่อเกม"
+            );
+          }
+
+          if(actors[0].id===data.target) {
+            return notice(
+              "ไม่สามารถเลือกตัวเอง"
+            );
+          }
+        }
+
+        if(!data.target) {
+          return notice(
+            "เลือกเป้าหมายหรือกดข้าม"
+          );
+        }
+      }
+    }
+
+    snapshot();
+
+    
+    S.actions[r.id] = data;
+
+    if (
+      r.id==="cupid" &&
+      !skip &&
+      data.lover1 &&
+      data.lover2
+    ) {
+
+      S.lovers = [
+        data.lover1,
+        data.lover2
+      ];
+
+      log(
+        "💘 กามเทพจับคู่ "+
+        nameOf(data.lover1)+
+        " กับ "+
+        nameOf(data.lover2)
+      );
+    }
+
+    if(!skip && data.target) {
+
+      if(r.action==="silence") {
+        S.silenced = data.target;
+      }
+
+      if(r.action==="copy") {
+        const actor = alive().find(
+          p=>p.roleId===r.id
+        );
+
+        if(actor) {
+          actor.copyTarget = data.target;
+        }
+      }
+
+      if(r.action==="reveal") {
+        const target = player(data.target);
+        const actor = alive().find(
+          p=>p.roleId===r.id
+        );
+
+        if(isWolf(target)) {
+          data.victim = target.id;
+        } else if(actor) {
+          data.victim = actor.id;
+        }
+      }
+    }
+    
+
+    if(data.heal) S.potions.heal = false;
+    if(data.poison) S.potions.poison = false;
+
+    let detail = skip
+      ?"ข้าม"
+      :data.target
+        ?nameOf(data.target)
+        :data.note||"ดำเนินการแล้ว";
+
+    if(r.action==="witch"&&!skip) {
+      detail =
+        "รักษา: "+
+        (data.heal?"ใช้":"ไม่ใช้")+
+        " / พิษ: "+
+        nameOf(data.poison);
+    }
+
+    log(r.name+" : "+detail);
+
+    let result = "";
+
+    if(r.action==="inspect"&&data.target) {
+      const p = player(data.target);
+
+      if(p) {
+        result = p.name+" อยู่ฝ่าย "+
+          teamName(role(p.roleId).team);
+      }
+    }
+
+    S.step++;
+    commit();
+
+    if(result) {
+      notice(result,"🔮 ผลการตรวจสอบ");
+    }
+  }
+
+  function resolveNight() {
+
+    if (hasPendingHunter()) {
+      return openHunter();
+    }
+
+    if(S.phase!=="night" ||
+       S.step<S.queue.length) return;
+
+    ask("สรุปผลกลางคืน?",()=>{
+      snapshot();
+
+      const wolfBlocked =
+        S.wolfBlockedNight===S.night;
+
+      const wolf = wolfBlocked
+        ?null
+        :S.actions.wolf?.target;
+      const guard = S.actions.guard?.target;
+      const witch = S.actions.witch||{};
+      const deaths = new Set();
+      const wolfVictims = new Set();
+
+      
+      const wolfTargets = [
+        wolf,
+        (wolfBlocked
+          ?null
+          :S.actions.wolf?.target2)
+      ].filter(Boolean);
+
+      wolfTargets.forEach((id,index)=>{
+        if(id===guard) return;
+        if(index===0 && witch.heal) return;
+
+        const p = player(id);
+
+        if(!p?.alive) return;
+
+        if(p.roleId==="cursed") {
+
+          transformCursed(p);
+
+        } else if(
+          p.roleId==="toughGuy"
+        ) {
+
+          if(!p.toughDueNight) {
+
+            p.toughDueNight =
+              S.night+1;
+
+            specialAlert(
+              "💪 หนุ่มถึกถูกโจมตี",
+              p.name+
+              " ยังรอดชีวิต "+
+              "และจะเสียชีวิตในคืนที่ "+
+              p.toughDueNight
+            );
+          }
+
+        } else {
+
+          deaths.add(id);
+          wolfVictims.add(id);
+        }
+      });
+
+      if(S.actions.revealer?.victim) {
+        deaths.add(
+          S.actions.revealer.victim
+        );
+      }
+    
+
+      if(witch.poison) {
+        deaths.add(witch.poison);
+      }
+
+      alive().forEach(p=>{
+
+        if(
+          p.toughDueNight>0 &&
+          p.toughDueNight<=S.night
+        ) {
+
+          deaths.add(p.id);
+
+          specialAlert(
+            "💪 หนุ่มถึกครบกำหนด",
+            p.name+
+            " เสียชีวิตจากการโจมตีของหมาป่าในคืนก่อน"
+          );
+        }
+      });
+
+      S.deaths = [];
+
+      const messages = [];
+
+      deaths.forEach(id=>{
+        const p = player(id);
+
+        if(p?.alive) {
+          S.deaths.push(p.name);
+
+          const infected =
+            p.roleId==="diseased" &&
+            wolfVictims.has(p.id);
+
+          const msg = killPlayer(
+            p,
+            wolfVictims.has(p.id)
+              ?"ถูกหมาป่ากำจัด"
+              :"กลางคืน"
+          );
+
+          if(infected && !p.alive) {
+
+            S.wolfBlockedNight =
+              S.night+1;
+
+            specialAlert(
+              "🦠 หมาป่าติดเชื้อ",
+              p.name+
+              " ถูกหมาป่ากำจัด "+
+              "หมาป่าจะโจมตีไม่ได้ในคืนที่ "+
+              S.wolfBlockedNight
+            );
+          }
+
+          if(msg) messages.push(msg);
+        }
+      });
+
+      if(!S.deaths.length) {
+        log("คืนนี้ไม่มีผู้เสียชีวิต");
+      }
+
+      S.phase = "day";
+      S.votes = {};
+      S.voted = false;
+
+      commit();
+
+      if(messages.length) {
+        notice(messages.join(" / "));
+      }
+    });
+  }
+
+  // =========================
+  // VOTE
+  // =========================
+
+  function vote(id,delta) {
+    if(S.phase!=="day" ||
+       S.voted ||
+       !player(id)?.alive) return;
+
+    const total = Object.values(S.votes)
+      .reduce((a,b)=>a+b,0);
+
+    if(delta>0 &&
+       total>=alive().length) {
+      return notice(
+        "คะแนนครบจำนวนผู้รอดชีวิตแล้ว"
+      );
+    }
+
+    snapshot();
+
+    S.votes[id] = Math.max(
+      0,(S.votes[id]||0)+delta
+    );
+
+    commit();
+  }
+
+  function resetVotes() {
+    if(S.voted) return;
+
+    ask("ล้างคะแนนทั้งหมด?",()=>{
+      snapshot();
+      S.votes = {};
+      commit();
+    });
+  }
+
+  function executeVote() {
+
+    if (hasPendingHunter()) {
+      return openHunter();
+    }
+
+    if(S.phase!=="day"||S.voted) return;
+
+    const list = alive().map(p=>({
+      id:p.id,
+      votes:S.votes[p.id]||0
+    })).sort((a,b)=>b.votes-a.votes);
+
+    if(!list.length||!list[0].votes) {
+      return notice("ยังไม่มีคะแนนโหวต");
+    }
+
+    if(list[1]?.votes===list[0].votes) {
+      return notice(
+        "คะแนนเสมอ กรุณาโหวตใหม่"
+      );
+    }
+
+    const p = player(list[0].id);
+
+    ask(
+      "กำจัด "+p.name+" ด้วย "+
+      list[0].votes+" คะแนน?",
+      ()=>{
+        snapshot();
+
+        log(p.name+" ได้รับ "+
+          list[0].votes+" คะแนน");
+
+        const msg = killPlayer(
+          p,"ถูกโหวต"
+        );
+
+        S.voted = true;
+        S.votes = {};
+        S.timerEnd = 0;
+        tab = "home";
+
+        commit();
+
+        if(msg) notice(msg);
+      }
+    );
+  }
+
+  // =========================
+  // WINNER / RESET
+  // =========================
+
+  function winner() {
+    if(hasPendingHunter()) return "";
+    if(S.phase!=="day") return "";
+
+    const list = alive();
+
+    
+    const wolves = list.filter(isWolf).length;
+
+    const wolfTeam = list.filter(p=>
+      role(p.roleId).team==="wolf"
+    ).length;
+    
+
+    const neutral = list.filter(p=>
+      role(p.roleId).team==="neutral"
+    ).length;
+
+    if(!list.length) {
+      return "ไม่มีผู้รอดชีวิต";
+    }
+
+    if(neutral) return "";
+    if(!wolves) return "ฝ่ายชาวบ้าน";
+
+    if(wolfTeam>=list.length-wolfTeam) {
+      return "ฝ่ายหมาป่า";
+    }
+
+    return "";
+  }
+
+  function endGame() {
+
+    if (hasPendingHunter()) {
+      return openHunter();
+    }
+
+    if(S.phase==="setup") {
+      return notice("ยังไม่ได้เริ่มเกม");
+    }
+
+    const w = winner();
+
+    showModal(
+      "กำหนดผู้ชนะ",
+      `
+      <select id="win">
+        ${[
+          "ฝ่ายชาวบ้าน",
+          "ฝ่ายหมาป่า",
+          "ฝ่ายอิสระ",
+          "เสมอ",
+          "ไม่มีผู้รอดชีวิต"
+        ].map(x=>`
+          <option ${x===w?"selected":""}>
+            ${x}
+          </option>
+        `).join("")}
+      </select>
+      `,
+      ()=>{
+        snapshot();
+
+        S.result = $("win").value;
+        S.phase = "ended";
+        S.timerEnd = 0;
+
+        log("จบเกม: "+S.result);
+
+        tab = "home";
+        closeModal();
+        commit();
+      },
+      "จบเกม"
+    );
+  }
+
+  function resetGame() {
+    ask(
+      "เริ่มเกมใหม่ โดยเก็บรายชื่อและตัวละครเดิม?",
+      ()=>{
+        snapshot();
+
+        S = {
+          version:1.3,
+          players:S.players.map(p=>({
+            
+            ...p,
+            roleId:p.originalRoleId||p.roleId,
+            originalRoleId:"",
+            copyTarget:"",
+            transformedFrom:"",
+            transformedNight:0,
+            toughDueNight:0,
+            princeRevealed:false,
+            cursedConverted:false,
+            cursedNight:0,
+            alive:true
+          })),
+          roles:S.roles,
+          undo:S.undo,
+          copyNotices:[],
+          specialNotices:[],
+          wolfBlockedNight:0,
+          lovers:[],
+          loveNotices:[],
+          cursedNotices:[],
+          hunterPending:[],
+          revealerUsed:false,
+          cubPending:false,
+          doubleAttack:false,
+          silenced:"",
+          phase:"setup",
+          night:0,
+          step:0,
+          queue:[],
+          actions:{},
+          potions:{
+            heal:true,
+            poison:true
+          },
+          votes:{},
+          history:[],
+          deaths:[],
+          timerEnd:0,
+          voted:false,
+          result:""
+        };
+
+        tab = "home";
+        commit();
+      }
+    );
+  }
+
+  // =========================
+  // TIMER
+  // =========================
+
+  function timerStart(minutes) {
+    snapshot();
+    S.timerEnd = Date.now()+minutes*60000;
+    commit();
+  }
+
+  function timerStop() {
+    snapshot();
+    S.timerEnd = 0;
+    commit();
+  }
+
+  function tick() {
+    const sec = Math.max(
+      0,
+      Math.ceil(
+        (S.timerEnd-Date.now())/1000
+      )
+    );
+
+    const el = $("timer");
+
+    if(el) {
+      el.textContent =
+        String(Math.floor(sec/60))
+          .padStart(2,"0")+
+        ":"+
+        String(sec%60).padStart(2,"0");
+
+      el.style.color =
+        sec<15&&S.timerEnd
+          ?"#f08090"
+          :"#ffffff";
+    }
+
+    if(S.timerEnd&&sec===0) {
+      S.timerEnd = 0;
+      commit();
+
+      if(!$("modal").innerHTML) {
+        notice("⏰ หมดเวลาอภิปราย");
+      } else {
+        status = "หมดเวลาอภิปราย";
+        const label = $("saveStatus");
+        if(label) label.textContent = status;
+      }
+    }
+  }
+
+  // =========================
+  // PLAYER LIST
+  // =========================
+
+  function playerList(compact=false) {
+
+    if(!S.players.length) {
+      return `<div class="empty">
+        ยังไม่มีผู้เล่น
+      </div>`;
+    }
+
+    return S.players.map((p,i)=>{
+      const r = role(p.roleId);
+
+      return `
+      <div class="item row ${p.alive?"":"dead"}">
+
+        <div class="avatar">
+          ${esc(r.icon)}
+        </div>
+
+        <div class="grow">
+          <b class="playerName">
+            ${i+1}. ${esc(p.name)}
+          </b>
+
+          <div class="small muted">
+            ${esc(r.name)} ·
+            ${p.alive?"รอดชีวิต":"เสียชีวิต"}
+
+          ${p.alive &&
+             p.toughDueNight>0
+            ?`<div class="small gold">
+                💪 เสียชีวิตคืนที่
+                ${p.toughDueNight}
+              </div>`
+            :""}
+
+          ${p.princeRevealed
+            ?`<div class="small gold">
+                🤴 เปิดเผยตัวตนแล้ว
+              </div>`
+            :""}
+
+    
+
+          ${getPartner(p.id)
+            ?`<div class="small"
+              style="color:#f08090">
+
+                💘 คู่รัก:
+                ${esc(
+                  getPartner(p.id).name
+                )}
+
+              </div>`
+            :""}
+
+    
+
+          ${p.cursedConverted
+            ?`<div class="small gold">
+                🌘 เปลี่ยนจากผู้ต้องคำสาป
+              </div>`
+            :""}
+
+    
+
+          ${p.alive &&
+             p.roleId==="doppelganger" &&
+             p.copyTarget
+            ?`<div class="small gold">
+                🎭 รอสวมรอย:
+                ${esc(nameOf(p.copyTarget))}
+              </div>`
+            :""}
+
+          ${p.transformedFrom
+            ?`<div class="small blue">
+                🎭 สวมรอยจาก:
+                ${esc(p.transformedFrom)}
+              </div>`
+            :""}
+    
+          </div>
+        </div>
+
+        ${compact
+          ?`<span class="${p.alive?"green":"red"}">
+              ${p.alive?"●":"✕"}
+            </span>`
+          :`
+            ${btn("แก้ไข",
+              call("editPlayer",p.id),
+              "mini")}
+
+            ${S.phase==="setup" ||
+              S.phase==="ended"
+              ?btn("ลบ",
+                call("deletePlayer",p.id),
+                "mini danger")
+              :btn(p.alive?"ตาย":"ฟื้น",
+                call("changeLife",p.id),
+                p.alive
+                  ?"mini danger"
+                  :"mini success")}
+          `}
+      </div>`;
+    }).join("");
+  }
+
+  // =========================
+  // NIGHT UI
+  // =========================
+
+  function nightPanel() {
+    const total = S.queue.length;
+
+    const percent = total
+      ?Math.round(S.step/total*100)
+      :100;
+
+    let out = card(`
+      <div class="row between">
+        <h2>🌙 ลำดับกลางคืน</h2>
+        <span class="muted">
+          ${S.step}/${total}
+        </span>
+      </div>
+
+      <div class="progress">
+        <div style="width:${percent}%"></div>
+      </div>
+
+      ${S.queue.map((id,i)=>{
+        const r = role(id);
+
+        return `
+          <div class="item row">
+            <span class="${i<S.step
+              ?"green":"muted"}">
+              ${i<S.step
+                ?"✓":i===S.step?"▶":"○"}
+            </span>
+
+            <div class="grow">
+              ${esc(r.icon+" "+r.name)}
+            </div>
+
+            <span class="small muted">
+              ${i<S.step
+                ?"เสร็จแล้ว"
+                :i===S.step?"กำลังทำ":"รอ"}
+            </span>
+          </div>`;
+      }).join("")}
+    `);
+
+    if(S.step>=total) {
+      return out+card(`
+        <h2 class="green">
+          ✓ ครบทุกบทบาท
+        </h2>
+
+        ${btn(
+          "☀️ สรุปผลและเข้าสู่กลางวัน",
+          "resolveNight()",
+          "primary full"
+        )}
+      `);
+    }
+
+    const r = role(S.queue[S.step]);
+
+    let actionUI = "";
+
+    
+    if(r.id==="cupid") {
+
+      actionUI = `
+
+        <label>💗 คู่รักคนที่ 1</label>
+
+        <select id="lover1">
+          ${targets()}
+        </select>
+
+        <label>💗 คู่รักคนที่ 2</label>
+
+        <select id="lover2">
+          ${targets()}
+        </select>
+
+        <p class="notice">
+          เมื่อคนหนึ่งเสียชีวิต
+          อีกคนจะเสียชีวิตตามทันที
+        </p>
+
+      `;
+
+    } else if(r.action==="revealWolves") {
+
+      actionUI = `
+        <div class="speech">
+          หมาป่า:
+          ${esc(alive()
+            .filter(isWolf)
+            .map(p=>p.name).join(", "))}
+        </div>
+      `;
+
+    } else if(r.action==="witch") {
+
+      actionUI = `
+        <p>เหยื่อหมาป่า:
+          <b class="red">
+            ${esc(nameOf(
+              S.actions.wolf?.target
+            ))}
+          </b>
+        </p>
+
+        <div class="item">
+          ${S.potions.heal
+            ?`<label class="check">
+                <input type="checkbox"
+                  id="heal">
+                🧪 ใช้ยารักษา
+              </label>`
+            :`<span class="red">
+                ยารักษาใช้แล้ว
+              </span>`}
+        </div>
+
+        <div class="item">
+          <label>☠️ ยาพิษ</label>
+
+          ${S.potions.poison
+            ?`<select id="poison">
+                ${targets()}
+              </select>`
+            :`<p class="red">
+                ใช้ไปแล้ว
+              </p>`}
+        </div>`;
+
+    } else if(
+      r.action==="custom" ||
+      r.action==="none"
+    ) {
+
+      actionUI = `
+        <label>บันทึกผลความสามารถ</label>
+
+        <textarea id="customNote"
+          placeholder="ระบุชื่อหรือเหตุการณ์"></textarea>
+      `;
+
+    } else {
+
+      actionUI = `
+        <label>เลือกเป้าหมาย</label>
+
+        <select id="target">
+          ${targets("",p=>
+            r.action!=="kill" ||
+            
+            !isWolf(p)
+          )}
+        </select>`;
+
+      if(r.action==="kill" &&
+         S.doubleAttack) {
+
+        actionUI += `
+          <p class="notice">
+            ลูกหมาป่าเสียชีวิต
+            คืนนี้เลือกเหยื่อได้ 2 คน
+          </p>
+
+          <label>เหยื่อคนที่ 2</label>
+
+          <select id="target2">
+            ${targets("",p=>!isWolf(p))}
+          </select>
+        `;
+      }
+    
+    }
+
+    out += card(`
+      <h2>${esc(r.icon+" "+r.name)}</h2>
+
+      <p class="small muted">
+        ผู้เล่น:
+        ${esc(alive()
+          .filter(p=>
+            r.id==="wolf"
+              ?isWolf(p)
+              :p.roleId===r.id
+          )
+          .map(p=>p.name).join(", "))}
+      </p>
+
+      <div class="speech">
+        ${esc(r.speech||"ดำเนินความสามารถ")}
+      </div>
+
+      ${actionUI}
+
+      ${btn(
+        "✓ ยืนยันและไปบทบาทถัดไป",
+        "nightAction(false)",
+        "primary full"
+      )}
+
+      ${btn(
+        "ข้ามความสามารถ",
+        "nightAction(true)",
+        "full"
+      )}
+    `);
+
+    return out;
+  }
+
+  // =========================
+  // HOME
+  // =========================
+
+  
+  function getRevealer() {
+    return alive().find(p => {
+      const r = role(p.roleId);
+
+      return r.id === "revealer" ||
+        r.name.includes("ผู้เผยตัวตน");
+    });
+  }
+
+  function useRevealer() {
+
+    if (hasPendingHunter()) {
+      return openHunter();
+    }
+
+
+    if (S.phase !== "day") {
+      return notice(
+        "ใช้พลังได้เฉพาะกลางวัน"
+      );
+    }
+
+    if (S.revealerUsed) {
+      return notice("ใช้พลังไปแล้ว");
+    }
+
+    const actor = getRevealer();
+
+    if (!actor) {
+      return notice(
+        "ไม่มีผู้เผยตัวตนที่รอดชีวิต"
+      );
+    }
+
+    showModal(
+      "👁️ ผู้เผยตัวตน",
+      `
+      <div class="speech">
+        ผู้ใช้พลัง: ${esc(actor.name)}
+        <br>
+        ใช้ได้เพียงครั้งเดียวตลอดเกม
+      </div>
+
+      <label>เลือกผู้เล่น</label>
+
+      <select id="revealTarget">
+        ${targets("",p=>p.id!==actor.id)}
+      </select>
+
+      <p class="notice">
+        หากเป้าหมายเป็นมนุษย์หมาป่า
+        เป้าหมายจะเสียชีวิต
+        หากไม่ใช่ ผู้เผยตัวตนจะตายแทน
+      </p>
+      `,
+      ()=>{
+        const target = player(
+          $("revealTarget").value
+        );
+
+        if (!target ||
+            !target.alive ||
+            target.id === actor.id) {
+          return formError(
+            "กรุณาเลือกเป้าหมาย"
+          );
+        }
+
+        closeModal();
+
+        ask(
+          "ยืนยันใช้พลังกับ "+
+          target.name+"?",
+          ()=>{
+
+            if (S.revealerUsed ||
+                S.phase !== "day" ||
+                !actor.alive ||
+                !target.alive) {
+              return notice(
+                "ไม่สามารถใช้พลังได้"
+              );
+            }
+
+            snapshot();
+
+            S.revealerUsed = true;
+
+            const r = role(target.roleId);
+
+            // สมุนรับใช้ไม่ใช่มนุษย์หมาป่า
+
+            const isWolf =
+              r.id === "wolf" ||
+              r.name === "หมาป่า" ||
+              r.name.includes("มนุษย์หมาป่า");
+
+            let result;
+            let extra;
+
+            if (isWolf) {
+
+              extra = killPlayer(
+                target,
+                "พลังผู้เผยตัวตน"
+              );
+
+              result =
+                target.name+
+                " เป็นมนุษย์หมาป่า และเสียชีวิต";
+
+            } else {
+
+              extra = killPlayer(
+                actor,
+                "ใช้พลังผู้เผยตัวตนผิด"
+              );
+
+              result =
+                target.name+
+                " ไม่ใช่มนุษย์หมาป่า "+
+                actor.name+" เสียชีวิตแทน";
+            }
+
+            log("ผู้เผยตัวตน: "+result);
+
+            commit();
+
+            notice(
+              result + (extra?" / "+extra:""),
+              "👁️ ผลการใช้พลัง"
+            );
+          }
+        );
+      },
+      "ใช้พลัง"
+    );
+  }
+
+  function revealerPanel() {
+
+    if (S.phase !== "day") return "";
+
+    const actor = getRevealer();
+
+    if (!actor && !S.revealerUsed) {
+      return "";
+    }
+
+    return card(`
+      <h2>👁️ ผู้เผยตัวตน</h2>
+
+      <div class="item row between">
+        <span>สถานะพลัง</span>
+
+        <b class="${S.revealerUsed
+          ?"red":"green"}">
+
+          ${S.revealerUsed
+            ?"ใช้แล้ว":"พร้อมใช้"}
+
+        </b>
+      </div>
+
+      ${S.revealerUsed
+        ?'<p class="muted">ใช้พลังครบแล้ว</p>'
+        :btn(
+          "👁️ ใช้พลังผู้เผยตัวตน",
+          "useRevealer()",
+          "primary full"
+        )
+      }
+    `);
+  }
+
+  window.useRevealer = useRevealer;
+
+  
+
+  function hunterQueue() {
+
+    if (!Array.isArray(S.hunterPending)) {
+      S.hunterPending = [];
+    }
+
+    return S.hunterPending;
+  }
+
+  function isHunter(p) {
+
+    if (!p) return false;
+
+    const r = role(p.roleId);
+
+    return r.id === "hunter" ||
+      r.name.includes("นายพราน");
+  }
+
+  function hasPendingHunter() {
+    return hunterQueue().some(id => {
+      const p = player(id);
+      return p && !p.alive;
+    });
+  }
+
+  let hunterTimer = null;
+
+  function scheduleHunter() {
+
+    if (hunterTimer !== null) {
+      clearTimeout(hunterTimer);
+    }
+
+    hunterTimer = setTimeout(() => {
+
+      hunterTimer = null;
+
+      if (
+        S.phase === "setup" ||
+        S.phase === "ended"
+      ) return;
+
+      if (hasPendingHunter()) {
+        openHunter();
+      }
+
+    }, 180);
+  }
+
+  function openHunter() {
+
+    const id = hunterQueue().find(id => {
+      const p = player(id);
+      return p && !p.alive;
+    });
+
+    const hunter = player(id);
+
+    if (!hunter) return;
+
+    if (!alive().length) {
+
+      snapshot();
+
+      S.hunterPending = [];
+
+      log("นายพรานไม่มีเป้าหมาย");
+
+      commit();
+      return;
+    }
+
+    showModal(
+      "🏹 นายพรานใช้พลัง",
+      `
+      <div class="speech">
+
+        <b>${esc(hunter.name)}</b>
+        ถูกกำจัดแล้ว
+
+        <br><br>
+
+        เลือกผู้เล่นที่จะยิง
+        ก่อนออกจากเกม
+
+      </div>
+
+      <label>เลือกเป้าหมาย</label>
+
+      <select id="hunterTarget">
+        ${targets()}
+      </select>
+
+      <p class="notice">
+        ผู้เล่นที่เลือกจะเสียชีวิตทันที
+      </p>
+      `,
+      ()=>{
+
+        const target = player(
+          $("hunterTarget").value
+        );
+
+        if (!target || !target.alive) {
+          return formError(
+            "กรุณาเลือกผู้เล่น"
+          );
+        }
+
+        if (
+          !hunterQueue().includes(id) ||
+          hunter.alive
+        ) {
+          closeModal();
+          return;
+        }
+
+        closeModal();
+
+        ask(
+          "ยืนยันให้นายพราน "+
+          hunter.name+
+          " ยิง "+target.name+"?",
+          ()=>{
+
+            if (
+              !target.alive ||
+              hunter.alive ||
+              !hunterQueue().includes(id)
+            ) {
+              return notice(
+                "ไม่สามารถใช้พลังได้"
+              );
+            }
+
+            snapshot();
+
+            S.hunterPending =
+              hunterQueue().filter(
+                x => x !== id
+              );
+
+            const extra = killPlayer(
+              target,
+              "ถูกนายพรานยิง"
+            );
+
+            if (
+              S.phase === "night" ||
+              (
+                S.phase === "day" &&
+                !S.voted
+              )
+            ) {
+
+              S.deaths = S.deaths || [];
+
+              if (
+                !S.deaths.includes(
+                  target.name
+                )
+              ) {
+                S.deaths.push(
+                  target.name
+                );
+              }
+            }
+
+            log(
+              "🏹 "+hunter.name+
+              " ยิง "+target.name
+            );
+
+            tab = "home";
+
+            commit();
+
+            if (hasPendingHunter()) {
+
+              scheduleHunter();
+
+            } else {
+
+              notice(
+                target.name+
+                " ถูกนายพรานกำจัด"+
+                (extra?" / "+extra:""),
+                "🏹 ผลการยิง"
+              );
+
+            }
+          }
+        );
+      },
+      "🏹 ยืนยันยิง"
+    );
+  }
+
+  function hunterPanel() {
+
+    if (!hasPendingHunter()) {
+      return "";
+    }
+
+    const names = hunterQueue()
+      .map(id=>player(id))
+      .filter(p=>p && !p.alive)
+      .map(p=>p.name);
+
+    return card(`
+
+      <h2 class="gold">
+        🏹 นายพรานรอใช้พลัง
+      </h2>
+
+      <div class="speech">
+        ${esc(names.join(", "))}
+      </div>
+
+      ${btn(
+        "🏹 เลือกผู้เล่นที่จะยิง",
+        "openHunter()",
+        "danger full"
+      )}
+
+      <p class="notice">
+        ต้องจัดการพลังนายพรานก่อน
+        ดำเนินเกมต่อ
+      </p>
+
+    `);
+  }
+
+  window.openHunter = openHunter;
+
+  
+
+  function transformDoppelganger(dead) {
+
+    if (!dead || dead.alive) return;
+
+    const actors = alive().filter(p =>
+      p.roleId === "doppelganger" &&
+      p.copyTarget === dead.id
+    );
+
+    actors.forEach(actor => {
+
+      const oldRole = actor.roleId;
+      const newRole = dead.roleId;
+
+      if (!role(newRole).id) return;
+
+      actor.originalRoleId =
+        actor.originalRoleId || oldRole;
+
+      actor.roleId = newRole;
+
+      delete actor.copyTarget;
+
+      actor.transformedFrom = dead.name;
+      actor.transformedNight = S.night;
+
+      if (!Array.isArray(S.copyNotices)) {
+        S.copyNotices = [];
+      }
+
+      S.copyNotices.push({
+        id: uid(),
+        player: actor.name,
+        target: dead.name,
+        roleId: newRole,
+        night: S.night
+      });
+
+      log(
+        "🎭 " + actor.name +
+        " สวมรอยเป็น " +
+        role(newRole).name +
+        " แทน " + dead.name
+      );
+
+    });
+  }
+
+  function doppelgangerPanel() {
+
+    const notices = S.copyNotices || [];
+
+    if (!notices.length) return "";
+
+    return notices.map(n => {
+
+      const r = role(n.roleId);
+
+      return card(`
+
+        <h2 class="gold">
+          🎭 ภูตจำแลงเปลี่ยนบทบาท
+        </h2>
+
+        <div class="speech">
+
+          <b>${esc(n.target)}</b>
+          เสียชีวิตแล้ว
+
+          <br><br>
+
+          ผู้สวมรอย:
+          <b>${esc(n.player)}</b>
+
+          <br><br>
+
+          🎭 ภูตจำแลง
+          →
+          ${esc(r.icon+" "+r.name)}
+
+          <br>
+
+          ฝ่ายใหม่:
+          <b class="gold">
+            ${esc(teamName(r.team))}
+          </b>
+
+        </div>
+
+        <p class="green">
+          ✓ เปลี่ยนบทบาทอัตโนมัติแล้ว
+        </p>
+
+        ${btn(
+          "รับทราบ",
+          call("dismissCopyNotice",n.id),
+          "primary full"
+        )}
+
+      `);
+
+    }).join("");
+  }
+
+  function dismissCopyNotice(id) {
+
+    snapshot();
+
+    S.copyNotices =
+      (S.copyNotices || [])
+      .filter(n => n.id !== id);
+
+    commit();
+  }
+
+  window.dismissCopyNotice =
+    dismissCopyNotice;
+
+  
+
+  function transformCursed(p) {
+
+    if (
+      !p ||
+      !p.alive ||
+      p.roleId !== "cursed"
+    ) return;
+
+    p.originalRoleId =
+      p.originalRoleId || "cursed";
+
+    p.roleId = "wolf";
+
+    p.cursedConverted = true;
+    p.cursedNight = S.night;
+
+    if (!Array.isArray(S.cursedNotices)) {
+      S.cursedNotices = [];
+    }
+
+    S.cursedNotices.push({
+      id: uid(),
+      playerId: p.id,
+      name: p.name,
+      night: S.night
+    });
+
+    log(
+      "🌘 "+p.name+
+      " ถูกหมาป่าโจมตี "+
+      "และกลายเป็นหมาป่า"
+    );
+  }
+
+  function cursedPanel() {
+
+    const notices =
+      S.cursedNotices || [];
+
+    if (!notices.length) {
+      return "";
+    }
+
+    return notices.map(n=>card(`
+
+      <h2 class="gold">
+        🌘 ผู้ต้องคำสาปถูกโจมตี
+      </h2>
+
+      <div class="speech">
+
+        ผู้เล่น:
+        <b>${esc(n.name)}</b>
+
+        <br>
+
+        ถูกโจมตีในคืนที่
+        ${n.night}
+
+        <br><br>
+
+        ถูกหมาป่าโจมตี
+        แต่ไม่เสียชีวิต
+
+        <br><br>
+
+        🌘 ผู้ต้องคำสาป
+        →
+        🐺 หมาป่า
+
+      </div>
+
+      <div class="item row between">
+
+        <span>ฝ่ายใหม่</span>
+
+        <b class="red">
+          🐺 ฝ่ายหมาป่า
+        </b>
+
+      </div>
+
+      <p class="green">
+        ✓ เปลี่ยนบทบาทอัตโนมัติแล้ว
+      </p>
+
+      <p class="notice">
+        คืนถัดไปให้ผู้เล่นคนนี้
+        ลืมตาพร้อมหมาป่า
+      </p>
+
+      ${btn(
+        "รับทราบ",
+        call("dismissCursedNotice",n.id),
+        "primary full"
+      )}
+
+    `)).join("");
+  }
+
+  function dismissCursedNotice(id) {
+
+    snapshot();
+
+    S.cursedNotices =
+      (S.cursedNotices || [])
+      .filter(n=>n.id!==id);
+
+    commit();
+  }
+
+  window.dismissCursedNotice =
+    dismissCursedNotice;
+
+  
+
+  function getLovers() {
+
+    return (S.lovers || [])
+      .map(id=>player(id))
+      .filter(Boolean);
+  }
+
+  function getPartner(id) {
+
+    const ids = S.lovers || [];
+
+    if (!ids.includes(id)) {
+      return null;
+    }
+
+    return player(
+      ids.find(x=>x!==id)
+    );
+  }
+
+  function loverDeath(dead) {
+
+    if (!dead || dead.alive) {
+      return "";
+    }
+
+    const partner = getPartner(dead.id);
+
+    if (!partner || !partner.alive) {
+      return "";
+    }
+
+    if (!Array.isArray(S.loveNotices)) {
+      S.loveNotices = [];
+    }
+
+    S.loveNotices.push({
+      id:uid(),
+      dead:dead.name,
+      partner:partner.name,
+      night:S.night
+    });
+
+    log(
+      "💔 "+dead.name+
+      " เสียชีวิต ทำให้ "+
+      partner.name+
+      " เสียชีวิตตามคู่รัก"
+    );
+
+    if (S.phase==="night") {
+
+      S.deaths = S.deaths || [];
+
+      if (!S.deaths.includes(
+        partner.name
+      )) {
+        S.deaths.push(partner.name);
+      }
+    }
+
+    const extra = killPlayer(
+      partner,
+      "เสียชีวิตตามคู่รัก"
+    );
+
+    return extra || "";
+  }
+
+  function loversPanel() {
+
+    const pair = getLovers();
+
+    if (pair.length!==2) {
+      return "";
+    }
+
+    const a = pair[0];
+    const b = pair[1];
+
+    const broken =
+      !a.alive || !b.alive;
+
+    return card(`
+
+      <h2>💘 คู่รักประจำเกม</h2>
+
+      <div class="row between"
+        style="text-align:center;
+        padding:12px 0">
+
+        <div class="grow">
+
+          <div style="font-size:30px">
+            ${a.alive
+              ?esc(role(a.roleId).icon)
+              :"☠️"}
+          </div>
+
+          <b>${esc(a.name)}</b>
+
+          <div class="small
+            ${a.alive?"green":"red"}">
+
+            ${a.alive
+              ?"รอดชีวิต":"เสียชีวิต"}
+
+          </div>
+
+        </div>
+
+        <div style="font-size:30px">
+          ${broken?"💔":"❤️"}
+        </div>
+
+        <div class="grow">
+
+          <div style="font-size:30px">
+            ${b.alive
+              ?esc(role(b.roleId).icon)
+              :"☠️"}
+          </div>
+
+          <b>${esc(b.name)}</b>
+
+          <div class="small
+            ${b.alive?"green":"red"}">
+
+            ${b.alive
+              ?"รอดชีวิต":"เสียชีวิต"}
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <p class="small muted"
+        style="text-align:center">
+
+        ${broken
+          ?"สถานะ: คู่รักสูญเสียชีวิต"
+          :"สถานะ: ผูกชีวิตร่วมกัน"}
+
+      </p>
+
+    `);
+  }
+
+  function loveNoticePanel() {
+
+    return (S.loveNotices || [])
+      .map(n=>card(`
+
+        <h2 class="red">
+          💔 คู่รักเสียชีวิต
+        </h2>
+
+        <div class="speech">
+
+          <b>${esc(n.dead)}</b>
+          เสียชีวิตแล้ว
+
+          <br><br>
+
+          ทำให้คู่รัก
+
+          <b class="red">
+            ${esc(n.partner)}
+          </b>
+
+          เสียชีวิตตามทันที
+
+        </div>
+
+        <p class="green">
+          ✓ อัปเดตสถานะผู้เล่นแล้ว
+        </p>
+
+        ${btn(
+          "รับทราบ",
+          call("dismissLoveNotice",n.id),
+          "primary full"
+        )}
+
+      `)).join("");
+  }
+
+  function dismissLoveNotice(id) {
+
+    S.loveNotices =
+      (S.loveNotices || [])
+      .filter(n=>n.id!==id);
+
+    commit();
+  }
+
+  window.dismissLoveNotice =
+    dismissLoveNotice;
+
+  
+
+  function specialAlert(title,text) {
+
+    if(!Array.isArray(S.specialNotices)) {
+      S.specialNotices = [];
+    }
+
+    S.specialNotices.push({
+      id:uid(),
+      title:title,
+      text:text,
+      night:S.night
+    });
+
+    log(title+": "+text);
+  }
+
+  function dismissSpecial(id) {
+
+    S.specialNotices =
+      (S.specialNotices||[])
+      .filter(n=>n.id!==id);
+
+    commit();
+  }
+
+  function specialRolePanel() {
+
+    let out = "";
+
+    (S.specialNotices||[])
+      .forEach(n=>{
+
+        out += card(`
+
+          <h2 class="gold">
+            ${esc(n.title)}
+          </h2>
+
+          <div class="speech">
+            ${esc(n.text)}
+          </div>
+
+          ${btn(
+            "รับทราบ",
+            call("dismissSpecial",n.id),
+            "primary full"
+          )}
+
+        `);
+
+      });
+
+    const injured = alive().filter(
+      p=>p.toughDueNight>0
+    );
+
+    injured.forEach(p=>{
+
+      out += card(`
+
+        <h2>💪 หนุ่มถึกรอเสียชีวิต</h2>
+
+        <div class="item row between">
+
+          <b>${esc(p.name)}</b>
+
+          <span class="red">
+            คืนที่ ${p.toughDueNight}
+          </span>
+
+        </div>
+
+        <p class="green">
+          ● ยังรอดชีวิต
+        </p>
+
+      `);
+
+    });
+
+    if(
+      S.wolfBlockedNight===S.night &&
+      S.phase==="night"
+    ) {
+
+      out += card(`
+
+        <h2 class="red">
+          🦠 หมาป่าติดเชื้อ
+        </h2>
+
+        <p class="notice">
+          คืนนี้หมาป่าไม่สามารถ
+          เลือกกำจัดผู้เล่นได้
+        </p>
+
+      `);
+    }
+
+    if(
+      S.wolfBlockedNight>S.night
+    ) {
+
+      out += card(`
+
+        <h2 class="gold">
+          🦠 หมาป่าติดเชื้อ
+        </h2>
+
+        <p>
+          งดโจมตีในคืนที่
+          ${S.wolfBlockedNight}
+        </p>
+
+      `);
+    }
+
+    return out;
+  }
+
+  window.dismissSpecial =
+    dismissSpecial;
+
+  
+
+  // ROLE REGISTRATION V1.4.0
+
+  function registrationState() {
+    return S.registration || null;
+  }
+
+  function openRegistration() {
+
+    if(S.phase !== "setup") {
+      return notice(
+        "ใช้ได้ก่อนเริ่มเกมเท่านั้น"
+      );
+    }
+
+    if(S.players.length < 3) {
+      return notice(
+        "กรุณาเพิ่มผู้เล่นอย่างน้อย 3 คน"
+      );
+    }
+
+    const counts = {};
+
+    S.players.forEach(p=>{
+      if(p.roleId) {
+        counts[p.roleId] =
+          (counts[p.roleId] || 0) + 1;
+      }
+    });
+
+    const old = registrationState();
+
+    if(old && old.counts) {
+      Object.assign(counts, old.counts);
+    }
+
+    showModal(
+      "🎭 เลือกบทบาทในเกม",
+      `
+      <div class="speech">
+        ผู้เล่นทั้งหมด:
+        <b>${S.players.length} คน</b>
+        <br>
+        เลือกจำนวนการ์ดที่ใช้จริง
+      </div>
+
+      <div class="item gold"
+        id="registrationTotal">
+        จำนวนการ์ดที่เลือก
+      </div>
+
+      ${S.roles.map((r,i)=>`
+        <div class="item row between">
+
+          <div class="grow">
+            ${esc(r.icon+" "+r.name)}
+          </div>
+
+          ${btn(
+            "−",
+            "adjustRegistration("+i+",-1)",
+            "mini"
+          )}
+
+          <input
+            id="regCount_${i}"
+            class="count"
+            type="number"
+            min="0"
+            max="${S.players.length}"
+            value="${counts[r.id]||0}"
+            oninput="updateRegistrationTotal()"
+          >
+
+          ${btn(
+            "+",
+            "adjustRegistration("+i+",1)",
+            "mini"
+          )}
+
+        </div>
+      `).join("")}
+
+      <p class="notice">
+        จำนวนที่เหลือจะเป็นชาวบ้าน
+        โดยอัตโนมัติ
+      </p>
+      `,
+      ()=>{
+
+        const selected = {};
+        let total = 0;
+
+        for(let i=0;i<S.roles.length;i++) {
+
+          const n = Number(
+            $("regCount_"+i).value
+          );
+
+          if(
+            !Number.isInteger(n) ||
+            n<0 ||
+            n>S.players.length
+          ) {
+            return formError(
+              "จำนวนบทบาทไม่ถูกต้อง"
+            );
+          }
+
+          if(n>0) {
+            selected[S.roles[i].id] = n;
+          }
+
+          total += n;
+        }
+
+        if(total>S.players.length) {
+          return formError(
+            "จำนวนการ์ดมากกว่าผู้เล่น"
+          );
+        }
+
+        selected.villager =
+          (selected.villager||0) +
+          S.players.length-total;
+
+        if(
+          !(selected.wolf||0) &&
+          !(selected.wolfCub||0)
+        ) {
+          return formError(
+            "ต้องมีหมาป่าอย่างน้อย 1 คน"
+          );
+        }
+
+        if(!S.roles.some(r=>
+          r.team==="village" &&
+          selected[r.id]>0
+        )) {
+          return formError(
+            "ต้องมีฝ่ายชาวบ้าน"
+          );
+        }
+
+        const queue = S.roles
+          .filter(r=>
+            selected[r.id]>0 &&
+            r.id!=="villager"
+          )
+          .map(r=>r.id);
+
+        snapshot();
+
+        S.registration = {
+          counts:selected,
+          queue:queue,
+          step:0,
+          assignments:{},
+          playerIds:S.players.map(p=>p.id),
+          complete:false
+        };
+
+        closeModal();
+
+        tab = "home";
+
+        commit();
+
+        notice(
+          "แจกการ์ดให้ผู้เล่นเรียบร้อย "+
+          "จากนั้นให้ทุกคนหลับตา "+
+          "และเริ่มเรียกทีละบทบาท",
+          "🌙 เตรียมลงทะเบียน"
+        );
+      },
+      "เริ่มลงทะเบียน"
+    );
+
+    updateRegistrationTotal();
+  }
+
+  function adjustRegistration(i,delta) {
+
+    const el = $("regCount_"+i);
+
+    if(!el) return;
+
+    el.value = Math.max(
+      0,
+      Math.min(
+        S.players.length,
+        (Number(el.value)||0)+delta
+      )
+    );
+
+    updateRegistrationTotal();
+  }
+
+  function updateRegistrationTotal() {
+
+    let total = 0;
+
+    S.roles.forEach((r,i)=>{
+      total += Number(
+        $("regCount_"+i)?.value||0
+      );
+    });
+
+    const el = $("registrationTotal");
+
+    if(el) {
+
+      const left = S.players.length-total;
+
+      el.textContent =
+        "เลือกแล้ว "+total+
+        " / "+S.players.length+
+        (left>0
+          ?" · เหลือ "+left+" ชาวบ้าน"
+          :"");
+
+      el.className =
+        "item "+
+        (left<0?"red":left===0?"green":"gold");
+    }
+  }
+
+  function validRegistration() {
+
+    const reg = registrationState();
+
+    if(!reg) return false;
+
+    return reg.playerIds.length ===
+      S.players.length &&
+      reg.playerIds.every(id=>player(id)) &&
+      Object.keys(reg.counts).every(
+        id=>S.roles.some(r=>r.id===id)
+      );
+  }
+
+  function registrationPanel() {
+
+    if(S.phase!=="setup") return "";
+
+    const reg = registrationState();
+
+    if(!reg) {
+      return card(`
+        <h2>🌙 ลงทะเบียนบทบาท</h2>
+
+        <p class="muted">
+          ให้ผู้เล่นหลับตา
+          แล้วเรียกทีละบทบาท
+        </p>
+
+        ${btn(
+          "🎭 เลือกบทบาทที่ใช้ในเกม",
+          "openRegistration()",
+          "primary full"
+        )}
+      `);
+    }
+
+    if(!validRegistration()) {
+
+      return card(`
+        <h2 class="red">
+          รายชื่อหรือบทบาทมีการเปลี่ยนแปลง
+        </h2>
+
+        ${btn(
+          "ตั้งค่าลงทะเบียนใหม่",
+          "openRegistration()",
+          "primary full"
+        )}
+
+        ${btn(
+          "ยกเลิกการลงทะเบียน",
+          "cancelRegistration()",
+          "danger full"
+        )}
+      `);
+    }
+
+    if(reg.complete ||
+       reg.step>=reg.queue.length) {
+
+      const remaining = S.players.filter(
+        p=>!reg.assignments[p.id]
+      );
+
+      return card(`
+
+        <h2 class="green">
+          ✓ ตรวจสอบบทบาทก่อนเริ่มเกม
+        </h2>
+
+        ${S.players.map(p=>{
+
+          const r = role(
+            reg.assignments[p.id] ||
+            "villager"
+          );
+
+          return `
+            <div class="item row">
+
+              <div class="avatar">
+                ${esc(r.icon)}
+              </div>
+
+              <div class="grow">
+                <b>${esc(p.name)}</b>
+
+                <div class="small muted">
+                  ${esc(r.name)}
+                </div>
+              </div>
+
+              <span class="green">✓</span>
+            </div>
+          `;
+
+        }).join("")}
+
+        <p class="notice">
+          ชาวบ้านอัตโนมัติ:
+          ${remaining.length} คน
+        </p>
+
+        ${btn(
+          "✓ บันทึกบทบาททั้งหมด",
+          "finishRegistration()",
+          "success full"
+        )}
+
+        ${btn(
+          "↩ ย้อนกลับ",
+          "previousRegistration()",
+          "full"
+        )}
+
+        ${btn(
+          "ยกเลิกการลงทะเบียน",
+          "cancelRegistration()",
+          "danger full"
+        )}
+
+      `);
+    }
+
+    const rid = reg.queue[reg.step];
+    const r = role(rid);
+    const count = reg.counts[rid];
+
+    const available = S.players.filter(
+      p=>!reg.assignments[p.id] ||
+      reg.assignments[p.id]===rid
+    );
+
+    const percent = Math.round(
+      reg.step/reg.queue.length*100
+    );
+
+    return card(`
+
+      <div class="row between">
+        <h2>🌙 ลงทะเบียนบทบาท</h2>
+        <span class="muted">
+          ${reg.step+1}/${reg.queue.length}
+        </span>
+      </div>
+
+      <div class="progress">
+        <div style="width:${percent}%"></div>
+      </div>
+
+      <div style="
+        text-align:center;
+        padding:18px 0">
+
+        <div style="font-size:52px">
+          ${esc(r.icon)}
+        </div>
+
+        <h1>${esc(r.name)}</h1>
+
+        <p class="gold">
+          เลือกผู้เล่น ${count} คน
+        </p>
+
+      </div>
+
+      <div class="speech">
+
+        ขอให้ ${esc(r.name)}
+        ลืมตาขึ้นมา
+        ให้ผู้ดำเนินเกมเห็นว่าเป็นใคร
+
+      </div>
+
+      <div id="regSelected"
+        class="item green">
+        เลือกแล้ว 0 / ${count} คน
+      </div>
+
+      ${available.map((p,i)=>`
+
+        <label class="item check">
+
+          <input
+            type="checkbox"
+            class="registrationCheck"
+            value="${esc(p.id)}"
+            onchange="checkRegistration(this)"
+            ${reg.assignments[p.id]===rid
+              ?"checked":""}
+          >
+
+          <b>${esc(p.name)}</b>
+
+        </label>
+
+      `).join("")}
+
+      ${btn(
+        "✓ ยืนยันและไปบทบาทถัดไป",
+        "confirmRegistration()",
+        "primary full"
+      )}
+
+      ${btn(
+        "↩ ย้อนกลับบทบาทก่อนหน้า",
+        "previousRegistration()",
+        "full"
+      )}
+
+      ${btn(
+        "ยกเลิกการลงทะเบียน",
+        "cancelRegistration()",
+        "danger full"
+      )}
+
+      <p class="notice">
+        รายชื่อที่ลงทะเบียนแล้ว
+        จะไม่สามารถเลือกซ้ำได้
+      </p>
+
+    `);
+  }
+
+  function checkRegistration(el) {
+
+    const reg = registrationState();
+
+    if(!reg) return;
+
+    const rid = reg.queue[reg.step];
+    const limit = reg.counts[rid];
+
+    const boxes = Array.from(
+      document.querySelectorAll(
+        ".registrationCheck"
+      )
+    );
+
+    let count = boxes.filter(
+      x=>x.checked
+    ).length;
+
+    if(count>limit && el) {
+      el.checked = false;
+      count--;
+    }
+
+    const label = $("regSelected");
+
+    if(label) {
+      label.textContent =
+        "เลือกแล้ว "+count+
+        " / "+limit+" คน";
+
+      label.className =
+        "item "+
+        (count===limit?"green":"gold");
+    }
+  }
+
+  function confirmRegistration() {
+
+    const reg = registrationState();
+
+    if(!validRegistration() ||
+       S.phase!=="setup") return;
+
+    const rid = reg.queue[reg.step];
+
+    const ids = Array.from(
+      document.querySelectorAll(
+        ".registrationCheck:checked"
+      )
+    ).map(x=>x.value);
+
+    if(ids.length!==reg.counts[rid]) {
+
+      return notice(
+        "กรุณาเลือกผู้เล่นให้ครบ "+
+        reg.counts[rid]+" คน"
+      );
+    }
+
+    if(ids.some(id=>
+      !player(id) ||
+      (
+        reg.assignments[id] &&
+        reg.assignments[id]!==rid
+      )
+    )) {
+      return notice(
+        "พบผู้เล่นที่ลงทะเบียนแล้ว"
+      );
+    }
+
+    snapshot();
+
+    Object.keys(reg.assignments)
+      .forEach(id=>{
+        if(reg.assignments[id]===rid) {
+          delete reg.assignments[id];
+        }
+      });
+
+    ids.forEach(id=>{
+      reg.assignments[id] = rid;
+    });
+
+    reg.step++;
+
+    reg.complete =
+      reg.step>=reg.queue.length;
+
+    commit();
+
+    notice(
+      role(rid).name+
+      " ลงทะเบียนเรียบร้อย "+
+      "ให้หลับตาลงได้",
+      "✓ บันทึกแล้ว"
+    );
+  }
+
+  function previousRegistration() {
+
+    const reg = registrationState();
+
+    if(!reg || reg.step<=0) {
+
+      return openRegistration();
+    }
+
+    snapshot();
+
+    reg.step--;
+    reg.complete = false;
+
+    const rid = reg.queue[reg.step];
+
+    Object.keys(reg.assignments)
+      .forEach(id=>{
+        if(reg.assignments[id]===rid) {
+          delete reg.assignments[id];
+        }
+      });
+
+    commit();
+  }
+
+  function finishRegistration() {
+
+    const reg = registrationState();
+
+    if(!validRegistration() ||
+       S.phase!=="setup") return;
+
+    if(reg.step<reg.queue.length) {
+      return notice(
+        "ยังลงทะเบียนไม่ครบ"
+      );
+    }
+
+    const actual = {};
+
+    S.players.forEach(p=>{
+
+      const rid =
+        reg.assignments[p.id] ||
+        "villager";
+
+      actual[rid] =
+        (actual[rid]||0)+1;
+    });
+
+    if(S.roles.some(r=>
+      (actual[r.id]||0)!==
+      (reg.counts[r.id]||0)
+    )) {
+      return notice(
+        "จำนวนบทบาทไม่ตรง กรุณาตรวจสอบ"
+      );
+    }
+
+    ask(
+      "ยืนยันบทบาทผู้เล่นทั้งหมด "+
+      S.players.length+" คน?",
+      ()=>{
+
+        snapshot();
+
+        S.players.forEach(p=>{
+
+          p.roleId =
+            reg.assignments[p.id] ||
+            "villager";
+
+          p.originalRoleId = p.roleId;
+          p.alive = true;
+
+          delete p.copyTarget;
+        });
+
+        delete S.registration;
+
+        log(
+          "ลงทะเบียนบทบาทแบบหลับตาครบแล้ว"
+        );
+
+        tab = "home";
+
+        commit();
+
+        notice(
+          "กำหนดบทบาทครบทุกคนแล้ว "+
+          "สามารถเริ่มเกมคืนที่ 1 ได้เลย",
+          "🎉 ลงทะเบียนสำเร็จ"
+        );
+      }
+    );
+  }
+
+  function cancelRegistration() {
+
+    ask(
+      "ยกเลิกการลงทะเบียนบทบาท?",
+      ()=>{
+
+        snapshot();
+
+        delete S.registration;
+
+        commit();
+      }
+    );
+  }
+
+  Object.assign(window,{
+
+    openRegistration,
+    adjustRegistration,
+    updateRegistrationTotal,
+    checkRegistration,
+    confirmRegistration,
+    previousRegistration,
+    finishRegistration,
+    cancelRegistration
+
+  });
+
+  function homePage() {
+    let out =
+      hunterPanel() +
+      doppelgangerPanel() +
+      cursedPanel() +
+      loveNoticePanel() +
+      loversPanel() +
+      specialRolePanel();
+
+    if(S.phase==="setup") {
+
+      out += registrationPanel();
+
+      out += card(`
+        <h2>🎮 เตรียมเกม</h2>
+
+        <p class="muted">
+          เพิ่มผู้เล่นและกำหนดบทบาท
+        </p>
+
+        ${btn("＋ เพิ่มผู้เล่น",
+          "editPlayer()","full")}
+
+        ${btn("👥 เพิ่มหลายคน",
+          "quickAdd()","full")}
+
+        ${btn("🎲 สุ่มบทบาท",
+          "shuffleRoles()","full")}
+
+        ${btn("🌙 เริ่มเกม",
+          "startGame()","primary full")}
+      `);
+    }
+
+    if(S.phase==="night") {
+      out += nightPanel();
+    }
+
+    if(S.phase==="day") {
+
+      out += card(`
+        <h2>☀️ ประกาศผลกลางคืน</h2>
+
+        <div class="speech">
+          ${S.deaths.length
+            ?"ผู้เสียชีวิต: "+
+              esc(S.deaths.join(", "))
+            :"คืนนี้ไม่มีผู้เสียชีวิต"}
+        </div>
+
+        
+        ${S.silenced &&
+           player(S.silenced)?.alive
+          ?`<div class="speech gold">
+              🤫 ห้ามพูดวันนี้:
+              ${esc(nameOf(S.silenced))}
+            </div>`
+          :""}
+
+        <h3>⏱ เวลาอภิปราย</h3>
+    
+
+        <div class="timer" id="timer">
+          00:00
+        </div>
+
+        <div class="row">
+          ${btn("1 นาที",
+            "timerStart(1)","grow mini")}
+
+          ${btn("3 นาที",
+            "timerStart(3)","grow mini")}
+
+          ${btn("5 นาที",
+            "timerStart(5)","grow mini")}
+
+          ${btn("หยุด",
+            "timerStop()","mini danger")}
+        </div>
+
+        ${S.voted
+          ?`<p class="green item">
+              ✓ โหวตเรียบร้อย
+            </p>`
+          :btn("🗳️ เข้าสู่การโหวต",
+            call("go","vote"),
+            "primary full")}
+
+        ${btn("🌙 เข้าสู่คืนถัดไป",
+          "nextNight()","full")}
+      `);
+
+      out += revealerPanel();
+
+      const w = winner();
+
+      if(w) {
+        out += card(`
+          <h2 class="gold">
+            🏆 อาจจบเกมแล้ว
+          </h2>
+
+          <p>${esc(w)} เข้าเงื่อนไขชนะ</p>
+
+          <p class="notice">
+            ตรวจสอบความสามารถพิเศษก่อนยืนยัน
+          </p>
+
+          ${btn("ยืนยันผู้ชนะ",
+            "endGame()","success full")}
+        `);
+      }
+    }
+
+    if(S.phase==="ended") {
+      out += card(`
+        <h2 class="gold">🏆 จบเกม</h2>
+
+        <h1>${esc(S.result)}</h1>
+
+        ${btn("เริ่มเกมใหม่",
+          "resetGame()","primary full")}
+      `);
+    }
+
+    return out+card(`
+      <div class="row between">
+        <h2>👥 รายชื่อผู้เล่น</h2>
+
+        ${btn("จัดการ",
+          call("go","players"),"mini")}
+      </div>
+
+      ${playerList(true)}
+    `);
+  }
+
+  // =========================
+  // PLAYERS PAGE
+  // =========================
+
+  
+  function clearPlayerRoles() {
+
+    if (S.phase !== "setup") {
+      return notice(
+        "กรุณาเริ่มเกมใหม่ก่อนล้างบทบาท"
+      );
+    }
+
+    if (!S.players.length) {
+      return notice(
+        "ยังไม่มีผู้เล่น"
+      );
+    }
+
+    if (!S.players.some(p => p.roleId)) {
+      return notice(
+        "ผู้เล่นทุกคนยังไม่กำหนดบทบาท"
+      );
+    }
+
+    ask(
+      "ล้างบทบาทผู้เล่นทั้งหมด " +
+      S.players.length +
+      " คน โดยเก็บรายชื่อเดิมไว้?",
+      () => {
+
+        snapshot();
+
+        S.players.forEach(p => {
+          p.roleId = "";
+        });
+
+        log("ล้างบทบาทผู้เล่นทั้งหมด");
+
+        commit();
+      }
+    );
+  }
+
+  window.clearPlayerRoles = clearPlayerRoles;
+
+  function playersPage() {
+    return card(`
+      
+      <div class="row between">
+        <h2>👥 จัดการผู้เล่น</h2>
+
+        
+      </div>
+    
+
+      ${S.phase==="setup"?`
+        <div class="row">
+          ${btn("＋ เพิ่ม",
+            "editPlayer()","primary grow")}
+
+          ${btn("เพิ่มหลายคน",
+            "quickAdd()","grow")}
+        </div>
+
+        ${btn("🎲 สุ่มบทบาท",
+          "shuffleRoles()","full")}
+      `:""}
+
+      ${S.phase==="ended"?`
+        ${btn("เริ่มเกมใหม่",
+          "resetGame()","primary full")}
+      `:""}
+
+      ${playerList()}
+
+      <div class="clearArea">
+
+      ${btn(
+        "🎭 ล้างบทบาทผู้เล่นทั้งหมด",
+        "clearPlayerRoles()",
+        "clearRoleButton"
+      )}
+
+    
+        ${btn(
+          "🗑 ล้างรายชื่อผู้เล่นทั้งหมด",
+          "clearPlayers()",
+          "clearButton"
+        )}
+      </div>
+    
+    `);
+  }
+
+  // =========================
+  // ROLES PAGE
+  // =========================
+
+  function rolesPage() {
+    return card(`
+      <div class="row between">
+        <h2>🎭 ตัวละคร</h2>
+
+        ${btn("＋ เพิ่ม",
+          "editRole()","mini primary")}
+      </div>
+
+      ${S.roles.map(r=>`
+        <div class="item row">
+          <div class="avatar">
+            ${esc(r.icon)}
+          </div>
+
+          <div class="grow">
+            
+            <b>${esc(r.name)}</b>
+
+            ${r.description
+              ?`<p class="small muted">
+                  ${esc(r.description)}
+                </p>`
+              :""}
+
+            
+    
+
+            <div class="small muted">
+              ${teamName(r.team)} ·
+              ${r.order
+                ?"ลำดับ "+r.order
+                :"ไม่ตื่น"}
+
+              ${r.firstOnly
+                ?" · คืนแรก":""}
+            </div>
+          </div>
+
+          ${btn("แก้ไข",
+            call("editRole",r.id),"mini")}
+
+          ${![
+            "wolf","seer","guard",
+            "witch","hunter","villager"
+          ].includes(r.id)
+            ?btn("ลบ",
+              call("deleteRole",r.id),
+              "mini danger")
+            :""}
+        </div>
+      `).join("")}
+    `)+card(`
+      <h2>🧪 สถานะยาแม่มด</h2>
+
+      <div class="item row between">
+        <span>ยารักษา</span>
+
+        <b class="${S.potions.heal
+          ?"green":"red"}">
+          ${S.potions.heal
+            ?"พร้อมใช้":"ใช้แล้ว"}
+        </b>
+      </div>
+
+      <div class="item row between">
+        <span>ยาพิษ</span>
+
+        <b class="${S.potions.poison
+          ?"green":"red"}">
+          ${S.potions.poison
+            ?"พร้อมใช้":"ใช้แล้ว"}
+        </b>
+      </div>
+    `);
+  }
+
+  // =========================
+  // VOTE PAGE
+  // =========================
+
+  function votePage() {
+    if(S.phase!=="day") {
+      return card(`
+        <div class="empty">
+          เปิดโหวตได้ในช่วงกลางวัน
+        </div>
+      `);
+    }
+
+    if(S.voted) {
+      return card(`
+        <h2 class="green">
+          ✓ โหวตเรียบร้อย
+        </h2>
+
+        ${btn("กลับหน้าหลัก",
+          call("go","home"),"full")}
+      `);
+    }
+
+    const total = Object.values(S.votes)
+      .reduce((a,b)=>a+b,0);
+
+    return card(`
+      <h2>🗳️ ลงคะแนนโหวต</h2>
+
+      <p class="muted">
+        คะแนนรวม ${total} /
+        ${alive().length}
+      </p>
+
+      ${alive().map(p=>`
+        <div class="item row">
+          <div class="grow">
+            <b>${esc(p.name)}</b>
+          </div>
+
+          ${btn("−",
+            call("vote",p.id,-1),"mini")}
+
+          <b class="blue voteNumber">
+            ${S.votes[p.id]||0}
+          </b>
+
+          ${btn("+",
+            call("vote",p.id,1),"mini")}
+        </div>
+      `).join("")}
+
+      ${btn("ยืนยันผลโหวต",
+        "executeVote()","danger full")}
+
+      ${btn("ล้างคะแนน",
+        "resetVotes()","full")}
+    `);
+  }
+
+  // =========================
+  // HISTORY PAGE
+  // =========================
+
+  function historyPage() {
+    return card(`
+      <h2>📜 ประวัติเกม</h2>
+
+      ${S.history.length
+        ?S.history.map(h=>`
+          <div class="item">
+
+            <div class="small muted">
+              ${esc(h.time)} · รอบ ${h.night}
+            </div>
+
+            <p>${esc(h.text)}</p>
+
+          </div>
+        `).join("")
+        :`<div class="empty">
+            ยังไม่มีประวัติ
+          </div>`}
+    `)+card(`
+      <h2>⚙️ จัดการเกม</h2>
+
+      ${btn("↩️ ย้อนกลับ",
+        "undo()","full")}
+
+      ${btn("🏆 กำหนดผู้ชนะ",
+        "endGame()","full")}
+
+      ${btn("เริ่มเกมใหม่",
+        "resetGame()","danger full")}
+    `);
+  }
+
+  function go(t) {
+    tab = t;
+    render();
+    window.scrollTo(0,0);
+  }
+
+  // =========================
+  // MAIN RENDER
+  // =========================
+
+  function render() {
+
+    const pages = {
+      home:homePage,
+      players:playersPage,
+      roles:rolesPage,
+      vote:votePage,
+      history:historyPage
+    };
+
+    const nav = [
+      ["home","🏠","หน้าหลัก"],
+      ["players","👥","ผู้เล่น"],
+      ["roles","🎭","บทบาท"],
+      ["vote","🗳️","โหวต"],
+      ["history","📜","ประวัติ"]
+    ];
+
+    const phase = {
+      setup:"เตรียมเกม",
+      night:"🌙 คืนที่ "+S.night,
+      day:"☀️ วันที่ "+S.night,
+      ended:"จบเกม"
+    }[S.phase];
+
+    $("app").innerHTML = `
+      <header class="row between">
+        <div>
+          <h1>🐺 WEREWOLF</h1>
+
+          <div class="subtitle">
+            MODERATOR WEB APP V2.0
+          </div>
+        </div>
+
+        <div class="badge">
+          ${esc(phase)}
+        </div>
+      </header>
+
+      <div class="stats">
+
+        <div class="stat">
+          <strong>${S.players.length}</strong>
+          <small>ผู้เล่นทั้งหมด</small>
+        </div>
+
+        <div class="stat">
+          <strong class="green">
+            ${alive().length}
+          </strong>
+          <small>รอดชีวิต</small>
+        </div>
+
+        <div class="stat">
+          <strong class="red">
+            ${S.players.length-alive().length}
+          </strong>
+          <small>เสียชีวิต</small>
+        </div>
+
+      </div>
+
+      <div class="row between toolbar">
+        <span id="saveStatus"
+          class="small muted">
+          ● ${esc(status)}
+        </span>
+
+        ${btn("↩ ย้อนกลับ",
+          "undo()","mini")}
+      </div>
+
+      ${pages[tab]()}
+
+      <nav>
+        ${nav.map(n=>`
+          <button
+            class="${tab===n[0]
+              ?"active":""}"
+            onclick="${esc(call("go",n[0]))}">
+
+            <span>${n[1]}</span>
+            ${n[2]}
+
+          </button>
+        `).join("")}
+      </nav>
+    `;
+  }
+
+  // เปิดให้ HTML เรียกฟังก์ชันได้
+
+  Object.assign(window,{
+
+    clearPlayers,
+    closeModal,
+    submitModal,
+    undo,
+    editPlayer,
+    quickAdd,
+    deletePlayer,
+    changeLife,
+    shuffleRoles,
+    editRole,
+    deleteRole,
+    startGame,
+    nightAction,
+    resolveNight,
+    nextNight,
+    vote,
+    resetVotes,
+    executeVote,
+    endGame,
+    resetGame,
+    timerStart,
+    timerStop,
+    go
+  });
+
+  render();
+  tick();
+  setInterval(tick,250);
+
+    if (
+      S.phase !== "setup" &&
+      S.phase !== "ended" &&
+      hasPendingHunter()
+    ) {
+      scheduleHunter();
+    }
+}
+
+    let game = fresh();
+
+    try {
+      const saved = localStorage.getItem(
+        "WerewolfMasterV2"
+      );
+
+      if (saved) {
+        const old = JSON.parse(saved);
+
+        if (
+          Array.isArray(old.players) &&
+          Array.isArray(old.roles)
+        ) {
+          game = Object.assign(game, old);
+        }
+      }
+    } catch(e) {
+      console.log(e);
+    }
+
+    game.version = 2.0;
+
+    dashboard(game);
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("./sw.js")
+        .catch(console.log);
+    }
+  </script>
+
+</body>
+</html>

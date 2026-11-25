@@ -1,0 +1,18 @@
+{
+  "id": "./",
+  "name": "WerewolfMaster V2.0",
+  "short_name": "Werewolf",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#11131c",
+  "theme_color": "#11131c",
+  "lang": "th",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
