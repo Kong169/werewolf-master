@@ -422,7 +422,7 @@ nav span {
 
 </style>
 
-    <title>WerewolfMaster V2.0</title>
+    <title>WerewolfMaster V2.1</title>
 
     <meta name="theme-color"
       content="#11131c">
@@ -478,6 +478,11 @@ nav span {
     function dashboard(initial) {
 
   let S = initial;
+  const defaults21 = {autoSpeech:false, sound:true, warning:true, awake:false, discussion:true, rate:1};
+  let prefs = {...defaults21};
+  try { Object.assign(prefs, JSON.parse(localStorage.getItem("WerewolfSettings21") || "{}")); } catch(e) {}
+  let lastCue = "", wakeLock = null, audio = null, warnedEnd = 0;
+
 
     S.roles.forEach(r => {
       if (
@@ -572,6 +577,7 @@ nav span {
       }
 
       render();
+      syncCue();
       window.saveStatus(
         status === "บันทึกแล้ว"
       );
@@ -867,7 +873,7 @@ nav span {
 
   function deletePlayer(id) {
     if(S.phase==="night" ||
-       S.phase==="day") {
+       S.phase==="day" || S.phase==="discussion") {
       return notice(
         "ระหว่างเกมให้ใช้ปุ่มตายแทนการลบ"
       );
@@ -919,7 +925,7 @@ nav span {
         S.history = [];
         S.deaths = [];
         S.result = "";
-        S.timerEnd = 0;
+        S.timerEnd = 0; S.timerRemaining = 0;
         S.voted = false;
         S.cubPending = false;
         S.doubleAttack = false;
@@ -1182,7 +1188,7 @@ nav span {
   function editRole(id="") {
 
     if(S.phase==="night" ||
-       S.phase==="day") {
+       S.phase==="day" || S.phase==="discussion") {
       return notice(
         "แก้ไขตัวละครได้ก่อนเริ่มเกมหรือหลังจบเกม"
       );
@@ -1273,7 +1279,7 @@ nav span {
 
   function deleteRole(id) {
     if(S.phase==="night" ||
-       S.phase==="day") {
+       S.phase==="day" || S.phase==="discussion") {
       return notice("ไม่สามารถลบระหว่างเกม");
     }
 
@@ -1344,7 +1350,7 @@ nav span {
       return notice("ต้องมีฝ่ายชาวบ้าน");
     }
 
-    ask("เริ่มเกมคืนที่ 1?",()=>{
+    ask(prefs.discussion ? "เริ่มช่วงอภิปรายก่อนคืนแรก?" : "เริ่มเกมคืนที่ 1?",()=>{
       snapshot();
 
       
@@ -1382,7 +1388,9 @@ nav span {
         poison:true
       };
 
-      beginNight();
+      S.timerEnd = 0; S.timerRemaining = 0; S.timerDuration = 180;
+      if(prefs.discussion) { S.phase = "discussion"; log("อภิปรายก่อนคืนแรก"); }
+      else beginNight();
       tab = "home";
       commit();
     });
@@ -1401,7 +1409,7 @@ nav span {
     S.actions = {};
     S.votes = {};
     S.deaths = [];
-    S.timerEnd = 0;
+    S.timerEnd = 0; S.timerRemaining = 0;
     S.voted = false;
 
     S.queue = S.roles
@@ -1907,7 +1915,7 @@ nav span {
 
         S.voted = true;
         S.votes = {};
-        S.timerEnd = 0;
+        S.timerEnd = 0; S.timerRemaining = 0;
         tab = "home";
 
         commit();
@@ -1987,7 +1995,7 @@ nav span {
 
         S.result = $("win").value;
         S.phase = "ended";
-        S.timerEnd = 0;
+        S.timerEnd = 0; S.timerRemaining = 0;
 
         log("จบเกม: "+S.result);
 
@@ -2061,54 +2069,46 @@ nav span {
   // TIMER
   // =========================
 
+  function unlockAudio() {
+    try { const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return; audio ||= new AC(); audio.resume().catch(()=>{}); } catch(e) {}
+  }
+  function beep(final=false) {
+    if(!prefs.sound || !audio || audio.state!=="running") return;
+    try { const o=audio.createOscillator(), g=audio.createGain(); o.frequency.value=final?880:550; g.gain.value=.12; o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime+(final?.65:.2)); } catch(e) {}
+  }
   function timerStart(minutes) {
-    snapshot();
-    S.timerEnd = Date.now()+minutes*60000;
-    commit();
+    if(!["day","discussion"].includes(S.phase)) return;
+    unlockAudio(); snapshot(); S.timerDuration=Math.round(minutes*60); S.timerRemaining=0; S.timerEnd=Date.now()+S.timerDuration*1000; commit(); tick();
   }
-
-  function timerStop() {
-    snapshot();
-    S.timerEnd = 0;
-    commit();
-  }
-
+  function timerStop() { if(!S.timerEnd) return; snapshot(); S.timerRemaining=Math.max(0,Math.ceil((S.timerEnd-Date.now())/1000)); S.timerEnd=0; commit(); tick(); }
+  function timerResume() { unlockAudio(); if(!S.timerRemaining) return; snapshot(); S.timerEnd=Date.now()+S.timerRemaining*1000; S.timerRemaining=0; commit(); tick(); }
+  function timerReset() { snapshot(); S.timerEnd=0; S.timerRemaining=S.timerDuration||180; commit(); tick(); }
+  function timerCustom() { showModal("กำหนดเวลา", '<label>นาที (1–120)</label><input id="customMinutes" type="number" min="1" max="120" value="3">',()=>{const n=Number($("customMinutes").value); if(!Number.isInteger(n)||n<1||n>120)return formError("กรอก 1–120 นาที"); closeModal(); timerStart(n);},"เริ่มจับเวลา"); }
+  function timerPanel() { return `<h3>⏱ เวลาอภิปราย</h3><div class="timer" id="timer">00:00</div><div class="row">${[1,3,5,10].map(n=>btn(n+" นาที","timerStart("+n+")","grow mini")).join("")}</div>${btn("กำหนดเวลาเอง","timerCustom()","full")}<div class="row" style="margin-top:8px">${btn(S.timerEnd?"หยุดชั่วคราว":"เล่นต่อ",S.timerEnd?"timerStop()":"timerResume()","grow")}${btn("รีเซ็ต","timerReset()","grow")}</div>`; }
   function tick() {
-    const sec = Math.max(
-      0,
-      Math.ceil(
-        (S.timerEnd-Date.now())/1000
-      )
-    );
-
-    const el = $("timer");
-
-    if(el) {
-      el.textContent =
-        String(Math.floor(sec/60))
-          .padStart(2,"0")+
-        ":"+
-        String(sec%60).padStart(2,"0");
-
-      el.style.color =
-        sec<15&&S.timerEnd
-          ?"#f08090"
-          :"#ffffff";
-    }
-
-    if(S.timerEnd&&sec===0) {
-      S.timerEnd = 0;
-      commit();
-
-      if(!$("modal").innerHTML) {
-        notice("⏰ หมดเวลาอภิปราย");
-      } else {
-        status = "หมดเวลาอภิปราย";
-        const label = $("saveStatus");
-        if(label) label.textContent = status;
-      }
-    }
+    const sec=S.timerEnd?Math.max(0,Math.ceil((S.timerEnd-Date.now())/1000)):(S.timerRemaining||0);
+    const el=$("timer"); if(el){el.textContent=String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0");el.style.color=S.timerEnd&&sec<=10?"#f08090":"#ffffff";}
+    if(S.timerEnd&&sec>0&&sec<=10&&prefs.warning&&warnedEnd!==S.timerEnd){warnedEnd=S.timerEnd;beep();}
+    if(S.timerEnd&&sec===0){S.timerEnd=0;S.timerRemaining=0;beep(true);commit();if(!$("modal").innerHTML)notice("⏰ หมดเวลาอภิปราย");else status="หมดเวลาอภิปราย";}
   }
+  function firstNight() { if(S.phase!=="discussion")return; ask("สิ้นสุดการอภิปรายและเริ่มคืนที่ 1?",()=>{snapshot();beginNight();tab="home";commit();}); }
+  function cue() {
+    if(S.phase==="discussion")return ["discussion","ขอให้ทุกคนลืมตา และเริ่มอภิปรายก่อนคืนแรก"];
+    if(S.phase==="setup"&&S.registration){const r=role(S.registration.queue[S.registration.step]);return ["reg"+S.registration.step,r.id?"ขอให้ "+r.name+" ลืมตาขึ้นมา ให้ผู้ดำเนินเกมเห็นว่าเป็นใคร":"ลงทะเบียนครบแล้ว"];} 
+    if(S.phase==="night"){const r=role(S.queue[S.step]);return ["night"+S.night+":"+S.step,(S.step===0?"ขอให้ทุกคนหลับตา ":"ขอให้บทบาทก่อนหน้าหลับตา ")+(r.id?(r.speech||r.name+" ลืมตา"):"รอสรุปผลกลางคืน")];}
+    if(S.phase==="day")return ["day"+S.night,"ขอให้ทุกคนลืมตา เตรียมอภิปราย"];
+    return [S.phase,""];
+  }
+  function speakCue(manual=true){const t=cue()[1];if(!t)return;if(!window.speechSynthesis){if(manual)notice("อุปกรณ์ไม่รองรับเสียงพูด");return;} try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="th-TH";u.rate=Number(prefs.rate)||1;const v=speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith("th"));if(v)u.voice=v;speechSynthesis.speak(u);}catch(e){if(manual)notice("ไม่สามารถอ่านเสียงได้");}}
+  function syncCue(){const k=cue()[0];if(k!==lastCue){lastCue=k;if(prefs.autoSpeech)speakCue(false);}}
+  async function keepAwake(){try{if(prefs.awake&&document.visibilityState==="visible"&&navigator.wakeLock){if(!wakeLock||wakeLock.released)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
+  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.1</h2>${[["autoSpeech","อ่านบทพูดอัตโนมัติ"],["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}<label>ความเร็วเสียงพูด</label><select onchange="setPref('rate',Number(this.value))">${[.75,1,1.25,1.5].map(n=>`<option ${prefs.rate===n?"selected":""} value="${n}">${n}x</option>`).join("")}</select>${btn("ทดสอบเสียง","testSound()","full")}${btn("สำรองข้อมูลเกม","backupGame()","full")}<label class="check">กู้คืนข้อมูลเกม<input type="file" accept=".json,application/json" onchange="restoreGame(this)"></label><p class="notice">เสียงและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
+  function setPref(k,v){prefs[k]=v;try{localStorage.setItem("WerewolfSettings21",JSON.stringify(prefs));}catch(e){notice("บันทึกการตั้งค่าไม่สำเร็จ");}if(k==="autoSpeech"&&!v)window.speechSynthesis?.cancel();if(k==="awake")keepAwake();unlockAudio();}
+  function testSound(){unlockAudio();if(window.speechSynthesis){const u=new SpeechSynthesisUtterance("ทดสอบเสียงผู้ดำเนินเกม");u.lang="th-TH";u.rate=prefs.rate;speechSynthesis.speak(u);}beep(true);}
+  function backupGame(){const a=document.createElement("a");const url=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.href=url;a.download="werewolf-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
+  async function restoreGame(input){try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:2.1,undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
+  document.addEventListener("visibilitychange",keepAwake);
+  Object.assign(window,{timerResume,timerReset,timerCustom,firstNight,speakCue,setPref,testSound,backupGame,restoreGame});
 
   // =========================
   // PLAYER LIST
@@ -4062,11 +4062,7 @@ nav span {
 
         commit();
 
-        notice(
-          "กำหนดบทบาทครบทุกคนแล้ว "+
-          "สามารถเริ่มเกมคืนที่ 1 ได้เลย",
-          "🎉 ลงทะเบียนสำเร็จ"
-        );
+        startGame();
       }
     );
   }
@@ -4133,6 +4129,7 @@ nav span {
       `);
     }
 
+    if(S.phase==="discussion") { out += card(`<h2>☀️ อภิปรายก่อนเริ่มเกม</h2><p>ให้ทุกคนลืมตาและพูดคุยก่อนคืนแรก</p>${timerPanel()}${btn("🌙 สิ้นสุดอภิปราย / เริ่มคืนที่ 1","firstNight()","primary full")}`); }
     if(S.phase==="night") {
       out += nightPanel();
     }
@@ -4158,27 +4155,7 @@ nav span {
             </div>`
           :""}
 
-        <h3>⏱ เวลาอภิปราย</h3>
-    
-
-        <div class="timer" id="timer">
-          00:00
-        </div>
-
-        <div class="row">
-          ${btn("1 นาที",
-            "timerStart(1)","grow mini")}
-
-          ${btn("3 นาที",
-            "timerStart(3)","grow mini")}
-
-          ${btn("5 นาที",
-            "timerStart(5)","grow mini")}
-
-          ${btn("หยุด",
-            "timerStop()","mini danger")}
-        </div>
-
+        ${!S.voted?timerPanel():""}
         ${S.voted
           ?`<p class="green item">
               ✓ โหวตเรียบร้อย
@@ -4527,7 +4504,7 @@ nav span {
       players:playersPage,
       roles:rolesPage,
       vote:votePage,
-      history:historyPage
+      history:historyPage, settings:settingsPage
     };
 
     const nav = [
@@ -4535,11 +4512,11 @@ nav span {
       ["players","👥","ผู้เล่น"],
       ["roles","🎭","บทบาท"],
       ["vote","🗳️","โหวต"],
-      ["history","📜","ประวัติ"]
+      ["history","📜","ประวัติ"], ["settings","⚙️","ตั้งค่า"]
     ];
 
     const phase = {
-      setup:"เตรียมเกม",
+      setup:"เตรียมเกม", discussion:"อภิปรายก่อนเกม",
       night:"🌙 คืนที่ "+S.night,
       day:"☀️ วันที่ "+S.night,
       ended:"จบเกม"
@@ -4551,7 +4528,7 @@ nav span {
           <h1>🐺 WEREWOLF</h1>
 
           <div class="subtitle">
-            MODERATOR WEB APP V2.0
+            MODERATOR WEB APP V2.1
           </div>
         </div>
 
@@ -4593,6 +4570,7 @@ nav span {
           "undo()","mini")}
       </div>
 
+      ${tab==="home"&&cue()[1]?btn("🔊 อ่านบทพูด / อ่านซ้ำ","speakCue()","full"):""}
       ${pages[tab]()}
 
       <nav>
@@ -4641,6 +4619,7 @@ nav span {
   });
 
   render();
+  lastCue=cue()[0]; keepAwake();
   tick();
   setInterval(tick,250);
 
@@ -4674,7 +4653,7 @@ nav span {
       console.log(e);
     }
 
-    game.version = 2.0;
+    game.version = 2.1;
 
     dashboard(game);
 
