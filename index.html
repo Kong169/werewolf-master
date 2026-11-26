@@ -422,7 +422,7 @@ nav span {
 
 </style>
 
-    <title>WerewolfMaster V2.4</title>
+    <title>WerewolfMaster V2.4.1</title>
 
     <meta name="theme-color"
       content="#11131c">
@@ -1423,6 +1423,14 @@ nav span {
       ? S.previousNightTargets[rid] || '' : '';
   }
 
+  function wolfNightSpeech() {
+    return "ขอให้หมาป่าลืมตาขึ้นมา และร่วมกันเลือกผู้เล่นที่ต้องการกำจัด";
+  }
+  function nightRoleName(r) {
+    if(r.id!=="wolf") return r.name;
+    const names = ["wolf","wolfCub"].filter(id=>alive().some(p=>p.roleId===id)).map(id=>role(id).name);
+    return names.join(" + ") || r.name;
+  }
   function beginNight() {
     S.previousNightTargets = {
       night: S.night,
@@ -1446,7 +1454,7 @@ nav span {
 
     S.queue = S.roles
       .filter(r=>
-        r.order>0 &&
+        r.order>0 && r.id!=="wolfCub" &&
 
         !(
           r.id==="wolf" &&
@@ -2133,18 +2141,18 @@ nav span {
   function cue() {
     if(S.phase==="discussion")return ["discussion","ขอให้ทุกคนลืมตา และเริ่มอภิปรายก่อนคืนแรก"];
     if(S.phase==="setup"&&S.registration){const r=role(S.registration.queue[S.registration.step]);return ["reg"+S.registration.step,r.id?"ขอให้ "+r.name+" ลืมตาขึ้นมา ให้ผู้ดำเนินเกมเห็นว่าเป็นใคร":"ลงทะเบียนครบแล้ว"];} 
-    if(S.phase==="night"){const r=role(S.queue[S.step]);return ["night"+S.night+":"+S.step,(S.step===0?"ขอให้ทุกคนหลับตา ":"ขอให้บทบาทก่อนหน้าหลับตา ")+(r.id?(r.speech||r.name+" ลืมตา"):"รอสรุปผลกลางคืน")];}
+    if(S.phase==="night"){const r=role(S.queue[S.step]);return ["night"+S.night+":"+S.step,(S.step===0?"ขอให้ทุกคนหลับตา ":S.queue[S.step-1]==="wolf"?"ขอให้หมาป่าหลับตาลง ":"ขอให้บทบาทก่อนหน้าหลับตา ")+(r.id?(r.id==="wolf"?wolfNightSpeech():r.speech||r.name+" ลืมตา"):"รอสรุปผลกลางคืน")];}
     if(S.phase==="day")return ["day"+S.night,"ขอให้ทุกคนลืมตา เตรียมอภิปราย"];
     return [S.phase,""];
   }
   function speakCue(manual=true){const t=cue()[1];if(!t)return;if(!window.speechSynthesis){if(manual)notice("อุปกรณ์ไม่รองรับเสียงพูด");return;} try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="th-TH";u.rate=Number(prefs.rate)||1;const v=speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith("th"));if(v)u.voice=v;speechSynthesis.speak(u);}catch(e){if(manual)notice("ไม่สามารถอ่านเสียงได้");}}
   function syncCue(){const k=cue()[0];if(k!==lastCue){lastCue=k;if(prefs.autoSpeech)speakCue(false);}}
   async function keepAwake(){try{if(prefs.awake&&document.visibilityState==="visible"&&navigator.wakeLock){if(!wakeLock||wakeLock.released)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
-  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.4</h2>${[["autoSpeech","อ่านบทพูดอัตโนมัติ"],["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}<label>ความเร็วเสียงพูด</label><select onchange="setPref('rate',Number(this.value))">${[.75,1,1.25,1.5].map(n=>`<option ${prefs.rate===n?"selected":""} value="${n}">${n}x</option>`).join("")}</select>${btn("ทดสอบเสียง","testSound()","full")}${btn("สำรองข้อมูลเกม","backupGame()","full")}<label class="check">กู้คืนข้อมูลเกม<input type="file" accept=".json,application/json" onchange="restoreGame(this)"></label><p class="notice">เสียงและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
+  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.4.1</h2>${[["autoSpeech","อ่านบทพูดอัตโนมัติ"],["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}<label>ความเร็วเสียงพูด</label><select onchange="setPref('rate',Number(this.value))">${[.75,1,1.25,1.5].map(n=>`<option ${prefs.rate===n?"selected":""} value="${n}">${n}x</option>`).join("")}</select>${btn("ทดสอบเสียง","testSound()","full")}${btn("สำรองข้อมูลเกม","backupGame()","full")}<label class="check">กู้คืนข้อมูลเกม<input type="file" accept=".json,application/json" onchange="restoreGame(this)"></label><p class="notice">เสียงและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
   function setPref(k,v){prefs[k]=v;try{localStorage.setItem("WerewolfSettings21",JSON.stringify(prefs));}catch(e){notice("บันทึกการตั้งค่าไม่สำเร็จ");}if(k==="autoSpeech"&&!v)window.speechSynthesis?.cancel();if(k==="awake")keepAwake();unlockAudio();}
   function testSound(){unlockAudio();if(window.speechSynthesis){const u=new SpeechSynthesisUtterance("ทดสอบเสียงผู้ดำเนินเกม");u.lang="th-TH";u.rate=prefs.rate;speechSynthesis.speak(u);}beep(true);}
   function backupGame(){const a=document.createElement("a");const url=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.href=url;a.download="werewolf-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
-  async function restoreGame(input){try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:2.4,undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
+  async function restoreGame(input){try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:"2.4.1",undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
   document.addEventListener("visibilitychange",keepAwake);
   Object.assign(window,{timerResume,timerReset,timerCustom,firstNight,speakCue,setPref,testSound,backupGame,restoreGame});
 
@@ -2299,7 +2307,7 @@ nav span {
             </span>
 
             <div class="grow">
-              ${esc(r.icon+" "+r.name)}
+              ${esc(r.icon+" "+nightRoleName(r))}
             </div>
 
             <span class="small muted">
@@ -2442,7 +2450,7 @@ nav span {
     }
 
     out += card(`
-      <h2>${esc(r.icon+" "+r.name)}</h2>
+      <h2>${esc(r.icon+" "+nightRoleName(r))}</h2>
 
       <p class="small muted">
         ผู้เล่น:
@@ -2452,11 +2460,11 @@ nav span {
               ?isWolf(p)
               :p.roleId===r.id
           )
-          .map(p=>p.name).join(", "))}
+          .map(p=>r.id==="wolf"?p.name+" ("+role(p.roleId).name+")":p.name).join(", "))}
       </p>
 
       <div class="speech">
-        ${esc(r.speech||"ดำเนินความสามารถ")}
+        ${esc(r.id==="wolf"?wolfNightSpeech():r.speech||"ดำเนินความสามารถ")}
       </div>
 
       ${actionUI}
@@ -4593,7 +4601,7 @@ nav span {
           <h1>🐺 WEREWOLF</h1>
 
           <div class="subtitle">
-            MODERATOR WEB APP V2.4
+            MODERATOR WEB APP V2.4.1
           </div>
         </div>
 
@@ -4720,7 +4728,7 @@ nav span {
       console.log(e);
     }
 
-    game.version = 2.3;
+    game.version = "2.4.1";
 
     dashboard(game);
 
