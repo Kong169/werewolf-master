@@ -435,7 +435,7 @@ nav span {
 
 </style>
 
-    <title>WerewolfMaster V2.6</title>
+    <title>WerewolfMaster V2.5.5</title>
 
     <meta name="theme-color"
       content="#11131c">
@@ -517,7 +517,7 @@ nav span {
     S.roles.forEach(r => {
       if (
         r.id === "revealer" ||
-        (!Array.isArray(r.powers26) && r.name.includes("ผู้เผยตัวตน"))
+        r.name.includes("ผู้เผยตัวตน")
       ) {
         r.order = 0;
         r.firstOnly = false;
@@ -1011,7 +1011,6 @@ nav span {
       !p.alive
     ) {
 
-      death26(p,reason);
       extra = loverDeath(p);
 
     }
@@ -1217,37 +1216,7 @@ nav span {
   // ROLES
   // =========================
 
-  const kinds26={notice:'แจ้งเตือน / Manual',team:'ตรวจสอบฝ่าย',inspect:'ตรวจสอบบทบาทจริง',wolves:'รับรู้รายชื่อหมาป่า',link:'เชื่อมคู่รัก',protect:'ป้องกันหมาป่า',kill:'กำจัด',revive:'ชุบชีวิต',block:'ระงับพลังในคืนเดียวกัน',convert:'เปลี่ยนฝ่าย',reveal:'เปิดเผยบทบาท',silence:'ห้ามพูด'};
-  const times26={night:'ทุกคืน',first:'คืนแรก',day:'กลางวัน',discussion:'ก่อนคืนแรก',death:'เมื่อเสียชีวิต',vote:'เมื่อเสียชีวิตจากโหวต',before:'ก่อนสรุปกลางคืน'};
-  const custom26=r=>Array.isArray(r?.powers26);
-  const editable26=()=>['setup','ended'].includes(S.phase);
-  const options26=(obj,v)=>Object.entries(obj).map(([k,n])=>`<option value="${k}" ${k===v?'selected':''}>${esc(n)}</option>`).join('');
-  const state26=()=>S.custom26||(S.custom26={used:{},last:{},events:[],effects:[],blocked:[]});
-  const key26=(p,a)=>p.id+':'+a.id;
-  function normalize26(a){if(!a||!Object.hasOwn(kinds26,a.kind)||!Object.hasOwn(times26,a.when))throw Error('ประเภทพลังไม่ถูกต้อง');const limit=Number(a.limit);if(!Number.isInteger(limit)||limit<0||limit>99)throw Error('จำนวนครั้งไม่ถูกต้อง');return {id:uid(),kind:a.kind,when:a.when,limit,repeat:!!a.repeat,self:!!a.self,team:['any','wolf','village','neutral'].includes(a.team)?a.team:'any',convert:['wolf','village','neutral'].includes(a.convert)?a.convert:'village',message:String(a.message||'').slice(0,500)};}
-  function roleData26(r){if(!r||typeof r.name!=='string'||!r.name.trim()||!Array.isArray(r.powers26)||r.powers26.length>20)throw Error('ข้อมูลตัวละครไม่ถูกต้อง');const order=Number(r.order);if(!Number.isInteger(order)||order<0||order>999)throw Error('ลำดับไม่ถูกต้อง');const powers26=r.powers26.map(normalize26);return {id:uid(),name:r.name.trim().slice(0,100),icon:String(r.icon||'🎭').slice(0,24),team:['wolf','village','neutral'].includes(r.team)?r.team:'village',order:powers26.some(a=>['night','first'].includes(a.when))?Math.max(1,order):0,firstOnly:false,action:'custom',description:String(r.description||'').slice(0,2000),speech:String(r.speech||'').slice(0,2000),powers26};}
-  let draft26=[], editing26='';
-  function readDraft26(){const get=id=>$(id)?.value||'';return {name:get('c26name'),icon:get('c26icon'),team:get('c26team'),order:Number(get('c26order')),description:get('c26desc'),speech:get('c26speech'),powers26:draft26.map((a,i)=>({kind:get('k26'+i),when:get('w26'+i),limit:Number(get('l26'+i)),team:get('t26'+i),convert:get('v26'+i),message:get('m26'+i),repeat:!!$('r26'+i)?.checked,self:!!$('s26'+i)?.checked}))};}
-  function powerFields26(a,i){return `<div class="item"><div class="row between"><b>พลัง ${i+1}</b>${btn('ลบ',call('removePower26',i),'mini danger')}</div><label>ประเภท</label><select id="k26${i}">${options26(kinds26,a.kind)}</select><label>ช่วงเวลา</label><select id="w26${i}">${options26(times26,a.when)}</select><label>จำนวนครั้งต่อเกม (0 = ไม่จำกัด)</label><input id="l26${i}" type="number" min="0" max="99" value="${a.limit??0}"><label>ฝ่ายเป้าหมาย</label><select id="t26${i}">${options26({any:'ทุกฝ่าย',wolf:'หมาป่า',village:'ชาวบ้าน',neutral:'อิสระ'},a.team||'any')}</select><label>ฝ่ายใหม่ (เฉพาะพลังเปลี่ยนฝ่าย)</label><select id="v26${i}">${options26({wolf:'หมาป่า',village:'ชาวบ้าน',neutral:'อิสระ'},a.convert||'village')}</select><label class="check"><input type="checkbox" id="r26${i}" ${a.repeat?'checked':''}>ห้ามเป้าหมายเดิมคืนติดกัน</label><label class="check"><input type="checkbox" id="s26${i}" ${a.self?'checked':''}>เลือกตัวเองได้</label><label>ข้อความแจ้งเตือน</label><textarea id="m26${i}">${esc(a.message||'')}</textarea></div>`;}
-  function builder26(id='',copy=false){if(!editable26())return notice('สร้างหรือแก้ไขได้ก่อนเริ่มเกมหรือหลังจบเกม');const r=role(id);editing26=copy?'':id;const templates={guard:['protect','night'],seer:['team','night'],minion:['wolves','first'],cupid:['link','first'],revealer:['reveal','day'],hunter:['kill','death'],witch:['revive','night']};const t=templates[id];const d={...r,name:id?r.name+(copy?' (สำเนา)':''):'',icon:id?r.icon:'🎭',team:id?r.team:'village',order:r.order||1,powers26:custom26(r)?r.powers26:t?[{kind:t[0],when:t[1],limit:['first','death'].includes(t[1])||id==='revealer'?1:0,repeat:['guard','seer'].includes(id),self:id==='guard'}]:[]};drawBuilder26(d);}
-  function drawBuilder26(d){draft26=d.powers26||[];showModal('⚡ สร้างตัวละคร / พลัง',`<label>ชื่อ</label><input id="c26name" value="${esc(d.name)}"><label>Emoji</label><input id="c26icon" value="${esc(d.icon)}"><label>ฝ่าย</label><select id="c26team">${options26({wolf:'หมาป่า',village:'ชาวบ้าน',neutral:'อิสระ'},d.team)}</select><label>ลำดับกลางคืน</label><input type="number" min="0" max="999" id="c26order" value="${d.order||1}"><label>คำอธิบาย</label><textarea id="c26desc">${esc(d.description||'')}</textarea><label>บทพูด</label><textarea id="c26speech">${esc(d.speech||'')}</textarea><label>พลังต้นแบบ</label><select id="template26">${options26(kinds26,'notice')}</select>${btn('＋ เพิ่มพลังต้นแบบ','addPower26()','full')}${draft26.map(powerFields26).join('')}${btn('ทดลองพลัง (ไม่แก้เกม)','preview26()','full')}<p class="notice">พลังใหม่ใช้กติกาทั่วไป ไม่ใช่สำเนากลไกพิเศษของตัวละครเดิมทั้งหมด</p>`,()=>{try{const data=roleData26(readDraft26());snapshot();if(editing26){const r=role(editing26);Object.assign(r,{...data,id:r.id});}else S.roles.push(data);closeModal();commit();}catch(e){formError(e.message);}});}
-  function addPower26(){const d=readDraft26();if(d.powers26.length>=20)return formError('สูงสุด 20 พลัง');const kind=$('template26').value;d.powers26.push({kind,when:['wolves','link'].includes(kind)?'first':'night',limit:['wolves','link'].includes(kind)?1:0});drawBuilder26(d);}
-  function removePower26(i){const d=readDraft26();d.powers26.splice(i,1);drawBuilder26(d);}
-  function preview26(){const d=readDraft26();try{const r=roleData26(d);showModal('ทดลองพลัง',`<p>${esc(r.name)} · ผู้เล่นสมมติ A (ชาวบ้าน), B (หมาป่า)</p>${r.powers26.map(a=>`<div class="item"><b>${esc(kinds26[a.kind])}</b><p>${esc(times26[a.when])} · ${a.limit||'ไม่จำกัด'}</p><p>${esc(a.message||'ตัวอย่างผล: '+({team:'B อยู่ฝ่ายหมาป่า',inspect:'B เป็นหมาป่า',wolves:'รายชื่อหมาป่า: B',link:'A และ B เป็นคู่รัก',protect:'A ได้รับการป้องกัน',kill:'B ถูกกำจัด',revive:'A ฟื้น',block:'B ถูกระงับ',convert:'B เปลี่ยนฝ่าย',reveal:'เปิดเผยบทบาท B',silence:'B ห้ามพูด',notice:'แจ้งเตือนผู้ดำเนินเกม'}[a.kind]))}</p></div>`).join('')}${btn('กลับไปแก้ไข','backPreview26()','full')}`);draft26=d.powers26;previewDraft26=d;}catch(e){formError(e.message);}}
-  let previewDraft26;function backPreview26(){drawBuilder26(previewDraft26);}
-  function export26(id){const r=role(id);if(!custom26(r))return;const a=document.createElement('a'),url=URL.createObjectURL(new Blob([JSON.stringify({format:'werewolf-role-26',role:r},null,2)],{type:'application/json'}));a.href=url;a.download='werewolf-role.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
-  async function import26(el){if(!editable26()||!el.files?.length)return;try{if(el.files[0].size>100000)throw Error('ไฟล์ใหญ่เกินไป');const x=JSON.parse(await el.files[0].text());if(x.format!=='werewolf-role-26')throw Error('รูปแบบไฟล์ไม่ถูกต้อง');const r=roleData26(x.role);ask('นำเข้าตัวละคร '+r.name+'?',()=>{snapshot();S.roles.push(r);commit();});}catch(e){notice(e.message);}el.value='';}
-  function eligible26(p,a){const s=state26(),k=key26(p,a);return (!a.limit||(s.used[k]||0)<a.limit)&&!s.blocked.includes(p.id);}
-  function phaseMatch26(a){return a.when===S.phase||(a.when==='first'&&S.phase==='night'&&S.night===1)||(a.when==='before'&&S.phase==='night'&&S.step>=S.queue.length);}
-  function available26(p,a){const s=state26(),k=key26(p,a);if(!eligible26(p,a))return false;if(['death','vote'].includes(a.when))return s.events.some(e=>e.key===k);return p.alive&&phaseMatch26(a)&&(!s.last[k]||s.last[k].phase!==S.phase||s.last[k].night!==S.night);}
-  function targetList26(p,a){const last=state26().last[key26(p,a)];return S.players.filter(t=>(a.kind==='revive'?!t.alive:t.alive)&&(a.self||t.id!==p.id)&&(a.team==='any'||role(t.roleId).team===a.team)&&!(a.repeat&&last?.night===S.night-1&&last.targets?.includes(t.id)));}
-  function customPanel26(nightRole=''){let rows=[];for(const p of S.players){const r=role(p.roleId);if(!custom26(r))continue;for(const a of r.powers26){const isNight=['night','first'].includes(a.when);if(nightRole?(!isNight||r.id!==nightRole):isNight)continue;const k=key26(p,a),ok=available26(p,a);if(!ok&&!nightRole&&!p.alive)continue;if(!ok&&!nightRole&&!phaseMatch26(a)&&!state26().events.some(e=>e.key===k))continue;rows.push(`<div class="item"><b>${esc(r.icon+' '+p.name+' · '+kinds26[a.kind])}</b><p class="small muted">${esc(times26[a.when])} · ใช้ ${state26().used[k]||0}/${a.limit||'∞'} · ${ok?'พร้อมใช้':'ไม่พร้อมใช้'}</p>${ok?btn('ใช้พลัง',call('openPower26',p.id,a.id),'full primary'):''}</div>`);}}return rows.length?card(`<h2>⚡ พลังที่กำหนดเอง</h2>${rows.join('')}`):'';}
-  function openPower26(pid,aid){const p=player(pid),a=role(p?.roleId).powers26?.find(x=>x.id===aid);if(!p||!a||!available26(p,a))return notice('พลังไม่พร้อมใช้');const opts=targetList26(p,a).map(t=>`<option value="${esc(t.id)}">${esc(t.name)}</option>`).join('');const needs=!['notice','wolves'].includes(a.kind);showModal(kinds26[a.kind],`<p>${esc(a.message||role(p.roleId).speech||'ดำเนินความสามารถ')}</p>${needs?`<label>เป้าหมาย</label><select id="p26a"><option value="">เลือก</option>${opts}</select>`:''}${a.kind==='link'?`<label>เป้าหมายที่ 2</label><select id="p26b"><option value="">เลือก</option>${opts}</select>`:''}`,()=>{const ids=needs?[$('p26a').value]:[];if(a.kind==='link')ids.push($('p26b').value);if(!available26(p,a)||ids.some(id=>!targetList26(p,a).some(t=>t.id===id))||new Set(ids).size!==ids.length)return formError('เลือกเป้าหมายให้ถูกต้อง');if(a.kind==='link'&&S.lovers?.length)return formError('มีคู่รักอยู่แล้ว ระบบเดิมรองรับหนึ่งคู่');snapshot();const s=state26(),k=key26(p,a);s.used[k]=(s.used[k]||0)+1;s.last[k]={phase:S.phase,night:S.night,targets:ids};s.events=s.events.filter(e=>e.key!==k);let result=a.message||kinds26[a.kind];const t=player(ids[0]);switch(a.kind){case 'team':result+=': '+t.name+' · '+teamName(role(t.roleId).team);break;case 'inspect':case 'reveal':result+=': '+t.name+' · '+role(t.roleId).name;break;case 'wolves':result+=': '+alive().filter(isWolf).map(x=>x.name).join(', ');break;case 'link':S.lovers=ids;break;case 'protect':if(S.phase==='night')s.effects.push({kind:'protect',id:t.id});else result+=' (บันทึกเท่านั้นนอกช่วงกลางคืน)';break;case 'kill':if(S.phase==='night')s.effects.push({kind:'kill',id:t.id});else killPlayer(t,'พลัง '+role(p.roleId).name);break;case 'revive':t.alive=true;t.toughDueNight=0;break;case 'block':if(S.phase==='night')s.blocked.push(t.id);else result+=' (บันทึกเท่านั้นนอกช่วงกลางคืน)';break;case 'convert':t.roleId=({wolf:'wolf',village:'villager',neutral:'jester'})[a.convert];if(!role(t.roleId).id)t.roleId='villager';break;case 'silence':S.silenced=t.id;break;}if(t)result+=' · '+t.name;specialAlert('⚡ '+role(p.roleId).name,result);closeModal();commit();},'ยืนยันใช้พลัง');}
-  function death26(p,reason){const r=role(p.roleId);if(!custom26(r))return;for(const a of r.powers26){if(a.when!=='death'&&!(a.when==='vote'&&reason==='ถูกโหวต'))continue;const k=key26(p,a);if(!eligible26(p,a)||state26().events.some(e=>e.key===k))continue;state26().events.push({key:k});specialAlert('⚡ '+r.name,a.message||'ถึงเวลาใช้พลังเมื่อเสียชีวิต');}}
-  Object.assign(window,{builder26,addPower26,removePower26,preview26,backPreview26,export26,import26,openPower26});
-
   function editRole(id="") {
-    if(custom26(role(id))||!id)return builder26(id);
 
     if(S.phase==="night" ||
        S.phase==="day" || S.phase==="discussion") {
@@ -1433,7 +1402,6 @@ nav span {
         delete p.cursedNight;
       });
 
-      S.custom26={used:{},last:{},events:[],effects:[],blocked:[]};
       S.cubPending = false;
       S.doubleAttack = false;
       S.silenced = "";
@@ -1480,7 +1448,7 @@ nav span {
     return alive().filter(p=>r.id==="wolf" ? isWolf(p) : p.roleId===r.id);
   }
   function nightInactive(r) {
-    return !nightActors(r).some(p=>!state26().blocked.includes(p.id)) || (r.id==="wolf" && S.wolfBlockedNight===S.night);
+    return !nightActors(r).length || (r.id==="wolf" && S.wolfBlockedNight===S.night);
   }
   function beginNight() {
     S.previousNightTargets = {
@@ -1493,7 +1461,6 @@ nav span {
     S.cubPending = false;
     S.silenced = "";
 
-    state26().effects=[]; state26().blocked=[];
     S.night++;
     
     S.phase = "night";
@@ -1509,7 +1476,6 @@ nav span {
         r.order>0 && r.id!=="wolfCub" &&
 
         (!r.firstOnly||S.night===1) &&
-        (!custom26(r)||r.powers26.some(a=>a.when==="night"||(a.when==="first"&&S.night===1))) &&
         S.players.some(p=>
           r.id==="wolf"
             ?isWolf(p) || ["wolf","wolfCub"].includes(p.originalRoleId)
@@ -1570,7 +1536,6 @@ nav span {
     if(!r.id) return;
 
     skip = skip || nightInactive(r);
-    if(custom26(r))skip=true;
     const data = {skip:skip};
 
     if(!skip) {
@@ -1813,7 +1778,7 @@ nav span {
       ].filter(Boolean);
 
       wolfTargets.forEach((id,index)=>{
-        if(id===guard || state26().effects.some(e=>e.kind==="protect"&&e.id===id)) return;
+        if(id===guard) return;
         if(index===0 && witch.heal) return;
 
         const p = player(id);
@@ -1877,7 +1842,6 @@ nav span {
         }
       });
 
-      state26().effects.filter(e=>e.kind==="kill").forEach(e=>deaths.add(e.id));
       S.deaths = [];
 
       const messages = [];
@@ -2191,10 +2155,10 @@ nav span {
   }
   function firstNight() { if(hasPendingHunter())return openHunter(); if(S.phase!=="discussion")return; ask(S.voted?"เริ่มคืนที่ 1?":"ยังไม่ได้โหวต ต้องการข้ามและเริ่มคืนที่ 1?",()=>{snapshot();beginNight();tab="home";commit();}); }
   async function keepAwake(){try{if(prefs.awake&&document.visibilityState==="visible"&&navigator.wakeLock){if(!wakeLock||wakeLock.released)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
-  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.6</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
+  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.5</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
   function setPref(k,v){prefs[k]=v;try{localStorage.setItem("WerewolfSettings21",JSON.stringify(prefs));}catch(e){notice("บันทึกการตั้งค่าไม่สำเร็จ");}if(k==="awake")keepAwake();unlockAudio();}
   function backupGame(){const a=document.createElement("a");const url=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.href=url;a.download="werewolf-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
-  async function restoreGame(input){if(!input.files?.length)return;try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:"2.6",undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
+  async function restoreGame(input){if(!input.files?.length)return;try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:"2.5",undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
   document.addEventListener("visibilitychange",keepAwake);
   Object.assign(window,{timerResume,timerReset,timerCustom,firstNight,setPref,backupGame,restoreGame});
 
@@ -2381,8 +2345,6 @@ nav span {
     const inactive = nightInactive(r);
     if(inactive) {
       actionUI = `<p class="notice">${nightActors(r).length ? "คืนนี้หมาป่างดโจมตี" : "ไม่มีผู้เล่นบทบาทนี้ที่ยังรอดชีวิต"} — เรียกตามปกติเพื่อปกปิดข้อมูล ไม่มีผลของพลังในคืนนี้</p>`;
-    } else if(custom26(r)) {
-      actionUI=customPanel26(r.id);
     } else if(r.id==="cupid") {
 
       actionUI = `
@@ -2534,7 +2496,7 @@ nav span {
       const r = role(p.roleId);
 
       return r.id === "revealer" ||
-        (!Array.isArray(r.powers26) && r.name.includes("ผู้เผยตัวตน"));
+        r.name.includes("ผู้เผยตัวตน");
     });
   }
 
@@ -4211,7 +4173,7 @@ nav span {
       cursedPanel() +
       loveNoticePanel() +
       loversPanel() +
-      specialRolePanel() + (["night","day","discussion"].includes(S.phase)?customPanel26():"");
+      specialRolePanel();
 
     if(S.phase==="setup") {
 
@@ -4431,8 +4393,6 @@ nav span {
 
         ${btn("＋ เพิ่ม",
           "editRole()","mini primary")}
-        ${editable26()?btn("นำเข้า","document.getElementById('import26').click()","mini"):""}
-        <input type="file" id="import26" accept=".json,application/json" style="display:none" onchange="import26(this)">
       </div>
 
       ${["wolf","village","neutral"].map(t=>`<details ${folded[t]===false?"":"open"} ontoggle="rememberFold('${t}',this.open)"><summary style="padding:12px;color:var(--blue)">${teamName(t)} · ${S.roles.filter(r=>r.team===t).length} ตัวละคร</summary>${S.roles.filter(r=>r.team===t).map(r=>`
@@ -4467,8 +4427,6 @@ nav span {
 
           ${btn("แก้ไข",
             call("editRole",r.id),"mini")}
-          ${editable26()?btn("คัดลอก",call("builder26",r.id,true),"mini"):""}
-          ${custom26(r)?btn("ส่งออก",call("export26",r.id),"mini"):""}
 
           ${![
             "wolf","seer","guard",
@@ -4625,7 +4583,6 @@ nav span {
     add("diseased","ผลต่อหมาป่า",S.wolfBlockedNight>=S.night&&S.wolfBlockedNight>0?"งดโจมตีคืนที่ "+S.wolfBlockedNight:"ไม่มีผล");
     S.players.filter(p=>p.roleId==="prince").forEach(p=>rows.push([role(p.roleId).name,p.name,p.princeRevealed?"ใช้แล้ว":p.alive?"พร้อมใช้":"เสียชีวิตแล้ว"]));
     S.players.filter(p=>p.toughDueNight>0&&p.alive).forEach(p=>rows.push([role(p.roleId).name,p.name,"รอเสียชีวิตคืนที่ "+p.toughDueNight]));
-    S.players.forEach(p=>{const r=role(p.roleId);if(custom26(r))r.powers26.forEach(a=>rows.push([r.name,p.name+" · "+kinds26[a.kind],(state26().used[key26(p,a)]||0)+"/"+(a.limit||"∞")+(p.alive?"":" · เสียชีวิต") ]));});
     if(S.silenced)rows.push(["🤫 จอมเวท","ห้ามพูด",nameOf(S.silenced)]);
     return card(`<h2>⚡ สถานะพลังตัวละคร</h2><p class="small muted">เฉพาะผู้ดำเนินเกม · อ่านอย่างเดียว</p>${rows.map(([r,l,v])=>`<div class="item"><b>${esc(r)}</b><div class="row between"><span class="small muted">${esc(l)}</span><b class="blue">${esc(v)}</b></div></div>`).join("")||'<p class="muted">ยังไม่มีสถานะพลัง</p>'}`);
   }
@@ -4687,7 +4644,7 @@ nav span {
           <h1>🐺 WEREWOLF</h1>
 
           <div class="subtitle">
-            MODERATOR WEB APP V2.6
+            MODERATOR WEB APP V2.5.5
           </div>
         </div>
 
@@ -4815,7 +4772,7 @@ nav span {
       console.log(e);
     }
 
-    game.version = "2.6";
+    game.version = "2.5";
 
     dashboard(game);
 
