@@ -1,5 +1,5 @@
 
-const CACHE = "werewolf-v2-5-10-001";
+const CACHE = "werewolf-v2-5-11-001";
 
 const FILES = [
   "./",

@@ -444,7 +444,7 @@ nav span {
 .reg557modal .modalButtons{position:sticky;bottom:0;background:#222736;padding:8px 0;margin-top:8px;z-index:3}
 </style>
 
-    <title>WerewolfMaster V2.5.10</title>
+    <title>WerewolfMaster V2.5.11</title>
 
     <meta name="theme-color"
       content="#11131c">
@@ -610,6 +610,7 @@ nav span {
     function commit() {
       migrate24();
       autoLoneWin258();
+      autoVampireWin2511();
       try {
         localStorage.setItem(
           "WerewolfMasterV2",
@@ -2042,6 +2043,20 @@ nav span {
     try{const h=JSON.parse(localStorage.getItem("WerewolfResults556")||"[]");h.unshift({date:new Date().toISOString(),balance:S.balanceStart556??balance556(playerCounts556()),result:w});localStorage.setItem("WerewolfResults556",JSON.stringify(h.slice(0,200)));}catch(e){}
     tab="home";
   }
+  function vampireWinner2511(){
+    if(!canVotePhase() || hasPendingHunter() || S.vamp556) return "";
+    const list=alive();
+    const vampires=list.filter(p=>p.roleId==="vampire").length;
+    const others=list.length-vampires;
+    return vampires>0 && !list.some(isWolf) && vampires>=others ? "แวมไพร์" : "";
+  }
+  function autoVampireWin2511(){
+    const w=vampireWinner2511(); if(!w)return;
+    S.result=w; S.phase="ended"; S.timerEnd=0; S.timerRemaining=0;
+    log("จบเกม: "+w);
+    try{const h=JSON.parse(localStorage.getItem("WerewolfResults556")||"[]");h.unshift({date:new Date().toISOString(),balance:S.balanceStart556??balance556(playerCounts556()),result:w});localStorage.setItem("WerewolfResults556",JSON.stringify(h.slice(0,200)));}catch(e){}
+    tab="home";
+  }
   function winner() {
     if(hasPendingHunter()) return "";
     if(loneWinner258())return loneWinner258();
@@ -2051,7 +2066,7 @@ nav span {
     if(S.specialWin556)return S.specialWin556;
     
     if(list.some(p=>p.roleId==='cult')&&list.every(p=>p.roleId==='cult'||p.cult556))return 'เจ้าลัทธิ';
-    if(list.length&&list.every(p=>p.roleId==='vampire'))return 'แวมไพร์';
+    if(vampireWinner2511())return vampireWinner2511();
     const wolves = list.filter(isWolf).length;
 
     const wolfTeam = list.filter(p=>
@@ -2209,7 +2224,7 @@ nav span {
   }
   function firstNight() { if(hasPendingHunter())return openHunter(); if(S.phase!=="discussion")return; ask(S.voted?"เริ่มคืนที่ 1?":"ยังไม่ได้โหวต ต้องการข้ามและเริ่มคืนที่ 1?",()=>{snapshot();beginNight();tab="home";commit();}); }
   async function keepAwake(){try{if(prefs.awake&&document.visibilityState==="visible"&&navigator.wakeLock){if(!wakeLock||wakeLock.released)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
-  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.10</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
+  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.11</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
   function setPref(k,v){prefs[k]=v;try{localStorage.setItem("WerewolfSettings21",JSON.stringify(prefs));}catch(e){notice("บันทึกการตั้งค่าไม่สำเร็จ");}if(k==="awake")keepAwake();unlockAudio();}
   function backupGame(){const a=document.createElement("a");const url=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.href=url;a.download="werewolf-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
   async function restoreGame(input){if(!input.files?.length)return;try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:"2.5",undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
@@ -4755,7 +4770,7 @@ nav span {
           <h1>🐺 WEREWOLF</h1>
 
           <div class="subtitle">
-            MODERATOR WEB APP V2.5.10
+            MODERATOR WEB APP V2.5.11
           </div>
         </div>
 
