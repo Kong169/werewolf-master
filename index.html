@@ -154,6 +154,19 @@ small,.small {
   margin-bottom:12px;
 }
 
+.moderator-tools {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin: 0 0 14px;
+}
+.moderator-tools button {
+  min-height:44px;
+  padding:10px 8px;
+  font-size:13px;
+  width:100%;
+}
+
 button,input,textarea,select {
   font:inherit;
   color:var(--text);
@@ -422,7 +435,7 @@ nav span {
 
 </style>
 
-    <title>WerewolfMaster V2.5.3</title>
+    <title>WerewolfMaster V2.5.4</title>
 
     <meta name="theme-color"
       content="#11131c">
@@ -2132,7 +2145,7 @@ nav span {
   function timerResume() { unlockAudio(); if(!S.timerRemaining) return; snapshot(); S.timerEnd=Date.now()+S.timerRemaining*1000; S.timerRemaining=0; commit(); tick(); }
   function timerReset() { snapshot(); S.timerEnd=0; S.timerRemaining=S.timerDuration||180; commit(); tick(); }
   function timerCustom() { showModal("กำหนดเวลา", '<label>นาที (1–120)</label><input id="customMinutes" type="number" min="1" max="120" value="3">',()=>{const n=Number($("customMinutes").value); if(!Number.isInteger(n)||n<1||n>120)return formError("กรอก 1–120 นาที"); closeModal(); timerStart(n);},"เริ่มจับเวลา"); }
-  function timerPanel() { return `<h3>⏱ เวลาอภิปราย</h3><div class="timer" id="timer">00:00</div><div class="row">${[1,3,5,10].map(n=>btn(n+" นาที","timerStart("+n+")","grow mini")).join("")}</div>${btn("กำหนดเวลาเอง","timerCustom()","full")}<div class="row" style="margin-top:8px">${btn(S.timerEnd?"หยุดชั่วคราว":"เล่นต่อ",S.timerEnd?"timerStop()":"timerResume()","grow")}${btn("รีเซ็ต","timerReset()","grow")}</div>`; }
+  function timerPanel() { return `<h3>⏱ เวลาอภิปราย</h3><div class="timer" id="timer">00:00</div><div class="row">${[1,3,5,10].map(n=>btn(n+" นาที","timerStart("+n+")","grow mini")).join("")}</div>${btn("รีเซ็ต","timerReset()","full")}`; }
   function tick() {
     const sec=S.timerEnd?Math.max(0,Math.ceil((S.timerEnd-Date.now())/1000)):(S.timerRemaining||0);
     const el=$("timer"); if(el){el.textContent=String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0");el.style.color=S.timerEnd&&sec<=10?"#f08090":"#ffffff";}
@@ -2141,7 +2154,7 @@ nav span {
   }
   function firstNight() { if(hasPendingHunter())return openHunter(); if(S.phase!=="discussion")return; ask(S.voted?"เริ่มคืนที่ 1?":"ยังไม่ได้โหวต ต้องการข้ามและเริ่มคืนที่ 1?",()=>{snapshot();beginNight();tab="home";commit();}); }
   async function keepAwake(){try{if(prefs.awake&&document.visibilityState==="visible"&&navigator.wakeLock){if(!wakeLock||wakeLock.released)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
-  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.3</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
+  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.4</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
   function setPref(k,v){prefs[k]=v;try{localStorage.setItem("WerewolfSettings21",JSON.stringify(prefs));}catch(e){notice("บันทึกการตั้งค่าไม่สำเร็จ");}if(k==="awake")keepAwake();unlockAudio();}
   function backupGame(){const a=document.createElement("a");const url=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.href=url;a.download="werewolf-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
   async function restoreGame(input){if(!input.files?.length)return;try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:"2.5",undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
@@ -4589,9 +4602,7 @@ nav span {
 
   function morePage() {
     return card(`<h2>☰ เพิ่มเติม</h2>
-      ${btn("⚡ สถานะพลังตัวละคร",call("go","powers"),"full")}
       ${btn("📤 แชร์แอปให้เพื่อน",call("go","share"),"primary full")}
-      ${btn(prefs.compact25?"ปิดโหมดแบบย่อ":"เปิดโหมดแบบย่อ","toggleCompact25()","full")}
       ${btn("🎭 จัดการบทบาท / สถานะยา",call("go","roles"),"full")}
       ${btn("📜 ประวัติเกม",call("go","history"),"full")}
       ${btn("⚙️ ตั้งค่า / สำรองและกู้คืนข้อมูล",call("go","settings"),"full")}
@@ -4639,7 +4650,7 @@ nav span {
           <h1>🐺 WEREWOLF</h1>
 
           <div class="subtitle">
-            MODERATOR WEB APP V2.5.3
+            MODERATOR WEB APP V2.5.4
           </div>
         </div>
 
@@ -4682,7 +4693,7 @@ nav span {
       </div>
 
       ${["roles","history","settings","powers","share"].includes(tab)?btn("‹ กลับเมนูเพิ่มเติม",call("go","more"),"full"):""}
-      ${tab==="home"&&["night","day","discussion"].includes(S.phase)?`<div class="row">${btn(prefs.compact25?"แสดงเต็ม":"โหมดแบบย่อ","toggleCompact25()","grow mini")}${btn("⚡ ดูพลัง","showPowers25()","grow mini")}</div>`:""}
+      ${tab==="home"&&["night","day","discussion"].includes(S.phase)?`<div class="moderator-tools">${btn(prefs.compact25?"แสดงเต็ม":"โหมดแบบย่อ","toggleCompact25()")}${btn("⚡ ดูพลัง","showPowers25()")}</div>`:""}
       ${pages[tab]()}
 
       <nav>
