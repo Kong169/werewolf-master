@@ -435,7 +435,7 @@ nav span {
 
 </style>
 
-    <title>WerewolfMaster V2.5.4</title>
+    <title>WerewolfMaster V2.5.5</title>
 
     <meta name="theme-color"
       content="#11131c">
@@ -1444,6 +1444,12 @@ nav span {
     const names = ["wolf","wolfCub"].filter(id=>alive().some(p=>p.roleId===id)).map(id=>role(id).name);
     return names.join(" + ") || r.name;
   }
+  function nightActors(r) {
+    return alive().filter(p=>r.id==="wolf" ? isWolf(p) : p.roleId===r.id);
+  }
+  function nightInactive(r) {
+    return !nightActors(r).length || (r.id==="wolf" && S.wolfBlockedNight===S.night);
+  }
   function beginNight() {
     S.previousNightTargets = {
       night: S.night,
@@ -1469,17 +1475,11 @@ nav span {
       .filter(r=>
         r.order>0 && r.id!=="wolfCub" &&
 
-        !(
-          r.id==="wolf" &&
-          S.wolfBlockedNight===S.night
-        ) &&
-
         (!r.firstOnly||S.night===1) &&
-        
-        alive().some(p=>
+        S.players.some(p=>
           r.id==="wolf"
-            ?isWolf(p)
-            :p.roleId===r.id
+            ?isWolf(p) || ["wolf","wolfCub"].includes(p.originalRoleId)
+            :p.roleId===r.id || p.originalRoleId===r.id
         )
     
       )
@@ -1493,7 +1493,7 @@ nav span {
       specialAlert(
         "🦠 คืนนี้หมาป่างดโจมตี",
         "หมาป่าติดเชื้อ "+
-        "ระบบข้ามลำดับการโจมตีให้อัตโนมัติ"
+        "ยังเรียกหมาป่าตามปกติ แต่ไม่สามารถโจมตีได้"
       );
     }
   }
@@ -1535,6 +1535,7 @@ nav span {
 
     if(!r.id) return;
 
+    skip = skip || nightInactive(r);
     const data = {skip:skip};
 
     if(!skip) {
@@ -1949,14 +1950,14 @@ nav span {
       votes:S.votes[p.id]||0
     })).sort((a,b)=>b.votes-a.votes);
 
-    if(!list.length||!list[0].votes) {
-      return notice("ยังไม่มีคะแนนโหวต");
-    }
-
-    if(list[1]?.votes===list[0].votes) {
-      return notice(
-        "คะแนนเสมอ กรุณาโหวตใหม่"
-      );
+    if(!list.length || !list[0].votes || list[1]?.votes===list[0].votes) {
+      const reason = list[0]?.votes ? "คะแนนเสมอกัน: "+list.filter(v=>v.votes===list[0].votes).map(v=>nameOf(v.id)).join(", ")+" ("+list[0].votes+" คะแนน)" : "ไม่มีคะแนนโหวต";
+      return ask(reason+" — ยืนยันผลโดยไม่มีผู้เสียชีวิต?",()=>{
+        snapshot();
+        log(reason+" — ไม่มีผู้เสียชีวิตจากการโหวต");
+        S.voted=true; S.votes={}; S.timerEnd=0; S.timerRemaining=0; tab="home";
+        commit();
+      });
     }
 
     const p = player(list[0].id);
@@ -2154,7 +2155,7 @@ nav span {
   }
   function firstNight() { if(hasPendingHunter())return openHunter(); if(S.phase!=="discussion")return; ask(S.voted?"เริ่มคืนที่ 1?":"ยังไม่ได้โหวต ต้องการข้ามและเริ่มคืนที่ 1?",()=>{snapshot();beginNight();tab="home";commit();}); }
   async function keepAwake(){try{if(prefs.awake&&document.visibilityState==="visible"&&navigator.wakeLock){if(!wakeLock||wakeLock.released)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
-  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.4</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
+  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.5</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
   function setPref(k,v){prefs[k]=v;try{localStorage.setItem("WerewolfSettings21",JSON.stringify(prefs));}catch(e){notice("บันทึกการตั้งค่าไม่สำเร็จ");}if(k==="awake")keepAwake();unlockAudio();}
   function backupGame(){const a=document.createElement("a");const url=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.href=url;a.download="werewolf-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
   async function restoreGame(input){if(!input.files?.length)return;try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:"2.5",undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
@@ -2341,9 +2342,10 @@ nav span {
     const r = role(S.queue[S.step]);
 
     let actionUI = "";
-
-    
-    if(r.id==="cupid") {
+    const inactive = nightInactive(r);
+    if(inactive) {
+      actionUI = `<p class="notice">${nightActors(r).length ? "คืนนี้หมาป่างดโจมตี" : "ไม่มีผู้เล่นบทบาทนี้ที่ยังรอดชีวิต"} — เรียกตามปกติเพื่อปกปิดข้อมูล ไม่มีผลของพลังในคืนนี้</p>`;
+    } else if(r.id==="cupid") {
 
       actionUI = `
 
@@ -2459,13 +2461,7 @@ nav span {
 
       <p class="small muted">
         ผู้เล่น:
-        ${esc(alive()
-          .filter(p=>
-            r.id==="wolf"
-              ?isWolf(p)
-              :p.roleId===r.id
-          )
-          .map(p=>r.id==="wolf"?p.name+" ("+role(p.roleId).name+")":p.name).join(", "))}
+        ${esc(nightActors(r).map(p=>r.id==="wolf"?p.name+" ("+role(p.roleId).name+")":p.name).join(", ") || "ไม่มีผู้รอดชีวิต")}
       </p>
 
       <div class="speech">
@@ -2475,12 +2471,12 @@ nav span {
       ${actionUI}
 
       ${btn(
-        "✓ ยืนยันและไปบทบาทถัดไป",
-        "nightAction(false)",
+        inactive ? "✓ ไปบทบาทถัดไป" : "✓ ยืนยันและไปบทบาทถัดไป",
+        inactive ? "nightAction(true)" : "nightAction(false)",
         "primary full"
       )}
 
-      ${btn(
+      ${inactive ? "" : btn(
         "ข้ามความสามารถ",
         "nightAction(true)",
         "full"
@@ -4522,14 +4518,12 @@ nav span {
         </div>
       `).join("")}
 
-      <p class="speech">${!max?"ยังไม่มีคะแนน":leaders.length>1?"⚠ คะแนนสูงสุดเสมอกัน: "+esc(leaders.map(p=>p.name).join(", ")):"คะแนนสูงสุด: "+esc(leaders[0].name)+" · "+max+" เสียง"}</p>
+      <p class="speech">${!max?"ไม่มีคะแนน — ไม่มีผู้เสียชีวิต":leaders.length>1?"⚠ คะแนนสูงสุดเสมอกัน: "+esc(leaders.map(p=>p.name).join(", "))+" — ไม่มีผู้เสียชีวิต":"คะแนนสูงสุด: "+esc(leaders[0].name)+" · "+max+" เสียง"}</p>
       ${btn("ยืนยันผลโหวต",
-        "executeVote()","danger full")}
+        "executeVote()",leaders.length===1?"danger full":"primary full")}
 
       ${btn("ล้างคะแนน",
         "resetVotes()","full")}
-      ${btn("เลือกผู้ถูกโหวตออกโดยตรง","manualVote25()","full")}
-      ${btn("ไม่กำจัดใคร","noVote25()","full")}
     `);
   }
 
@@ -4650,7 +4644,7 @@ nav span {
           <h1>🐺 WEREWOLF</h1>
 
           <div class="subtitle">
-            MODERATOR WEB APP V2.5.4
+            MODERATOR WEB APP V2.5.5
           </div>
         </div>
 
