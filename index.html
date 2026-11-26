@@ -444,7 +444,7 @@ nav span {
 .reg557modal .modalButtons{position:sticky;bottom:0;background:#222736;padding:8px 0;margin-top:8px;z-index:3}
 </style>
 
-    <title>WerewolfMaster V2.5.9</title>
+    <title>WerewolfMaster V2.5.10</title>
 
     <meta name="theme-color"
       content="#11131c">
@@ -1524,6 +1524,7 @@ nav span {
     }
 
     if(S.phase!=="day") return;
+    if(S.vamp556){return notice("กรุณาเข้าสู่การโหวตเพื่อประกาศผลแวมไพร์ก่อนเข้าสู่คืนถัดไป");}
 
     ask(
       S.voted
@@ -1938,6 +1939,7 @@ nav span {
 
   function vote(id,delta) {
     if(!canVotePhase() ||
+       S.vamp556 ||
        S.voted ||
        !player(id)?.alive || id===S.exile556) return;
 
@@ -1977,6 +1979,7 @@ nav span {
     }
 
     if(!canVotePhase()||S.voted) return;
+    if(resolveVampireBeforeVote2510())return;
 
     const list = alive().filter(p=>p.id!==S.exile556).map(p=>({
       id:p.id,
@@ -2206,7 +2209,7 @@ nav span {
   }
   function firstNight() { if(hasPendingHunter())return openHunter(); if(S.phase!=="discussion")return; ask(S.voted?"เริ่มคืนที่ 1?":"ยังไม่ได้โหวต ต้องการข้ามและเริ่มคืนที่ 1?",()=>{snapshot();beginNight();tab="home";commit();}); }
   async function keepAwake(){try{if(prefs.awake&&document.visibilityState==="visible"&&navigator.wakeLock){if(!wakeLock||wakeLock.released)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
-  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.9</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
+  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.10</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
   function setPref(k,v){prefs[k]=v;try{localStorage.setItem("WerewolfSettings21",JSON.stringify(prefs));}catch(e){notice("บันทึกการตั้งค่าไม่สำเร็จ");}if(k==="awake")keepAwake();unlockAudio();}
   function backupGame(){const a=document.createElement("a");const url=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.href=url;a.download="werewolf-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
   async function restoreGame(input){if(!input.files?.length)return;try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:"2.5",undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
@@ -4542,6 +4545,7 @@ nav span {
       `);
     }
 
+    if(S.vamp556 && S.phase==="day") return card(btn("🧛 ประกาศผลก่อนโหวต","resolveVampireBeforeVote2510()","primary full"));
     if(S.voted) {
       return card(`
         <h2 class="green">
@@ -4631,9 +4635,33 @@ nav span {
     `);
   }
 
+  function resolveVampireBeforeVote2510() {
+    if(S.phase!=="day" || !S.vamp556) return false;
+    snapshot();
+    const p=player(S.vamp556);
+    S.vamp556="";
+    if(p?.alive){
+      const before=new Set(alive().map(x=>x.id));
+      killPlayer(p,"แวมไพร์");
+      const dead=S.players.filter(x=>before.has(x.id)&&!x.alive);
+      if(dead.length){
+        dead.forEach(x=>delete S.votes[x.id]);
+        const msg="ก่อนเริ่มโหวต มีผู้เสียชีวิตจากแวมไพร์: "+dead.map(x=>x.name).join("、");
+        specialAlert("🧛 ประกาศก่อนโหวต",msg);
+        commit();
+        notice(msg,"🧛 ประกาศก่อนโหวต");
+        return true;
+      }
+    }
+    commit();
+    return false;
+  }
   function toggleInlineVote() {
-    if(!votingOpen&&S.vamp556){snapshot();const p=player(S.vamp556);S.vamp556="";if(p?.alive&&p.id!==S.exile556)killPlayer(p,"แวมไพร์");commit();}
-
+    if(!votingOpen){
+      if(hasPendingHunter())return openHunter();
+      if(resolveVampireBeforeVote2510())return;
+      if(!canVotePhase()||S.voted)return;
+    }
     votingOpen = !votingOpen;
     render();
     if(votingOpen) document.getElementById("inlineVote")?.scrollIntoView({block:"start",behavior:"smooth"});
@@ -4674,7 +4702,7 @@ nav span {
       ${btn("🔄 เริ่มเกมใหม่","resetGame()","danger full")}`);
   }
   function go(t) {
-    if(t==="vote") { votingOpen=true; t="home"; }
+    if(t==="vote") { tab="home"; if(!votingOpen)toggleInlineVote(); return; }
     tab = t;
     render();
     window.scrollTo(0,0);
@@ -4695,7 +4723,7 @@ nav span {
   function voteCap556(){return alive().filter(p=>p.id!==S.exile556&&p.roleId!=='pacifist').reduce((a,p)=>a+(p.roleId==='mayor'?2:1),0);}
   function extraPanel556(){if(!canVotePhase())return '';let o='';if(S.exile556)o+=`<p class="notice">แม่หมอ: ${esc(nameOf(S.exile556))} พักการโหวตวันนี้</p>`;if(S.vamp556)o+=`<p class="notice">แวมไพร์: เหยื่อจะตายก่อนเปิดโหวต</p>`;if(S.extra556)o+='<p class="notice">ตัวป่วน: วันนี้โหวตสองรอบ</p>';S.players.filter(p=>p.roleId==='ghost'&&!p.alive).forEach(p=>{const k=p.id+'_'+S.night;const v=S.ghost556?.[k];o+=`<div class="item">พรายกระซิบ ${esc(p.name)} ${v?esc(v):btn('บันทึกตัวอักษร',call('ghost556',p.id),'mini')}</div>`});return o?card(o):'';}
   function ghost556(id){showModal('พรายกระซิบ','<input id="ghostChar556" placeholder="หนึ่งตัวอักษร">',()=>{const v=$('ghostChar556').value.trim();if(Array.from(v).length!==1)return formError('กรอกหนึ่งตัวอักษร');snapshot();S.ghost556=S.ghost556||{};S.ghost556[id+'_'+S.night]=v;log('พรายกระซิบ: '+v);closeModal();commit();});}
-  Object.assign(window,{auto556,swap556,ghost556});
+  Object.assign(window,{auto556,swap556,ghost556,resolveVampireBeforeVote2510});
 
   function render() {
 
@@ -4727,7 +4755,7 @@ nav span {
           <h1>🐺 WEREWOLF</h1>
 
           <div class="subtitle">
-            MODERATOR WEB APP V2.5.9
+            MODERATOR WEB APP V2.5.10
           </div>
         </div>
 
