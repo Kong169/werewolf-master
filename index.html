@@ -422,7 +422,7 @@ nav span {
 
 </style>
 
-    <title>WerewolfMaster V2.4.4</title>
+    <title>WerewolfMaster V2.5</title>
 
     <meta name="theme-color"
       content="#11131c">
@@ -2150,11 +2150,11 @@ nav span {
   function speakCue(manual=true){const t=cue()[1];if(!t)return;if(!window.speechSynthesis){if(manual)notice("อุปกรณ์ไม่รองรับเสียงพูด");return;} try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="th-TH";u.rate=Number(prefs.rate)||1;const v=speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith("th"));if(v)u.voice=v;speechSynthesis.speak(u);}catch(e){if(manual)notice("ไม่สามารถอ่านเสียงได้");}}
   function syncCue(){const k=cue()[0];if(k!==lastCue){lastCue=k;if(prefs.autoSpeech)speakCue(false);}}
   async function keepAwake(){try{if(prefs.awake&&document.visibilityState==="visible"&&navigator.wakeLock){if(!wakeLock||wakeLock.released)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
-  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.4.4</h2>${[["autoSpeech","อ่านบทพูดอัตโนมัติ"],["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}<label>ความเร็วเสียงพูด</label><select onchange="setPref('rate',Number(this.value))">${[.75,1,1.25,1.5].map(n=>`<option ${prefs.rate===n?"selected":""} value="${n}">${n}x</option>`).join("")}</select>${btn("ทดสอบเสียง","testSound()","full")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
+  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5</h2>${[["autoSpeech","อ่านบทพูดอัตโนมัติ"],["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}<label>ความเร็วเสียงพูด</label><select onchange="setPref('rate',Number(this.value))">${[.75,1,1.25,1.5].map(n=>`<option ${prefs.rate===n?"selected":""} value="${n}">${n}x</option>`).join("")}</select>${btn("ทดสอบเสียง","testSound()","full")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
   function setPref(k,v){prefs[k]=v;try{localStorage.setItem("WerewolfSettings21",JSON.stringify(prefs));}catch(e){notice("บันทึกการตั้งค่าไม่สำเร็จ");}if(k==="autoSpeech"&&!v)window.speechSynthesis?.cancel();if(k==="awake")keepAwake();unlockAudio();}
   function testSound(){unlockAudio();if(window.speechSynthesis){const u=new SpeechSynthesisUtterance("ทดสอบเสียงผู้ดำเนินเกม");u.lang="th-TH";u.rate=prefs.rate;speechSynthesis.speak(u);}beep(true);}
   function backupGame(){const a=document.createElement("a");const url=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.href=url;a.download="werewolf-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
-  async function restoreGame(input){if(!input.files?.length)return;try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:"2.4.4",undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
+  async function restoreGame(input){if(!input.files?.length)return;try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:"2.5",undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
   document.addEventListener("visibilitychange",keepAwake);
   Object.assign(window,{timerResume,timerReset,timerCustom,firstNight,speakCue,setPref,testSound,backupGame,restoreGame});
 
@@ -4279,6 +4279,7 @@ nav span {
       `);
     }
 
+    if(prefs.compact25 && ["night","day","discussion"].includes(S.phase)) return out;
     return out+card(`
       <div class="row between">
         <h2>👥 รายชื่อผู้เล่น</h2>
@@ -4494,6 +4495,8 @@ nav span {
     const total = Object.values(S.votes)
       .reduce((a,b)=>a+b,0);
 
+    const max=Math.max(0,...alive().map(p=>S.votes[p.id]||0));
+    const leaders=alive().filter(p=>max>0&&(S.votes[p.id]||0)===max);
     return card(`
       <h2 id="inlineVote" style="scroll-margin-top:16px">🗳️ ลงคะแนนโหวต</h2>
 
@@ -4505,7 +4508,7 @@ nav span {
       ${alive().map(p=>`
         <div class="item row">
           <div class="grow">
-            <b>${esc(p.name)}</b>
+            <b>${esc(p.name)}</b><div style="height:5px;background:#393f54;border-radius:8px;margin-top:7px"><div style="height:5px;border-radius:8px;background:#8faaff;width:${Math.min(100,100*(S.votes[p.id]||0)/Math.max(1,alive().length))}%"></div></div>
           </div>
 
           ${btn("−",
@@ -4520,11 +4523,14 @@ nav span {
         </div>
       `).join("")}
 
+      <p class="speech">${!max?"ยังไม่มีคะแนน":leaders.length>1?"⚠ คะแนนสูงสุดเสมอกัน: "+esc(leaders.map(p=>p.name).join(", ")):"คะแนนสูงสุด: "+esc(leaders[0].name)+" · "+max+" เสียง"}</p>
       ${btn("ยืนยันผลโหวต",
         "executeVote()","danger full")}
 
       ${btn("ล้างคะแนน",
         "resetVotes()","full")}
+      ${btn("เลือกผู้ถูกโหวตออกโดยตรง","manualVote25()","full")}
+      ${btn("ไม่กำจัดใคร","noVote25()","full")}
     `);
   }
 
@@ -4570,8 +4576,36 @@ nav span {
     render();
     if(votingOpen) document.getElementById("inlineVote")?.scrollIntoView({block:"start",behavior:"smooth"});
   }
+
+  const appLink25 = "https://kong169.github.io/werewolf-master/";
+  function toggleCompact25(){setPref("compact25",!prefs.compact25);render();}
+  function powers25(){
+    const rows=[];
+    const add=(id,label,value)=>{if(S.players.some(p=>p.roleId===id)) rows.push([role(id).icon+" "+role(id).name,label,value]);};
+    const target=(id)=>{const a=S.actions?.[id];const t=a?.skip?"":a?.target;const prev=S.previousNightTargets?.[id];return t?nameOf(t):prev?nameOf(prev)+" (คืนก่อน)":"ยังไม่มีเป้าหมาย";};
+    add("witch","ยารักษา",S.potions.heal?"พร้อมใช้":"ใช้แล้ว");add("witch","ยาพิษ",S.potions.poison?"พร้อมใช้":"ใช้แล้ว");
+    add("revealer","พลังเปิดเผย",S.revealerUsed?"ใช้แล้ว":alive().some(p=>p.roleId==="revealer")?"พร้อมใช้":"เสียชีวิตแล้ว");
+    add("guard","เป้าหมายล่าสุด",target("guard"));add("seer","เป้าหมายล่าสุด",target("seer"));
+    add("wolfCub","โจมตีพิเศษ",S.phase==="night"&&S.doubleAttack?"มีผลคืนนี้":S.cubPending?"รอคืนถัดไป":"ไม่มีผลพิเศษ");
+    add("diseased","ผลต่อหมาป่า",S.wolfBlockedNight>=S.night&&S.wolfBlockedNight>0?"งดโจมตีคืนที่ "+S.wolfBlockedNight:"ไม่มีผล");
+    S.players.filter(p=>p.roleId==="prince").forEach(p=>rows.push([role(p.roleId).name,p.name,p.princeRevealed?"ใช้แล้ว":p.alive?"พร้อมใช้":"เสียชีวิตแล้ว"]));
+    S.players.filter(p=>p.toughDueNight>0&&p.alive).forEach(p=>rows.push([role(p.roleId).name,p.name,"รอเสียชีวิตคืนที่ "+p.toughDueNight]));
+    if(S.silenced)rows.push(["🤫 จอมเวท","ห้ามพูด",nameOf(S.silenced)]);
+    return card(`<h2>⚡ สถานะพลังตัวละคร</h2><p class="small muted">เฉพาะผู้ดำเนินเกม · อ่านอย่างเดียว</p>${rows.map(([r,l,v])=>`<div class="item"><b>${esc(r)}</b><div class="row between"><span class="small muted">${esc(l)}</span><b class="blue">${esc(v)}</b></div></div>`).join("")||'<p class="muted">ยังไม่มีสถานะพลัง</p>'}`);
+  }
+  function showPowers25(){showModal("สถานะพลัง",powers25());}
+  function sharePage25(){return card(`<h2>📤 แชร์แอปให้เพื่อน</h2><p>สแกน QR Code เพื่อเปิดแอป</p><img alt="QR Code ลิงก์ WerewolfMaster" style="display:block;width:190px;max-width:100%;margin:12px auto;border-radius:8px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAACmElEQVR4nO2bQW6kMBBFX42RsjRSDjBHMTeYI41ypLkBPkoO0BIsWwL9WRh3dxIlPZEIgVHVAgy8xZcs+7vKxsRnIv/4FA7OO++888477/x7vC3RYN3YQL55rN+6DfU4vxbflFvqAcZHlNuAQZiMeDIgTADYNnqc/xp+rCM0DbORhtnUA+oBM2u21uP8Onzz6tnSH1Buw2Tp+eFt8rQ3/c5/ks8tQDzb0vpuPc6vwkdJPUAaguz384PKTA0gadpaj/Or8mXB3L76GGQdc1k+b6vH+ZX44r+3PhvPBsym3AYgvvTgvel3/l946wDrxsswjRMQz6anOrCt21CP82vxdfyOLRCnRgDK7QkYH0TJhMfa77vT7/ydkFSXVgDqo0QaKCst9QSRpHJRvzf9zt8JXaOPUpmaS18SJA1B6q/v9qbf+Y/jRX1jbEoedF1SWeonSMNc3+1Nv/MfR+lfI54aEU8mxoaL26Jc21ZK1HvT7/ydWObmoT72wI3/Lh+C+++x+ThRbLa0AD21YPZTIuns9Y1j8ov/5g6uGwqW+qmhTNcsduz+e0h+8d8ksFLVIIjcnrA0IHIHEE/uv8fk3/ivhlCSpNqSSIP770H5m/xIsAxiASJ3AZWcKbr/Hpo3a4OsG83Ujw0wmkGcMGtnI7dBL/iv1uP8Wvxt/Uq1DFnzI7iWJn1+PiRf6xslwgTMjXILKuc3xseJbKFu8O9Nv/N34jpqa6350oLL+J3qPsTe9Dt/J5b+HSgFK+ByiZdTOdHn5/+EL5nSckg2VFcevk2P8yvzuZ2tFinn5RBl9vNXR+Vr/hsFjECpZAHkX4MsDcvu0kZ6nP8SPt8cs5qNbJej7WPD9U+G3ep3/p0w/7/beeedd9555zfn/wJtqXrGXZn1gAAAAABJRU5ErkJggg=="><input id="appLink25" readonly value="${appLink25}" aria-label="ลิงก์แอป">${btn("คัดลอกลิงก์","copyLink25()","full")}${btn("แชร์ลิงก์","shareLink25()","primary full")}<p class="small muted">แชร์เฉพาะลิงก์ ไม่ส่งข้อมูลเกม</p><h3>📱 วิธีติดตั้ง</h3><p>iPhone: เปิดลิงก์ใน Safari → แชร์ → เพิ่มไปยังหน้าจอโฮม → เพิ่ม</p><p>Android: เปิดใน Chrome → เมนู ⋮ → ติดตั้งแอป หรือเพิ่มไปยังหน้าจอหลัก</p>`);}
+  async function copyLink25(){try{await navigator.clipboard.writeText(appLink25);notice("คัดลอกลิงก์แล้ว");}catch(e){const el=$("appLink25");if(el){el.focus();el.select();el.setSelectionRange(0,appLink25.length);}notice("คัดลอกอัตโนมัติไม่ได้ กรุณาคัดลอกลิงก์จากช่องข้อความ");}}
+  async function shareLink25(){if(!navigator.share)return copyLink25();try{await navigator.share({title:"WerewolfMaster PRO",url:appLink25});}catch(e){if(e.name!=="AbortError")copyLink25();}}
+  function manualVote25(){if(!canVotePhase()||S.voted)return;showModal("เลือกผู้ถูกโหวตออก",`<p>ใช้เมื่อทราบผลโหวตแล้ว</p>${alive().map(p=>btn(p.name,call("manualExecute25",p.id),"full")).join("")}`);}
+  function manualExecute25(id){if(!canVotePhase()||S.voted||!player(id)?.alive)return;if(hasPendingHunter())return openHunter();ask("ยืนยันกำจัด "+nameOf(id)+" ตามผลโหวต?",()=>{snapshot();log(nameOf(id)+" ถูกเลือกจากผลโหวตโดยผู้ดำเนินเกม");const msg=killPlayer(player(id),"ถูกโหวต");S.voted=true;S.votes={};S.timerEnd=0;S.timerRemaining=0;tab="home";commit();if(msg)notice(msg);});}
+  function noVote25(){if(!canVotePhase()||S.voted)return;if(hasPendingHunter())return openHunter();ask("จบการโหวตโดยไม่กำจัดใคร?",()=>{snapshot();S.voted=true;S.votes={};S.timerEnd=0;S.timerRemaining=0;log("จบการโหวตโดยไม่กำจัดใคร");commit();});}
+
   function morePage() {
     return card(`<h2>☰ เพิ่มเติม</h2>
+      ${btn("⚡ สถานะพลังตัวละคร",call("go","powers"),"full")}
+      ${btn("📤 แชร์แอปให้เพื่อน",call("go","share"),"primary full")}
+      ${btn(prefs.compact25?"ปิดโหมดแบบย่อ":"เปิดโหมดแบบย่อ","toggleCompact25()","full")}
       ${btn("🎭 จัดการบทบาท / สถานะยา",call("go","roles"),"full")}
       ${btn("📜 ประวัติเกม",call("go","history"),"full")}
       ${btn("⚙️ ตั้งค่า / สำรองและกู้คืนข้อมูล",call("go","settings"),"full")}
@@ -4596,7 +4630,7 @@ nav span {
       players:playersPage,
       roles:rolesPage,
       vote:votePage,
-      history:historyPage, settings:settingsPage, more:morePage
+      history:historyPage, settings:settingsPage, more:morePage, powers:powers25, share:sharePage25
     };
 
     if(!canVotePhase() || S.voted) votingOpen=false;
@@ -4619,7 +4653,7 @@ nav span {
           <h1>🐺 WEREWOLF</h1>
 
           <div class="subtitle">
-            MODERATOR WEB APP V2.4.4
+            MODERATOR WEB APP V2.5
           </div>
         </div>
 
@@ -4662,13 +4696,14 @@ nav span {
       </div>
 
       ${tab==="home"&&cue()[1]?btn("🔊 อ่านบทพูด / อ่านซ้ำ","speakCue()","full"):""}
-      ${["roles","history","settings"].includes(tab)?btn("‹ กลับเมนูเพิ่มเติม",call("go","more"),"full"):""}
+      ${["roles","history","settings","powers","share"].includes(tab)?btn("‹ กลับเมนูเพิ่มเติม",call("go","more"),"full"):""}
+      ${tab==="home"&&["night","day","discussion"].includes(S.phase)?`<div class="row">${btn(prefs.compact25?"แสดงเต็ม":"โหมดแบบย่อ","toggleCompact25()","grow mini")}${btn("⚡ ดูพลัง","showPowers25()","grow mini")}</div>`:""}
       ${pages[tab]()}
 
       <nav>
         ${nav.map(n=>`
           <button
-            class="${(tab===n[0] || (n[0]==="more" && ["roles","history","settings"].includes(tab)))
+            class="${(tab===n[0] || (n[0]==="more" && ["roles","history","settings","powers","share"].includes(tab)))
               ?"active":""}"
             onclick="${esc(call("go",n[0]))}">
 
@@ -4685,6 +4720,7 @@ nav span {
 
   Object.assign(window,{
 
+    toggleCompact25, showPowers25, copyLink25, shareLink25, manualVote25, manualExecute25, noVote25,
     clearPlayers,
     closeModal,
     submitModal,
@@ -4746,7 +4782,7 @@ nav span {
       console.log(e);
     }
 
-    game.version = "2.4.4";
+    game.version = "2.5";
 
     dashboard(game);
 
