@@ -435,7 +435,7 @@ nav span {
 
 </style>
 
-    <title>WerewolfMaster V2.5.5</title>
+    <title>WerewolfMaster V2.5.6</title>
 
     <meta name="theme-color"
       content="#11131c">
@@ -465,7 +465,7 @@ nav span {
 
 <script>
     const roles =
-      [{"id":"wolf","name":"หมาป่า","icon":"🐺","team":"wolf","order":20,"action":"kill","speech":"หมาป่าลืมตา เลือกเหยื่อหนึ่งคน"},{"id":"guard","name":"ผู้พิทักษ์","icon":"🛡️","team":"village","order":10,"action":"protect","speech":"ผู้พิทักษ์ลืมตา เลือกคนที่ต้องการปกป้อง"},{"id":"seer","name":"ผู้หยั่งรู้","icon":"🔮","team":"village","order":30,"action":"inspect","speech":"ผู้หยั่งรู้ลืมตา เลือกคนที่ต้องการตรวจสอบ"},{"id":"witch","name":"แม่มด","icon":"🧪","team":"village","order":40,"action":"witch","speech":"แม่มดลืมตา เลือกใช้ยารักษาหรือยาพิษ"},{"id":"hunter","name":"นายพราน","icon":"🏹","team":"village","order":0,"action":"none","speech":"นายพรานเลือกผู้เล่นที่จะยิง"},{"id":"villager","name":"ชาวบ้าน","icon":"👨‍🌾","team":"village","order":0,"action":"none","speech":""},{"id":"cupid","name":"กามเทพ","icon":"💘","team":"village","order":1,"action":"custom","firstOnly":true,"speech":"กามเทพลืมตา เลือกคู่รักสองคน"},{"id":"littleGirl","name":"เด็กหญิง","icon":"👧","team":"village","order":0,"action":"none","speech":""},{"id":"jester","name":"ตัวตลก","icon":"🤡","team":"neutral","order":0,"action":"none","speech":""},{"id":"minion","name":"สมุนรับใช้","icon":"🕴️","team":"wolf","order":2,"firstOnly":true,"action":"revealWolves","speech":"สมุนรับใช้ลืมตา ผู้ดำเนินเกมชี้ให้เห็นมนุษย์หมาป่า","description":"รู้ว่าใครเป็นหมาป่า แต่ไม่ตื่นร่วมกับหมาป่า","balance":-6},{"id":"wolfCub","name":"ลูกมนุษย์หมาป่า","icon":"🐺","team":"wolf","order":0,"action":"none","speech":"","description":"เมื่อตาย หมาป่ากำจัดผู้เล่นได้สองคนในคืนถัดไป","balance":-8},{"id":"spellcaster","name":"จอมเวท","icon":"🤫","team":"village","order":50,"action":"silence","speech":"จอมเวทลืมตา เลือกผู้เล่นที่ห้ามพูดในวันถัดไป","description":"เลือกผู้เล่นหนึ่งคนให้ห้ามพูดในวันถัดไป","balance":1},{"id":"cursed","name":"ผู้ต้องคำสาป","icon":"🌘","team":"village","order":0,"action":"none","speech":"","description":"เมื่อถูกหมาป่ากำจัด จะกลายเป็นหมาป่าแทน","balance":-3},{"id":"revealer","name":"ผู้เผยตัวตน","icon":"⚔️","team":"village","order":60,"action":"reveal","speech":"ผู้เผยตัวตนลืมตา เลือกผู้เล่นหนึ่งคน","description":"ถ้าเลือกหมาป่า เป้าหมายจะตาย หากไม่ใช่จะตายเอง","balance":4},{"id":"doppelganger","name":"ภูตจำแลง","icon":"🎭","team":"village","order":3,"firstOnly":true,"action":"copy","speech":"ภูตจำแลงลืมตา เลือกผู้เล่นที่จะสวมรอย","description":"เมื่อผู้เล่นที่เลือกตาย จะได้รับบทบาทนั้น","balance":-2},{"id":"toughGuy","name":"หนุ่มถึก","icon":"💪","team":"village","order":0,"action":"none","speech":"","description":"เมื่อถูกหมาป่ากำจัด จะรอดชีวิตจนถึงคืนถัดไป"},{"id":"diseased","name":"ผู้ป่วยติดเชื้อ","icon":"🦠","team":"village","order":0,"action":"none","speech":"","description":"เมื่อถูกหมาป่ากำจัด หมาป่าจะโจมตีไม่ได้ในคืนถัดไป"},{"id":"prince","name":"เจ้าชาย","icon":"🤴","team":"village","order":0,"action":"none","speech":"","description":"รอดจากการโหวตครั้งแรก โดยเปิดเผยบทบาท"}];
+      [{"id":"wolf","name":"หมาป่า","icon":"🐺","team":"wolf","order":20,"action":"kill","speech":"หมาป่าลืมตา เลือกเหยื่อหนึ่งคน","balance":-6},{"id":"guard","name":"ผู้พิทักษ์","icon":"🛡️","team":"village","order":10,"action":"protect","speech":"ผู้พิทักษ์ลืมตา เลือกคนที่ต้องการปกป้อง","balance":3},{"id":"seer","name":"ผู้หยั่งรู้","icon":"🔮","team":"village","order":30,"action":"inspect","speech":"ผู้หยั่งรู้ลืมตา เลือกคนที่ต้องการตรวจสอบ","balance":7},{"id":"witch","name":"แม่มด","icon":"🧪","team":"village","order":40,"action":"witch","speech":"แม่มดลืมตา เลือกใช้ยารักษาหรือยาพิษ","balance":4},{"id":"hunter","name":"นายพราน","icon":"🏹","team":"village","order":0,"action":"none","speech":"นายพรานเลือกผู้เล่นที่จะยิง","balance":3},{"id":"villager","name":"ชาวบ้าน","icon":"👨‍🌾","team":"village","order":0,"action":"none","speech":"","balance":1},{"id":"cupid","name":"กามเทพ","icon":"💘","team":"village","order":1,"action":"custom","firstOnly":true,"speech":"กามเทพลืมตา เลือกคู่รักสองคน","balance":-3},{"id":"littleGirl","name":"เด็กหญิง","icon":"👧","team":"village","order":0,"action":"none","speech":""},{"id":"jester","name":"ตัวตลก","icon":"🤡","team":"neutral","order":0,"action":"none","speech":"","balance":-2},{"id":"minion","name":"สมุนรับใช้","icon":"🕴️","team":"wolf","order":2,"firstOnly":true,"action":"revealWolves","speech":"สมุนรับใช้ลืมตา ผู้ดำเนินเกมชี้ให้เห็นมนุษย์หมาป่า","description":"รู้ว่าใครเป็นหมาป่า แต่ไม่ตื่นร่วมกับหมาป่า","balance":-6},{"id":"wolfCub","name":"ลูกมนุษย์หมาป่า","icon":"🐺","team":"wolf","order":0,"action":"none","speech":"","description":"เมื่อตาย หมาป่ากำจัดผู้เล่นได้สองคนในคืนถัดไป","balance":-8},{"id":"spellcaster","name":"จอมเวท","icon":"🤫","team":"village","order":50,"action":"silence","speech":"จอมเวทลืมตา เลือกผู้เล่นที่ห้ามพูดในวันถัดไป","description":"เลือกผู้เล่นหนึ่งคนให้ห้ามพูดในวันถัดไป","balance":1},{"id":"cursed","name":"ผู้ต้องคำสาป","icon":"🌘","team":"village","order":0,"action":"none","speech":"","description":"เมื่อถูกหมาป่ากำจัด จะกลายเป็นหมาป่าแทน","balance":-3},{"id":"revealer","name":"ผู้เผยตัวตน","icon":"⚔️","team":"village","order":60,"action":"reveal","speech":"ผู้เผยตัวตนลืมตา เลือกผู้เล่นหนึ่งคน","description":"ถ้าเลือกหมาป่า เป้าหมายจะตาย หากไม่ใช่จะตายเอง","balance":4},{"id":"doppelganger","name":"ภูตจำแลง","icon":"🎭","team":"village","order":3,"firstOnly":true,"action":"copy","speech":"ภูตจำแลงลืมตา เลือกผู้เล่นที่จะสวมรอย","description":"เมื่อผู้เล่นที่เลือกตาย จะได้รับบทบาทนั้น","balance":-2},{"id":"toughGuy","name":"หนุ่มถึก","icon":"💪","team":"village","order":0,"action":"none","speech":"","description":"เมื่อถูกหมาป่ากำจัด จะรอดชีวิตจนถึงคืนถัดไป","balance":3},{"id":"diseased","name":"ผู้ป่วยติดเชื้อ","icon":"🦠","team":"village","order":0,"action":"none","speech":"","description":"เมื่อถูกหมาป่ากำจัด หมาป่าจะโจมตีไม่ได้ในคืนถัดไป","balance":3},{"id":"prince","name":"เจ้าชาย","icon":"🤴","team":"village","order":0,"action":"none","speech":"","description":"รอดจากการโหวตครั้งแรก โดยเปิดเผยบทบาท","balance":3},{"id":"aura","name":"ญาณทิพย์","icon":"🔮","balance":3,"order":31,"action":"aura","description":"ตรวจว่าเป้าหมายไม่ใช่หมาป่าหรือชาวบ้านธรรมดา","speech":"ญาณทิพย์ ลืมตา ตรวจว่าเป้าหมายไม่ใช่หมาป่าหรือชาวบ้านธรรมดา","team":"village","firstOnly":false},{"id":"drunk","name":"ขี้เมา","icon":"🍺","balance":4,"order":0,"action":"none","description":"หลังคืนสามเปิดบทบาทจริงที่ผู้ดำเนินเกมสุ่ม","speech":"ขี้เมา ลืมตา หลังคืนสามเปิดบทบาทจริงที่ผู้ดำเนินเกมสุ่ม","team":"village","firstOnly":false},{"id":"priest","name":"นักบวช","icon":"✝️","balance":3,"order":8,"action":"priest","description":"มอบการรอดจากการกำจัดหนึ่งครั้ง ใช้พลังครั้งเดียว","speech":"นักบวช ลืมตา มอบการรอดจากการกำจัดหนึ่งครั้ง ใช้พลังครั้งเดียว","team":"village","firstOnly":false},{"id":"pi","name":"นักสืบเรื่องลี้ลับ","icon":"🔍","balance":3,"order":32,"action":"pi","description":"ตรวจหมาป่าในสามที่นั่งติดกัน ครั้งเดียว","speech":"นักสืบเรื่องลี้ลับ ลืมตา ตรวจหมาป่าในสามที่นั่งติดกัน ครั้งเดียว","team":"village","firstOnly":false},{"id":"trouble","name":"ตัวป่วน","icon":"😈","balance":-3,"order":45,"action":"trouble","description":"เปิดโหวตสองรอบในวันถัดไป ครั้งเดียว","speech":"ตัวป่วน ลืมตา เปิดโหวตสองรอบในวันถัดไป ครั้งเดียว","team":"village","firstOnly":false},{"id":"hag","name":"แม่หมอ","icon":"🧙","balance":1,"order":46,"action":"hag","description":"พักผู้เล่นจากการโหวตและการกำจัดกลางวันหนึ่งวัน","speech":"แม่หมอ ลืมตา พักผู้เล่นจากการโหวตและการกำจัดกลางวันหนึ่งวัน","team":"village","firstOnly":false},{"id":"apprentice","name":"ศิษย์เทพพยากรณ์","icon":"📖","balance":4,"order":0,"action":"none","description":"รับพลังเทพพยากรณ์เมื่อเทพพยากรณ์ตาย","speech":"ศิษย์เทพพยากรณ์ ลืมตา รับพลังเทพพยากรณ์เมื่อเทพพยากรณ์ตาย","team":"village","firstOnly":false},{"id":"mayor","name":"นายกเทศมนตรี","icon":"🎖️","balance":2,"order":0,"action":"none","description":"เสียงโหวตนับสอง","speech":"นายกเทศมนตรี ลืมตา เสียงโหวตนับสอง","team":"village","firstOnly":false},{"id":"pacifist","name":"ผู้รักสันติ","icon":"🕊️","balance":-1,"order":0,"action":"none","description":"ต้องโหวตให้รอด","speech":"ผู้รักสันติ ลืมตา ต้องโหวตให้รอด","team":"village","firstOnly":false},{"id":"ghost","name":"พรายกระซิบ","icon":"👻","balance":2,"order":0,"action":"none","description":"ตายคืนแรก ส่งข้อความวันละหนึ่งตัวอักษร","speech":"พรายกระซิบ ลืมตา ตายคืนแรก ส่งข้อความวันละหนึ่งตัวอักษร","team":"village","firstOnly":false},{"id":"mason","name":"ภราดรแห่งเมสัน","icon":"🤝","balance":2,"order":4,"action":"mason","description":"รู้จักเมสันด้วยกันคืนแรก","speech":"ภราดรแห่งเมสัน ลืมตา รู้จักเมสันด้วยกันคืนแรก","team":"village","firstOnly":true},{"id":"lycan","name":"ลูกครึ่งมนุษย์หมาป่า","icon":"🐾","balance":-1,"order":0,"action":"none","description":"ฝ่ายชาวบ้าน แต่ผู้หยั่งรู้เห็นเป็นหมาป่า","speech":"ลูกครึ่งมนุษย์หมาป่า ลืมตา ฝ่ายชาวบ้าน แต่ผู้หยั่งรู้เห็นเป็นหมาป่า","team":"village","firstOnly":false},{"id":"idiot","name":"ไอ้ทึ่ม","icon":"🤪","balance":2,"order":0,"action":"none","description":"ต้องโหวตให้กำจัด","speech":"ไอ้ทึ่ม ลืมตา ต้องโหวตให้กำจัด","team":"village","firstOnly":false},{"id":"lone","name":"หมาป่าเดียวดาย","icon":"🌑","balance":-5,"order":0,"action":"none","description":"ร่วมล่ากับหมาป่า ชนะเมื่อรอดคนเดียว","speech":"หมาป่าเดียวดาย ลืมตา ร่วมล่ากับหมาป่า ชนะเมื่อรอดคนเดียว","team":"wolf","firstOnly":false},{"id":"sorcerer","name":"นางปีศาจ","icon":"🧙‍♀️","balance":-3,"order":33,"action":"sorcerer","description":"ตรวจว่าเป้าหมายเป็นเทพพยากรณ์","speech":"นางปีศาจ ลืมตา ตรวจว่าเป้าหมายเป็นเทพพยากรณ์","team":"wolf","firstOnly":false},{"id":"hoodlum","name":"อันธพาล","icon":"😎","balance":0,"order":5,"action":"hoodlum","description":"เลือกสองเป้าหมายคืนแรก ชนะเมื่อรอดจนจบและทั้งคู่ตาย","speech":"อันธพาล ลืมตา เลือกสองเป้าหมายคืนแรก ชนะเมื่อรอดจนจบและทั้งคู่ตาย","team":"neutral","firstOnly":true},{"id":"vampire","name":"แวมไพร์","icon":"🧛","balance":-7,"order":35,"action":"vampire","description":"เลือกเหยื่อที่จะตายก่อนโหวตวันถัดไป หมาป่าฆ่าไม่ได้","speech":"แวมไพร์ ลืมตา เลือกเหยื่อที่จะตายก่อนโหวตวันถัดไป หมาป่าฆ่าไม่ได้","team":"neutral","firstOnly":false},{"id":"cult","name":"เจ้าลัทธิ","icon":"🕯️","balance":1,"order":47,"action":"cult","description":"ชวนหนึ่งคนต่อคืน ชนะเมื่อผู้รอดทั้งหมดเข้าลัทธิ","speech":"เจ้าลัทธิ ลืมตา ชวนหนึ่งคนต่อคืน ชนะเมื่อผู้รอดทั้งหมดเข้าลัทธิ","team":"neutral","firstOnly":false}];
 
     function fresh() {
   return {
@@ -494,6 +494,7 @@ nav span {
   const guides = {"wolf": "ตื่นทุกคืน เลือกกำจัดผู้เล่นร่วมกัน", "guard": "ปกป้องผู้เล่นจากหมาป่า ห้ามเลือกคนเดิมสองคืนติด", "seer": "ตรวจสอบฝ่ายของผู้เล่น ห้ามเลือกคนเดิมสองคืนติด", "witch": "ยารักษาและยาพิษอย่างละหนึ่งครั้งตลอดเกม", "hunter": "เมื่อเสียชีวิต เลือกยิงผู้เล่นอีกหนึ่งคน", "villager": "อภิปรายและโหวตเพื่อค้นหาหมาป่า ไม่มีพลังพิเศษ", "cupid": "คืนแรกเลือกคู่รักสองคน เมื่อคนหนึ่งตาย อีกคนตายตาม", "jester": "พยายามให้ตนเองถูกโหวตออก ผู้ดำเนินเกมยืนยันผลชนะเอง"};
   const folded = {};
   function migrate24(){
+    if(S.phase==='setup' && !S.roles556){roles.filter(r=>r.id!=='littleGirl').forEach(r=>{const old=S.roles.find(x=>x.id===r.id);if(!old)S.roles.push({...r});else if(r.balance!=null)old.balance=r.balance;});S.roles556=true;}
     S.roles.forEach(r=>{if(r.description==null && guides[r.id])r.description=guides[r.id];});
     if(S.phase==='setup'){
       S.roles=S.roles.filter(r=>r.id!=='littleGirl');
@@ -927,7 +928,7 @@ nav span {
   function isWolf(p) {
     return !!p && (
       p.roleId==="wolf" ||
-      p.roleId==="wolfCub"
+      p.roleId==="wolfCub" || p.roleId==="lone"
     );
   }
 
@@ -976,6 +977,7 @@ nav span {
 
   function killPlayer(p,reason) {
 
+    if(p?.alive&&p.bless556){p.bless556=false;specialAlert('นักบวช',p.name+' รอดจากการกำจัด');return '';}
     if(
       p &&
       p.alive &&
@@ -1062,7 +1064,8 @@ nav span {
 
     
     p.alive = false;
-
+    if(p.roleId==='seer')alive().filter(x=>x.roleId==='apprentice').forEach(x=>{x.roleId='seer';specialAlert('ศิษย์เทพพยากรณ์',x.name+' รับบทเทพพยากรณ์');});
+    if(p.roleId==='jester'&&reason==='ถูกโหวต')S.specialWin556='ยาจก: '+p.name;
     if(p.roleId==="wolfCub") {
       S.cubPending = true;
       log("คืนถัดไปหมาป่ากำจัดได้ 2 คน");
@@ -1260,7 +1263,7 @@ nav span {
         ตื่นเฉพาะคืนแรก
       </label>
 
-      <label>คำอธิบายความสามารถ</label><textarea id="rdesc">${esc(r?.description||"")}</textarea>
+      <label>แต้มสมดุล (เว้นว่างหากไม่ทราบ)</label><input id="balance556" type="number" value="${r?.balance??''}"><label>คำอธิบายความสามารถ</label><textarea id="rdesc">${esc(r?.description||"")}</textarea>
       <label>บทพูดผู้ดำเนินเกม</label>
       <textarea id="rspeech">${esc(
         r?.speech||""
@@ -1292,7 +1295,7 @@ nav span {
           firstOnly:$("firstOnly").checked,
           speech:$("rspeech").value,
           description:$("rdesc").value,
-          action:r?.action||"custom"
+          balance:$("balance556").value===""?null:Number($("balance556").value), action:r?.action||"custom"
         };
 
         if(r) {
@@ -1402,6 +1405,8 @@ nav span {
         delete p.cursedNight;
       });
 
+      S.used556={}; S.exile556=""; S.vamp556=""; S.extra556=0; S.ghost556={}; S.specialWin556=""; S.balanceStart556=balance556(playerCounts556());
+      S.players.forEach(p=>{delete p.bless556;delete p.cult556;delete p.hood556;});
       S.cubPending = false;
       S.doubleAttack = false;
       S.silenced = "";
@@ -1441,14 +1446,14 @@ nav span {
   }
   function nightRoleName(r) {
     if(r.id!=="wolf") return r.name;
-    const names = ["wolf","wolfCub"].filter(id=>alive().some(p=>p.roleId===id)).map(id=>role(id).name);
+    const names = ["wolf","wolfCub","lone"].filter(id=>alive().some(p=>p.roleId===id)).map(id=>role(id).name);
     return names.join(" + ") || r.name;
   }
   function nightActors(r) {
     return alive().filter(p=>r.id==="wolf" ? isWolf(p) : p.roleId===r.id);
   }
   function nightInactive(r) {
-    return !nightActors(r).length || (r.id==="wolf" && S.wolfBlockedNight===S.night);
+    return !nightActors(r).length || (["priest","pi","trouble"].includes(r.id)&&!!S.used556?.[r.id]) || (r.id==="wolf" && S.wolfBlockedNight===S.night);
   }
   function beginNight() {
     S.previousNightTargets = {
@@ -1459,7 +1464,7 @@ nav span {
     
     S.doubleAttack = !!S.cubPending;
     S.cubPending = false;
-    S.silenced = "";
+    S.silenced = ""; S.exile556=""; S.vamp556=""; S.extra556=0;
 
     S.night++;
     
@@ -1478,7 +1483,7 @@ nav span {
         (!r.firstOnly||S.night===1) &&
         S.players.some(p=>
           r.id==="wolf"
-            ?isWolf(p) || ["wolf","wolfCub"].includes(p.originalRoleId)
+            ?isWolf(p) || ["wolf","wolfCub","lone"].includes(p.originalRoleId)
             :p.roleId===r.id || p.originalRoleId===r.id
         )
     
@@ -1571,6 +1576,8 @@ nav span {
           " ❤️ "+
           nameOf(data.lover2);
 
+      } else if(r.id==='hoodlum') {data.target=$('target')?.value;data.target2=$('target2')?.value;if(!player(data.target)?.alive||!player(data.target2)?.alive||data.target===data.target2||nightActors(r).some(p=>[data.target,data.target2].includes(p.id)))return notice('เลือกสองคนที่ไม่ใช่ตัวเอง');
+      } else if(r.id==='mason'||r.id==='trouble'){data.note=r.id==='mason'?nightActors(r).map(p=>p.name).join(', '):'เปิดโหวตสองรอบ';
       } else if(r.action==="revealWolves") {
         data.note = alive()
           .filter(isWolf)
@@ -1656,6 +1663,14 @@ nav span {
 
     
     S.actions[r.id] = data;
+    if(!skip){S.used556=S.used556||{};if(['priest','pi','trouble'].includes(r.id))S.used556[r.id]=true;
+      if(r.id==='priest')player(data.target).bless556=true;
+      if(r.id==='trouble')S.extra556=1;
+      if(r.id==='hag')S.exile556=data.target;
+      if(r.id==='vampire')S.vamp556=data.target;
+      if(r.id==='cult')player(data.target).cult556=true;
+      if(r.id==='hoodlum')nightActors(r).forEach(p=>p.hood556=[data.target,data.target2]);
+    }
 
     if (
       r.id==="cupid" &&
@@ -1734,10 +1749,11 @@ nav span {
 
       if(p) {
         result = p.name+" อยู่ฝ่าย "+
-          teamName(role(p.roleId).team);
+          teamName(p.roleId==="lycan"?"wolf":role(p.roleId).team);
       }
     }
 
+    if(!skip&&data.target){const p=player(data.target);if(r.id==='aura')result=p.name+': '+(['wolf','villager'].includes(p.roleId)?'ไม่ใช่บทบาทพิเศษ':'บทบาทพิเศษ');if(r.id==='sorcerer')result=p.name+': '+(p.roleId==='seer'?'เป็นเทพพยากรณ์':'ไม่ใช่เทพพยากรณ์');if(r.id==='pi'){const i=S.players.indexOf(p),n=S.players.length;result='กลุ่มสามที่นั่ง: '+([-1,0,1].some(d=>isWolf(S.players[(i+d+n)%n]))?'พบหมาป่า':'ไม่พบหมาป่า');}}
     S.step++;
     commit();
 
@@ -1778,13 +1794,14 @@ nav span {
       ].filter(Boolean);
 
       wolfTargets.forEach((id,index)=>{
-        if(id===guard) return;
+        if(id===guard || player(id)?.roleId==="vampire") return;
         if(index===0 && witch.heal) return;
 
         const p = player(id);
 
         if(!p?.alive) return;
 
+        if(p.bless556){p.bless556=false;specialAlert("นักบวช",p.name+" รอดจากการโจมตี");return;}
         if(p.roleId==="cursed") {
 
           transformCursed(p);
@@ -1842,6 +1859,7 @@ nav span {
         }
       });
 
+      if(S.night===1)alive().filter(p=>p.roleId==="ghost").forEach(p=>deaths.add(p.id));
       S.deaths = [];
 
       const messages = [];
@@ -1886,6 +1904,7 @@ nav span {
       }
 
       S.phase = "day";
+      if(S.night===3)alive().filter(p=>p.roleId==='drunk').forEach(p=>{const pool=S.roles.filter(r=>['villager','seer','guard','wolf'].includes(r.id));p.roleId=pool[Math.floor(Math.random()*pool.length)].id;specialAlert('ขี้เม่าสร่างเมา',p.name+' → '+role(p.roleId).name);});
       S.votes = {};
       S.voted = false;
 
@@ -1906,13 +1925,13 @@ nav span {
   function vote(id,delta) {
     if(!canVotePhase() ||
        S.voted ||
-       !player(id)?.alive) return;
+       !player(id)?.alive || id===S.exile556) return;
 
     const total = Object.values(S.votes)
       .reduce((a,b)=>a+b,0);
 
     if(delta>0 &&
-       total>=alive().length) {
+       total>=voteCap556()) {
       return notice(
         "คะแนนครบจำนวนผู้รอดชีวิตแล้ว"
       );
@@ -1945,7 +1964,7 @@ nav span {
 
     if(!canVotePhase()||S.voted) return;
 
-    const list = alive().map(p=>({
+    const list = alive().filter(p=>p.id!==S.exile556).map(p=>({
       id:p.id,
       votes:S.votes[p.id]||0
     })).sort((a,b)=>b.votes-a.votes);
@@ -1955,7 +1974,7 @@ nav span {
       return ask(reason+" — ยืนยันผลโดยไม่มีผู้เสียชีวิต?",()=>{
         snapshot();
         log(reason+" — ไม่มีผู้เสียชีวิตจากการโหวต");
-        S.voted=true; S.votes={}; S.timerEnd=0; S.timerRemaining=0; tab="home";
+        S.voted=!S.extra556; S.extra556=0; S.votes={}; S.timerEnd=0; S.timerRemaining=0; tab="home";
         commit();
       });
     }
@@ -1975,7 +1994,7 @@ nav span {
           p,"ถูกโหวต"
         );
 
-        S.voted = true;
+        S.voted = !S.extra556; S.extra556=0;
         S.votes = {};
         S.timerEnd = 0; S.timerRemaining = 0;
         tab = "home";
@@ -1996,8 +2015,10 @@ nav span {
     if(!canVotePhase()) return "";
 
     const list = alive();
-
-    
+    if(S.specialWin556)return S.specialWin556;
+    if(list.length===1&&list[0].roleId==='lone')return 'หมาป่าเดียวดาย: '+list[0].name;
+    if(list.some(p=>p.roleId==='cult')&&list.every(p=>p.roleId==='cult'||p.cult556))return 'เจ้าลัทธิ';
+    if(list.length&&list.every(p=>p.roleId==='vampire'))return 'แวมไพร์';
     const wolves = list.filter(isWolf).length;
 
     const wolfTeam = list.filter(p=>
@@ -2013,10 +2034,10 @@ nav span {
       return "ไม่มีผู้รอดชีวิต";
     }
 
-    if(neutral) return "";
+    if(list.some(p=>p.roleId==='vampire'))return '';
     if(!wolves) return "ฝ่ายชาวบ้าน";
 
-    if(wolfTeam>=list.length-wolfTeam) {
+    if(!list.some(p=>p.roleId==='lone')&&wolfTeam>=list.length-wolfTeam) {
       return "ฝ่ายหมาป่า";
     }
 
@@ -2040,11 +2061,11 @@ nav span {
       `
       <select id="win">
         ${[
-          "ฝ่ายชาวบ้าน",
+          ...new Set([...(w?[w]:[]),"ฝ่ายชาวบ้าน",
           "ฝ่ายหมาป่า",
           "ฝ่ายอิสระ",
           "เสมอ",
-          "ไม่มีผู้รอดชีวิต"
+          "ไม่มีผู้รอดชีวิต"] )
         ].map(x=>`
           <option ${x===w?"selected":""}>
             ${x}
@@ -2059,7 +2080,7 @@ nav span {
         S.phase = "ended";
         S.timerEnd = 0; S.timerRemaining = 0;
 
-        log("จบเกม: "+S.result);
+        log("จบเกม: "+S.result); const hood=alive().filter(p=>p.roleId==='hoodlum'&&p.hood556?.length===2&&p.hood556.every(id=>!player(id)?.alive));if(hood.length)log('อันธพาลชนะร่วม: '+hood.map(p=>p.name).join(', '));try{const h=JSON.parse(localStorage.getItem('WerewolfResults556')||'[]');h.unshift({date:new Date().toISOString(),balance:S.balanceStart556??balance556(playerCounts556()),result:S.result});localStorage.setItem('WerewolfResults556',JSON.stringify(h.slice(0,200)));}catch(e){}
 
         tab = "home";
         closeModal();
@@ -2091,7 +2112,7 @@ nav span {
             cursedNight:0,
             alive:true
           })),
-          roles:S.roles,
+          roles:S.roles, roles556:true,
           undo:S.undo,
           copyNotices:[],
           specialNotices:[],
@@ -2155,7 +2176,7 @@ nav span {
   }
   function firstNight() { if(hasPendingHunter())return openHunter(); if(S.phase!=="discussion")return; ask(S.voted?"เริ่มคืนที่ 1?":"ยังไม่ได้โหวต ต้องการข้ามและเริ่มคืนที่ 1?",()=>{snapshot();beginNight();tab="home";commit();}); }
   async function keepAwake(){try{if(prefs.awake&&document.visibilityState==="visible"&&navigator.wakeLock){if(!wakeLock||wakeLock.released)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
-  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.5</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
+  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.6</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
   function setPref(k,v){prefs[k]=v;try{localStorage.setItem("WerewolfSettings21",JSON.stringify(prefs));}catch(e){notice("บันทึกการตั้งค่าไม่สำเร็จ");}if(k==="awake")keepAwake();unlockAudio();}
   function backupGame(){const a=document.createElement("a");const url=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.href=url;a.download="werewolf-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
   async function restoreGame(input){if(!input.files?.length)return;try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:"2.5",undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
@@ -2368,6 +2389,8 @@ nav span {
 
       `;
 
+    } else if(r.id==='hoodlum'){actionUI=`<label>เป้าหมาย 1</label><select id="target">${targets('',p=>!nightActors(r).includes(p))}</select><label>เป้าหมาย 2</label><select id="target2">${targets('',p=>!nightActors(r).includes(p))}</select>`;
+    } else if(r.id==='mason'||r.id==='trouble'){actionUI=`<p class="speech">${esc(r.id==='mason'?nightActors(r).map(p=>p.name).join(', '):'ยืนยันเพื่อเปิดโหวตสองรอบวันถัดไป')}</p>`;
     } else if(r.action==="revealWolves") {
 
       actionUI = `
@@ -3491,7 +3514,7 @@ nav span {
   function rememberFold(t,v){folded[t]=v;}
   function persistPresets(){try{localStorage.setItem('WerewolfPresets24',JSON.stringify(presets));return true;}catch(e){notice('บันทึกชุดไม่สำเร็จ');return false;}}
   function savePreset(){const name=$('presetName').value.trim();if(!name)return formError('กรอกชื่อชุด');const counts={};let total=0;for(let i=0;i<S.roles.length;i++){const n=Number($('regCount_'+i).value);if(!Number.isInteger(n)||n<0)return formError('จำนวนไม่ถูกต้อง');if(n)counts[S.roles[i].id]=n;total+=n;}if(total>S.players.length)return formError('การ์ดเกินจำนวนผู้เล่น');counts.villager=(counts.villager||0)+S.players.length-total;const old=presets.findIndex(p=>p.name===name);if(old>=0)presets[old]={name,counts};else presets.push({name,counts});if(persistPresets()){$('presetSelect').innerHTML=presetOptions();$('presetSelect').value=String(presets.findIndex(p=>p.name===name));}}
-  function presetOptions(){return '<option value="">เลือกชุดการ์ด</option>'+presets.map((p,i)=>`<option value="${i}">${esc(p.name)} (${Object.values(p.counts).reduce((a,b)=>a+b,0)} คน)</option>`).join('');}
+  function presetOptions(){return '<option value="">เลือกชุดการ์ด</option>'+presets.map((p,i)=>`<option value="${i}">${esc(p.name)} (${Object.values(p.counts).reduce((a,b)=>a+b,0)} คน · แต้ม ${balance556(p.counts)??"?"})</option>`).join('');}
   function loadPreset(){const v=$('presetSelect').value;if(v==='')return;const p=presets[Number(v)];if(!p)return;if(Object.keys(p.counts).some(id=>!S.roles.some(r=>r.id===id)))return formError('ชุดนี้มีบทบาทที่ถูกลบแล้ว');if(Object.values(p.counts).reduce((a,b)=>a+b,0)!==S.players.length)return formError('จำนวนผู้เล่นไม่ตรงกับชุด');S.roles.forEach((r,i)=>$('regCount_'+i).value=p.counts[r.id]||0);$('presetName').value=p.name;updateRegistrationTotal();}
   function deletePreset(){const v=$('presetSelect').value;if(v==='')return;presets.splice(Number(v),1);if(persistPresets())$('presetSelect').innerHTML=presetOptions();}
   function readiness(){const n=S.players.length,w=S.players.filter(isWolf).length,assigned=S.players.filter(p=>role(p.roleId).id).length,v=S.players.filter(p=>role(p.roleId).team==='village').length;return {checks:[[n>=3,'ผู้เล่นอย่างน้อย 3 คน'],[assigned===n&&n>0,'บทบาทครบ '+assigned+'/'+n],[w>0,'มีหมาป่า'],[v>0,'มีฝ่ายชาวบ้าน'],[!S.registration,'ลงทะเบียนเสร็จหรือไม่อยู่ระหว่างลงทะเบียน'],[S.players.filter(p=>p.roleId==='doppelganger').length<=1,'ภูตจำแลงไม่เกินหนึ่งคน']],warning:w>0&&w>=n-w};}
@@ -3541,13 +3564,13 @@ nav span {
       <div class="item gold"
         id="registrationTotal">
         จำนวนการ์ดที่เลือก
-      </div>
+      </div><div id="balanceReg556"></div>${btn("จัดชุดแนะนำ","auto556()","full")}
 
       ${registrationOrder(S.roles.map(r=>r.id)).map(id=>{const i=S.roles.findIndex(r=>r.id===id), r=S.roles[i]; return `
         <div class="item row between">
 
           <div class="grow">
-            ${esc(r.icon+" "+r.name)}
+            ${esc(r.icon+" "+r.name)} <span class="muted small">${r.balance??"?"}</span>
           </div>
 
           ${btn(
@@ -3700,6 +3723,7 @@ nav span {
       );
     });
 
+    const bal=$("balanceReg556");if(bal)bal.innerHTML=balancePanel556(regCounts556(),true);
     const el = $("registrationTotal");
 
     if(el) {
@@ -4173,7 +4197,7 @@ nav span {
       cursedPanel() +
       loveNoticePanel() +
       loversPanel() +
-      specialRolePanel();
+      specialRolePanel()+extraPanel556();
 
     if(S.phase==="setup") {
 
@@ -4193,7 +4217,7 @@ nav span {
           "quickAdd()","full")}
 
 
-        ${readinessPanel()}
+        ${balancePanel556(playerCounts556())}${readinessPanel()}
         ${btn("🌙 เริ่มเกม",
           "startGame()","primary full")}
       `);
@@ -4497,10 +4521,10 @@ nav span {
 
       <p class="muted">
         คะแนนรวม ${total} /
-        ${alive().length}
-      </p>
+        ${voteCap556()}
+      </p><p class="small muted">นายกเทศมนตรี 2 เสียง · ผู้รักสันติไม่โหวตกำจัด · ไอ้ทึ่มต้องโหวตกำจัด</p>
 
-      ${alive().map(p=>`
+      ${alive().filter(p=>p.id!==S.exile556).map(p=>`
         <div class="item row">
           <div class="grow">
             <b>${esc(p.name)}</b><div style="height:5px;background:#393f54;border-radius:8px;margin-top:7px"><div style="height:5px;border-radius:8px;background:#8faaff;width:${Math.min(100,100*(S.votes[p.id]||0)/Math.max(1,alive().length))}%"></div></div>
@@ -4532,7 +4556,8 @@ nav span {
   // =========================
 
   function historyPage() {
-    return card(`
+    let h=[];try{h=JSON.parse(localStorage.getItem("WerewolfResults556")||"[]")}catch(e){}
+    return card(`<h2>สถิติสมดุล</h2>${h.map(x=>`<p>${esc(x.date.slice(0,10))} · ${esc(x.result)} · แต้ม ${x.balance??"?"}</p>`).join("")||"ยังไม่มีผลเกม"}`)+card(`
       <h2>📜 ประวัติเกม</h2>
 
       ${S.history.length
@@ -4565,6 +4590,8 @@ nav span {
   }
 
   function toggleInlineVote() {
+    if(!votingOpen&&S.vamp556){snapshot();const p=player(S.vamp556);S.vamp556="";if(p?.alive&&p.id!==S.exile556)killPlayer(p,"แวมไพร์");commit();}
+
     votingOpen = !votingOpen;
     render();
     if(votingOpen) document.getElementById("inlineVote")?.scrollIntoView({block:"start",behavior:"smooth"});
@@ -4574,6 +4601,7 @@ nav span {
   function toggleCompact25(){setPref("compact25",!prefs.compact25);render();}
   function powers25(){
     const rows=[];
+    ["priest","pi","trouble"].forEach(id=>{if(S.players.some(p=>p.roleId===id))rows.push([role(id).name,"จำนวนครั้ง",S.used556?.[id]?"0/1":"1/1"])});
     const add=(id,label,value)=>{if(S.players.some(p=>p.roleId===id)) rows.push([role(id).icon+" "+role(id).name,label,value]);};
     const target=(id)=>{const a=S.actions?.[id];const t=a?.skip?"":a?.target;const prev=S.previousNightTargets?.[id];return t?nameOf(t):prev?nameOf(prev)+" (คืนก่อน)":"ยังไม่มีเป้าหมาย";};
     add("witch","ยารักษา",S.potions.heal?"พร้อมใช้":"ใช้แล้ว");add("witch","ยาพิษ",S.potions.poison?"พร้อมใช้":"ใช้แล้ว");
@@ -4614,6 +4642,19 @@ nav span {
   // MAIN RENDER
   // =========================
 
+
+  function playerCounts556(){const c={};S.players.forEach(p=>{const id=p.roleId;if(id)c[id]=(c[id]||0)+1});return c;}
+  function balance556(c){let v=0;for(const [id,n] of Object.entries(c)){if(!n)continue;const p=role(id).balance;if(p==null||!Number.isFinite(p))return null;v+=p*n;}return v;}
+  function regCounts556(){const c={};S.roles.forEach((r,i)=>{const n=Math.max(0,Math.floor(Number($('regCount_'+i)?.value)||0));if(n)c[r.id]=n});const left=S.players.length-Object.values(c).reduce((a,b)=>a+b,0);if(left>0)c.villager=(c.villager||0)+left;return c;}
+  function balancePanel556(c,reg=false){const v=balance556(c),n=Object.values(c).reduce((a,b)=>a+b,0),w=(c.wolf||0)+(c.wolfCub||0)+(c.lone||0);let msg=v==null?'มีบทบาทไม่ทราบแต้ม':Math.abs(v)<=2?'ใกล้สมดุล':v>0?'ชาวบ้านมีแนวโน้มได้เปรียบ':'หมาป่ามีแนวโน้มได้เปรียบ';let warnings=[];if(!w||w>=n/2)warnings.push('ตรวจจำนวนหมาป่า');if(c.mason===1)warnings.push('เมสันควรมีอย่างน้อย 2 คน');if(c.apprentice&&!c.seer)warnings.push('ศิษย์ควรมีเทพพยากรณ์');if(c.pi)warnings.push('ลงทะเบียนตามที่นั่งจริง');if(['priest','pi','trouble','hoodlum','drunk','cult','vampire','hag'].some(id=>c[id]>1))warnings.push('บทบาทพิเศษใหม่ควรเลือกอย่างละหนึ่งคน');let suggestions=[];if(reg&&v!=null&&n===S.players.length)for(const [id,k] of Object.entries(c))for(const r of S.roles){if(!k||id===r.id||r.balance==null||r.id==='littleGirl'||(c[r.id]&&r.id!=='villager'&&r.id!=='wolf'))continue;const cc={...c,[id]:k-1,[r.id]:(c[r.id]||0)+1},ww=(cc.wolf||0)+(cc.wolfCub||0)+(cc.lone||0);const z=balance556(cc);if(ww>0&&ww<n/2&&Math.abs(z)<Math.abs(v))suggestions.push({id,to:r.id,z});}suggestions.sort((a,b)=>Math.abs(a.z)-Math.abs(b.z));return `<div class="item"><b class="${v!=null&&Math.abs(v)<=2?'green':'gold'}">⚖️ แต้ม ${v==null?'?':v>0?'+'+v:v} · ${msg}</b><p class="small muted">แต้มประมาณการ ไม่ใช่โอกาสชนะ · <a href="https://www.online-station.net/entertainment/690636">อ้างอิง</a></p>${warnings.map(x=>`<p class="gold small">${x}</p>`).join('')}${suggestions.slice(0,3).map(x=>btn('เปลี่ยน '+role(x.id).name+' → '+role(x.to).name+' ('+x.z+')',call('swap556',x.id,x.to),'full')).join('')}</div>`;}
+  function setCounts556(c){S.roles.forEach((r,i)=>{$('regCount_'+i).value=c[r.id]||0});updateRegistrationTotal();}
+  function swap556(a,b){const c=regCounts556();if(!c[a])return;c[a]--;c[b]=(c[b]||0)+1;setCounts556(c);}
+  function auto556(){const n=S.players.length;let best=null;for(let w=1;w<n/2;w++)for(let m=0;m<16;m++){const c={wolf:w,villager:n-w};['seer','guard','witch','hunter'].forEach((id,i)=>{if(m&(1<<i)){c[id]=1;c.villager--;}});if(c.villager<1||Object.keys(c).some(id=>!role(id).id))continue;const z=balance556(c);if(z==null)continue;const cost=Math.abs(z)*10+Math.abs(w-n/4)+Math.abs(Object.keys(c).length-4)*.1;if(!best||cost<best.cost)best={c,cost};}if(best)setCounts556(best.c);}
+  function voteCap556(){return alive().filter(p=>p.id!==S.exile556&&p.roleId!=='pacifist').reduce((a,p)=>a+(p.roleId==='mayor'?2:1),0);}
+  function extraPanel556(){if(!canVotePhase())return '';let o='';if(S.exile556)o+=`<p class="notice">แม่หมอ: ${esc(nameOf(S.exile556))} พักการโหวตวันนี้</p>`;if(S.vamp556)o+=`<p class="notice">แวมไพร์: เหยื่อจะตายก่อนเปิดโหวต</p>`;if(S.extra556)o+='<p class="notice">ตัวป่วน: วันนี้โหวตสองรอบ</p>';S.players.filter(p=>p.roleId==='ghost'&&!p.alive).forEach(p=>{const k=p.id+'_'+S.night;const v=S.ghost556?.[k];o+=`<div class="item">พรายกระซิบ ${esc(p.name)} ${v?esc(v):btn('บันทึกตัวอักษร',call('ghost556',p.id),'mini')}</div>`});return o?card(o):'';}
+  function ghost556(id){showModal('พรายกระซิบ','<input id="ghostChar556" placeholder="หนึ่งตัวอักษร">',()=>{const v=$('ghostChar556').value.trim();if(Array.from(v).length!==1)return formError('กรอกหนึ่งตัวอักษร');snapshot();S.ghost556=S.ghost556||{};S.ghost556[id+'_'+S.night]=v;log('พรายกระซิบ: '+v);closeModal();commit();});}
+  Object.assign(window,{auto556,swap556,ghost556});
+
   function render() {
 
     const pages = {
@@ -4644,7 +4685,7 @@ nav span {
           <h1>🐺 WEREWOLF</h1>
 
           <div class="subtitle">
-            MODERATOR WEB APP V2.5.5
+            MODERATOR WEB APP V2.5.6
           </div>
         </div>
 
