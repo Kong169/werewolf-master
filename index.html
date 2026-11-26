@@ -422,7 +422,7 @@ nav span {
 
 </style>
 
-    <title>WerewolfMaster V2.3</title>
+    <title>WerewolfMaster V2.4</title>
 
     <meta name="theme-color"
       content="#11131c">
@@ -478,6 +478,18 @@ nav span {
     function dashboard(initial) {
 
   let S = initial;
+  const guides = {"wolf": "ตื่นทุกคืน เลือกกำจัดผู้เล่นร่วมกัน", "guard": "ปกป้องผู้เล่นจากหมาป่า ห้ามเลือกคนเดิมสองคืนติด", "seer": "ตรวจสอบฝ่ายของผู้เล่น ห้ามเลือกคนเดิมสองคืนติด", "witch": "ยารักษาและยาพิษอย่างละหนึ่งครั้งตลอดเกม", "hunter": "เมื่อเสียชีวิต เลือกยิงผู้เล่นอีกหนึ่งคน", "villager": "อภิปรายและโหวตเพื่อค้นหาหมาป่า ไม่มีพลังพิเศษ", "cupid": "คืนแรกเลือกคู่รักสองคน เมื่อคนหนึ่งตาย อีกคนตายตาม", "jester": "พยายามให้ตนเองถูกโหวตออก ผู้ดำเนินเกมยืนยันผลชนะเอง"};
+  const folded = {};
+  function migrate24(){
+    S.roles.forEach(r=>{if(r.description==null && guides[r.id])r.description=guides[r.id];});
+    if(S.phase==='setup'){
+      S.roles=S.roles.filter(r=>r.id!=='littleGirl');
+      S.players.forEach(p=>{if(p.roleId==='littleGirl')p.roleId='villager';if(p.originalRoleId==='littleGirl')p.originalRoleId='villager';});
+      if(S.registration && (S.registration.counts?.littleGirl || S.registration.queue?.includes('littleGirl') || Object.values(S.registration.assignments||{}).includes('littleGirl')))delete S.registration;
+    }
+  }
+  migrate24();
+
   if (!S.previousNightTargets && S.night > 1) {
     const prev = (S.undo || []).slice().reverse().find(x=>x.night===S.night-1 && x.phase==='day');
     if (prev) S.previousNightTargets = {night:prev.night, guard:prev.actions?.guard?.skip?'':prev.actions?.guard?.target||'', seer:prev.actions?.seer?.skip?'':prev.actions?.seer?.target||''};
@@ -571,6 +583,7 @@ nav span {
 
   
     function commit() {
+      migrate24();
       try {
         localStorage.setItem(
           "WerewolfMasterV2",
@@ -1234,6 +1247,7 @@ nav span {
         ตื่นเฉพาะคืนแรก
       </label>
 
+      <label>คำอธิบายความสามารถ</label><textarea id="rdesc">${esc(r?.description||"")}</textarea>
       <label>บทพูดผู้ดำเนินเกม</label>
       <textarea id="rspeech">${esc(
         r?.speech||""
@@ -1264,6 +1278,7 @@ nav span {
           order:order,
           firstOnly:$("firstOnly").checked,
           speech:$("rspeech").value,
+          description:$("rdesc").value,
           action:r?.action||"custom"
         };
 
@@ -1355,7 +1370,8 @@ nav span {
       return notice("ต้องมีฝ่ายชาวบ้าน");
     }
 
-    ask(prefs.discussion ? "เริ่มช่วงอภิปรายก่อนคืนแรก?" : "เริ่มเกมคืนที่ 1?",()=>{
+    if(!readiness().checks.every(([ok])=>ok))return notice("ตรวจสอบความพร้อมก่อนเริ่มเกม");
+    ask((readiness().warning?"⚠ หมาป่ามีจำนวนมาก ต้องการเล่นต่อ? ":"")+(prefs.discussion ? "เริ่มช่วงอภิปรายก่อนคืนแรก?" : "เริ่มเกมคืนที่ 1?"),()=>{
       snapshot();
 
       
@@ -2124,11 +2140,11 @@ nav span {
   function speakCue(manual=true){const t=cue()[1];if(!t)return;if(!window.speechSynthesis){if(manual)notice("อุปกรณ์ไม่รองรับเสียงพูด");return;} try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="th-TH";u.rate=Number(prefs.rate)||1;const v=speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith("th"));if(v)u.voice=v;speechSynthesis.speak(u);}catch(e){if(manual)notice("ไม่สามารถอ่านเสียงได้");}}
   function syncCue(){const k=cue()[0];if(k!==lastCue){lastCue=k;if(prefs.autoSpeech)speakCue(false);}}
   async function keepAwake(){try{if(prefs.awake&&document.visibilityState==="visible"&&navigator.wakeLock){if(!wakeLock||wakeLock.released)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
-  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.3</h2>${[["autoSpeech","อ่านบทพูดอัตโนมัติ"],["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}<label>ความเร็วเสียงพูด</label><select onchange="setPref('rate',Number(this.value))">${[.75,1,1.25,1.5].map(n=>`<option ${prefs.rate===n?"selected":""} value="${n}">${n}x</option>`).join("")}</select>${btn("ทดสอบเสียง","testSound()","full")}${btn("สำรองข้อมูลเกม","backupGame()","full")}<label class="check">กู้คืนข้อมูลเกม<input type="file" accept=".json,application/json" onchange="restoreGame(this)"></label><p class="notice">เสียงและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
+  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.4</h2>${[["autoSpeech","อ่านบทพูดอัตโนมัติ"],["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}<label>ความเร็วเสียงพูด</label><select onchange="setPref('rate',Number(this.value))">${[.75,1,1.25,1.5].map(n=>`<option ${prefs.rate===n?"selected":""} value="${n}">${n}x</option>`).join("")}</select>${btn("ทดสอบเสียง","testSound()","full")}${btn("สำรองข้อมูลเกม","backupGame()","full")}<label class="check">กู้คืนข้อมูลเกม<input type="file" accept=".json,application/json" onchange="restoreGame(this)"></label><p class="notice">เสียงและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
   function setPref(k,v){prefs[k]=v;try{localStorage.setItem("WerewolfSettings21",JSON.stringify(prefs));}catch(e){notice("บันทึกการตั้งค่าไม่สำเร็จ");}if(k==="autoSpeech"&&!v)window.speechSynthesis?.cancel();if(k==="awake")keepAwake();unlockAudio();}
   function testSound(){unlockAudio();if(window.speechSynthesis){const u=new SpeechSynthesisUtterance("ทดสอบเสียงผู้ดำเนินเกม");u.lang="th-TH";u.rate=prefs.rate;speechSynthesis.speak(u);}beep(true);}
   function backupGame(){const a=document.createElement("a");const url=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.href=url;a.download="werewolf-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
-  async function restoreGame(input){try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:2.3,undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
+  async function restoreGame(input){try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:2.4,undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
   document.addEventListener("visibilitychange",keepAwake);
   Object.assign(window,{timerResume,timerReset,timerCustom,firstNight,speakCue,setPref,testSound,backupGame,restoreGame});
 
@@ -2163,6 +2179,10 @@ nav span {
             ${esc(r.name)} ·
             ${p.alive?"รอดชีวิต":"เสียชีวิต"}
 
+          ${p.alive&&S.phase==='day'&&S.silenced===p.id?'<div class="small gold">🤫 ห้ามพูดวันนี้</div>':''}
+          ${p.alive&&S.phase==='night'&&S.actions.guard?.target===p.id?'<div class="small blue">🛡️ ได้รับการปกป้อง</div>':''}
+          ${p.roleId==='witch'?`<div class="small muted">ยารักษา: ${S.potions.heal?'พร้อม':'ใช้แล้ว'} · ยาพิษ: ${S.potions.poison?'พร้อม':'ใช้แล้ว'}</div>`:''}
+          ${p.roleId==='revealer'&&S.revealerUsed?'<div class="small gold">ใช้พลังแล้ว</div>':''}
           ${p.alive &&
              p.toughDueNight>0
             ?`<div class="small gold">
@@ -3448,6 +3468,17 @@ nav span {
     return S.registration || null;
   }
 
+  let presets=[];try{presets=JSON.parse(localStorage.getItem('WerewolfPresets24')||'[]');if(!Array.isArray(presets))presets=[];}catch(e){}
+  function rememberFold(t,v){folded[t]=v;}
+  function persistPresets(){try{localStorage.setItem('WerewolfPresets24',JSON.stringify(presets));return true;}catch(e){notice('บันทึกชุดไม่สำเร็จ');return false;}}
+  function savePreset(){const name=$('presetName').value.trim();if(!name)return formError('กรอกชื่อชุด');const counts={};let total=0;for(let i=0;i<S.roles.length;i++){const n=Number($('regCount_'+i).value);if(!Number.isInteger(n)||n<0)return formError('จำนวนไม่ถูกต้อง');if(n)counts[S.roles[i].id]=n;total+=n;}if(total>S.players.length)return formError('การ์ดเกินจำนวนผู้เล่น');counts.villager=(counts.villager||0)+S.players.length-total;const old=presets.findIndex(p=>p.name===name);if(old>=0)presets[old]={name,counts};else presets.push({name,counts});if(persistPresets()){$('presetSelect').innerHTML=presetOptions();$('presetSelect').value=String(presets.findIndex(p=>p.name===name));}}
+  function presetOptions(){return '<option value="">เลือกชุดการ์ด</option>'+presets.map((p,i)=>`<option value="${i}">${esc(p.name)} (${Object.values(p.counts).reduce((a,b)=>a+b,0)} คน)</option>`).join('');}
+  function loadPreset(){const v=$('presetSelect').value;if(v==='')return;const p=presets[Number(v)];if(!p)return;if(Object.keys(p.counts).some(id=>!S.roles.some(r=>r.id===id)))return formError('ชุดนี้มีบทบาทที่ถูกลบแล้ว');if(Object.values(p.counts).reduce((a,b)=>a+b,0)!==S.players.length)return formError('จำนวนผู้เล่นไม่ตรงกับชุด');S.roles.forEach((r,i)=>$('regCount_'+i).value=p.counts[r.id]||0);$('presetName').value=p.name;updateRegistrationTotal();}
+  function deletePreset(){const v=$('presetSelect').value;if(v==='')return;presets.splice(Number(v),1);if(persistPresets())$('presetSelect').innerHTML=presetOptions();}
+  function readiness(){const n=S.players.length,w=S.players.filter(isWolf).length,assigned=S.players.filter(p=>role(p.roleId).id).length,v=S.players.filter(p=>role(p.roleId).team==='village').length;return {checks:[[n>=3,'ผู้เล่นอย่างน้อย 3 คน'],[assigned===n&&n>0,'บทบาทครบ '+assigned+'/'+n],[w>0,'มีหมาป่า'],[v>0,'มีฝ่ายชาวบ้าน'],[!S.registration,'ลงทะเบียนเสร็จหรือไม่อยู่ระหว่างลงทะเบียน'],[S.players.filter(p=>p.roleId==='doppelganger').length<=1,'ภูตจำแลงไม่เกินหนึ่งคน']],warning:w>0&&w>=n-w};}
+  function readinessPanel(){const r=readiness();return `<h3>📋 ตรวจสอบความพร้อม</h3>${r.checks.map(([ok,t])=>`<div class="small ${ok?'green':'red'}">${ok?'✓':'✕'} ${esc(t)}</div>`).join('')}${r.warning?'<p class="notice">⚠ หมาป่ามีจำนวนมาก ควรตรวจสอบสมดุล</p>':''}`;}
+  async function shareResult(){if(S.phase!=='ended')return;const text=`WerewolfMaster\nผู้ชนะ: ${S.result}\nผู้เล่น ${S.players.length} คน | ${S.night} คืน | รอด ${alive().length} คน`;try{if(navigator.share){await navigator.share({text});return;}if(navigator.clipboard){await navigator.clipboard.writeText(text);return notice('คัดลอกสรุปแล้ว');}}catch(e){if(e.name==='AbortError')return;}showModal('แชร์สรุป',`<textarea readonly>${esc(text)}</textarea>`);}
+  Object.assign(window,{rememberFold,savePreset,loadPreset,deletePreset,shareResult});
   function openRegistration() {
 
     if(S.phase !== "setup") {
@@ -3487,6 +3518,7 @@ nav span {
         เลือกจำนวนการ์ดที่ใช้จริง
       </div>
 
+      <label>ชุดการ์ด Preset</label><select id="presetSelect">${presetOptions()}</select><div class="row">${btn('ใช้ชุด','loadPreset()','grow')}${btn('ลบชุด','deletePreset()','danger')}</div><input id="presetName" placeholder="ชื่อชุดใหม่ / ชื่อเดิมเพื่อแก้ไข">${btn('บันทึกชุดจากจำนวนด้านล่าง','savePreset()','full')}
       <div class="item gold"
         id="registrationTotal">
         จำนวนการ์ดที่เลือก
@@ -4144,6 +4176,7 @@ nav span {
         ${btn("🎲 สุ่มบทบาท",
           "shuffleRoles()","full")}
 
+        ${readinessPanel()}
         ${btn("🌙 เริ่มเกม",
           "startGame()","primary full")}
       `);
@@ -4212,7 +4245,8 @@ nav span {
       out += card(`
         <h2 class="gold">🏆 จบเกม</h2>
 
-        <h1>${esc(S.result)}</h1>
+        <h1>${esc(S.result)}</h1><p>ผู้เล่น ${S.players.length} คน · ${S.night} คืน · รอดชีวิต ${alive().length} คน</p>
+        ${btn('📜 ดูเหตุการณ์ทั้งหมด',call('go','history'),'full')}${btn('📤 แชร์สรุปผล','shareResult()','full')}
 
         ${btn("เริ่มเกมใหม่",
           "resetGame()","primary full")}
@@ -4339,7 +4373,7 @@ nav span {
           "editRole()","mini primary")}
       </div>
 
-      ${S.roles.map(r=>`
+      ${["wolf","village","neutral"].map(t=>`<details ${folded[t]===false?"":"open"} ontoggle="rememberFold('${t}',this.open)"><summary style="padding:12px;color:var(--blue)">${teamName(t)} · ${S.roles.filter(r=>r.team===t).length} ตัวละคร</summary>${S.roles.filter(r=>r.team===t).map(r=>`
         <div class="item row">
           <div class="avatar">
             ${esc(r.icon)}
@@ -4381,7 +4415,7 @@ nav span {
               "mini danger")
             :""}
         </div>
-      `).join("")}
+      `).join("")}</details>`).join("")}
     `)+card(`
       <h2>🧪 สถานะยาแม่มด</h2>
 
@@ -4559,7 +4593,7 @@ nav span {
           <h1>🐺 WEREWOLF</h1>
 
           <div class="subtitle">
-            MODERATOR WEB APP V2.3
+            MODERATOR WEB APP V2.4
           </div>
         </div>
 
