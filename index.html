@@ -433,9 +433,18 @@ nav span {
   background:#30384f;
 }
 
+
+.reg557group{border:1px solid var(--line);border-radius:12px;margin:8px 0;overflow:hidden}
+.reg557group summary{padding:12px;background:#2d3446;cursor:pointer;font-weight:600;list-style-position:inside}
+.reg557badge{float:right;color:#aebbd5;font-size:12px}
+.reg557row{padding:7px 9px;gap:6px}.reg557row .count{width:48px;text-align:center;padding:8px 3px}.reg557row button{min-width:32px;padding:7px}.reg557row .grow{min-width:0;overflow-wrap:anywhere;font-size:14px}
+.reg557row[hidden],.reg557group[hidden]{display:none!important}
+.reg557tools{margin:10px 0}.reg557tools input{margin-bottom:6px}
+.reg557modal #registrationTotal{position:sticky;top:0;z-index:2;background:#222736;padding:9px 0}
+.reg557modal .modalButtons{position:sticky;bottom:0;background:#222736;padding:8px 0;margin-top:8px;z-index:3}
 </style>
 
-    <title>WerewolfMaster V2.5.6</title>
+    <title>WerewolfMaster V2.5.7</title>
 
     <meta name="theme-color"
       content="#11131c">
@@ -2176,7 +2185,7 @@ nav span {
   }
   function firstNight() { if(hasPendingHunter())return openHunter(); if(S.phase!=="discussion")return; ask(S.voted?"เริ่มคืนที่ 1?":"ยังไม่ได้โหวต ต้องการข้ามและเริ่มคืนที่ 1?",()=>{snapshot();beginNight();tab="home";commit();}); }
   async function keepAwake(){try{if(prefs.awake&&document.visibilityState==="visible"&&navigator.wakeLock){if(!wakeLock||wakeLock.released)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
-  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.6</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
+  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.7</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
   function setPref(k,v){prefs[k]=v;try{localStorage.setItem("WerewolfSettings21",JSON.stringify(prefs));}catch(e){notice("บันทึกการตั้งค่าไม่สำเร็จ");}if(k==="awake")keepAwake();unlockAudio();}
   function backupGame(){const a=document.createElement("a");const url=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.href=url;a.download="werewolf-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
   async function restoreGame(input){if(!input.files?.length)return;try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:"2.5",undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
@@ -3566,11 +3575,12 @@ nav span {
         จำนวนการ์ดที่เลือก
       </div><div id="balanceReg556"></div>${btn("จัดชุดแนะนำ","auto556()","full")}
 
-      ${registrationOrder(S.roles.map(r=>r.id)).map(id=>{const i=S.roles.findIndex(r=>r.id===id), r=S.roles[i]; return `
-        <div class="item row between">
+      <div class="reg557tools"><input id="regSearch557" placeholder="🔎 ค้นหาบทบาท" oninput="filterReg557()"><label class="check"><input type="checkbox" id="regSelected557" onchange="filterReg557()"> แสดงเฉพาะที่เลือก</label></div>
+      ${[["wolf","🐺 ฝ่ายหมาป่า"],["village","👨‍🌾 ฝ่ายชาวบ้าน"],["neutral","🎭 ฝ่ายอิสระ"],["other","❔ อื่น ๆ"]].map(([team,label])=>{const ids=registrationOrder(S.roles.map(r=>r.id)).filter(id=>{const r=S.roles.find(x=>x.id===id);return team==='other'?!['wolf','village','neutral'].includes(r.team):r.team===team});if(!ids.length)return '';return `<details class="reg557group" ${team==='wolf'||team==='village'?'open':''}><summary>${label} <span class="reg557badge" data-team="${team}"></span></summary>${ids.map(id=>{const i=S.roles.findIndex(r=>r.id===id),r=S.roles[i];return `
+        <div class="item row between reg557row">
 
           <div class="grow">
-            ${esc(r.icon+" "+r.name)} <span class="muted small">${r.balance??"?"}</span>
+            ${esc(r.icon+" "+r.name)} <span class="muted small">${r.balance==null?"?":r.balance>0?"+"+r.balance:r.balance}</span>
           </div>
 
           ${btn(
@@ -3596,8 +3606,7 @@ nav span {
           )}
 
         </div>
-      `;}).join("")}
-
+      `;}).join('')}</details>`;}).join('')}
       <p class="notice">
         จำนวนที่เหลือจะเป็นชาวบ้าน
         โดยอัตโนมัติ
@@ -3693,6 +3702,7 @@ nav span {
       "เริ่มลงทะเบียน"
     );
 
+    document.querySelector(".modal").classList.add("reg557modal");
     updateRegistrationTotal();
   }
 
@@ -3713,6 +3723,12 @@ nav span {
     updateRegistrationTotal();
   }
 
+  function filterReg557(){
+    const search=$('regSearch557');if(!search)return;
+    const term=search.value.trim().toLowerCase(), only=$('regSelected557').checked;
+    document.querySelectorAll('.reg557group').forEach(g=>{let visible=0,total=0;g.querySelectorAll('.reg557row').forEach(row=>{const input=row.querySelector('input');const i=Number(input.id.split('_').pop()),r=S.roles[i],n=Number(input.value)||0;total+=n;const match=(!term||(r.name+' '+r.id).toLowerCase().includes(term))&&(!only||n>0);row.hidden=!match;if(match)visible++;});g.querySelector('.reg557badge').textContent=total+' ใบ';g.hidden=!visible;if((term||only)&&visible)g.open=true;});
+  }
+  window.filterReg557=filterReg557;
   function updateRegistrationTotal() {
 
     let total = 0;
@@ -3723,6 +3739,7 @@ nav span {
       );
     });
 
+    filterReg557();
     const bal=$("balanceReg556");if(bal)bal.innerHTML=balancePanel556(regCounts556(),true);
     const el = $("registrationTotal");
 
@@ -4685,7 +4702,7 @@ nav span {
           <h1>🐺 WEREWOLF</h1>
 
           <div class="subtitle">
-            MODERATOR WEB APP V2.5.6
+            MODERATOR WEB APP V2.5.7
           </div>
         </div>
 
