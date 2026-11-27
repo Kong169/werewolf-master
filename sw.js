@@ -1,11 +1,12 @@
 
-const CACHE = "werewolf-v2-5-12-001";
+const CACHE = "werewolf-v2-5-13-embedded-002";
 
 const FILES = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./icon.png"
+  "./icon.png",
+  "./icon-192.png",
 ];
 
 self.addEventListener("install", e => {
