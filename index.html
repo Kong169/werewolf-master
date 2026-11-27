@@ -442,9 +442,40 @@ nav span {
 .reg557tools{margin:10px 0}.reg557tools input{margin-bottom:6px}
 .reg557modal #registrationTotal{position:sticky;top:0;z-index:2;background:#222736;padding:9px 0}
 .reg557modal .modalButtons{position:sticky;bottom:0;background:#222736;padding:8px 0;margin-top:8px;z-index:3}
+
+/* Retro RPG skin: presentation only; no layout or game state changes. */
+:root{--bg:#101020;--card:#202039;--line:#555077;--text:#fff3d9;--muted:#b9b4cf;--green:#83e3ae;--red:#ff92a4;--blue:#a9baff;--gold:#f6d27d}
+body{background-color:var(--bg);background-image:linear-gradient(90deg,#ffffff04 1px,transparent 1px),linear-gradient(#ffffff04 1px,transparent 1px);background-size:16px 16px}
+header h1{color:var(--gold);letter-spacing:1px;text-shadow:2px 2px #76503d;font-family:ui-monospace,Menlo,monospace;font-weight:900}
+.subtitle{color:#c2b2e0;letter-spacing:1.5px}
+.card,.stat,.modal{border-radius:2px;border:2px solid var(--line);box-shadow:inset 0 0 0 2px #141426,3px 3px 0 #080812;background-color:var(--card)}
+.card h2,.modal h2{color:var(--gold)}
+.stat strong,.timer,.voteNumber{font-family:ui-monospace,Menlo,monospace;font-weight:800;letter-spacing:-1px;text-shadow:2px 2px #101020}
+.stat{background-image:linear-gradient(180deg,#ffffff06,transparent)}
+.badge{border-radius:0;border:1px solid #8073a8;background:#30274a;color:var(--gold)}
+button{border-radius:2px;background:#393451;box-shadow:inset 0 0 0 1px #71658c,0 3px 0 #0b0b18;color:var(--text)}
+button.primary{background:#4c4383;box-shadow:inset 0 0 0 1px #b0a0ef,0 3px 0 #16112e;color:#fff3d9}
+button.success{background:#244c40;box-shadow:inset 0 0 0 1px #64b58d,0 3px 0 #101b19;color:var(--green)}
+button.danger{background:#572c40;box-shadow:inset 0 0 0 1px #b86a82,0 3px 0 #25101b;color:var(--red)}
+button:disabled{opacity:.45;cursor:default}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+input,select,textarea{border-radius:2px;background:#151529;border-color:#61567e;accent-color:#b4a0f0}
+.speech{border-radius:0;background:#151529;border-left:4px solid var(--gold);box-shadow:inset 0 0 0 1px #403752}
+.avatar{border-radius:2px;background:#393451;box-shadow:inset 0 0 0 1px #75638d}
+.progress{border-radius:0;background:#151529;box-shadow:inset 0 0 0 1px #61567e}
+.progress div{background:repeating-linear-gradient(90deg,#83e3ae 0 8px,#4c9d80 8px 10px)}
+nav{background:#19182d;border-top:2px solid #8c754f}
+nav button{background:transparent;box-shadow:none;color:var(--muted)}
+nav button.active{color:var(--gold);background:#352d46;box-shadow:inset 0 0 0 1px #8c754f}
+.modal{background:#202039;border-color:#8c754f;box-shadow:inset 0 0 0 2px #141426,4px 4px 0 #080812}
+.reg557group{border-radius:2px;border-color:#61567e}
+.reg557group summary{background:#393451;color:var(--gold)}
+.reg557modal #registrationTotal,.reg557modal .modalButtons{background:#202039}
+.clearButton,.clearRoleButton{border-radius:2px;background:transparent}
+
 </style>
 
-    <title>WerewolfMaster V2.5.11</title>
+    <title>WerewolfMaster V2.5.12</title>
 
     <meta name="theme-color"
       content="#11131c">
@@ -2224,7 +2255,7 @@ nav span {
   }
   function firstNight() { if(hasPendingHunter())return openHunter(); if(S.phase!=="discussion")return; ask(S.voted?"เริ่มคืนที่ 1?":"ยังไม่ได้โหวต ต้องการข้ามและเริ่มคืนที่ 1?",()=>{snapshot();beginNight();tab="home";commit();}); }
   async function keepAwake(){try{if(prefs.awake&&document.visibilityState==="visible"&&navigator.wakeLock){if(!wakeLock||wakeLock.released)wakeLock=await navigator.wakeLock.request("screen");}else if(wakeLock){await wakeLock.release();wakeLock=null;}}catch(e){}}
-  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.11</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
+  function settingsPage(){return card(`<h2>⚙️ ตั้งค่า V2.5.12</h2>${[["sound","เสียงเตือน"],["warning","เตือนก่อนหมดเวลา 10 วินาที"],["awake","ป้องกันหน้าจอดับ"],["discussion","อภิปรายก่อนคืนแรก"]].map(([k,t])=>`<label class="check"><input type="checkbox" ${prefs[k]?"checked":""} onchange="setPref('${k}',this.checked)">${t}</label>`).join("")}${btn("สำรองข้อมูลเกม","backupGame()","full")}${btn("📂 กู้คืนข้อมูลเกม","document.getElementById('restoreFile').click()","full")}<input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreGame(this)"><p class="small muted">เลือกไฟล์สำรอง .json จากแอปไฟล์</p><p class="notice">เสียงเตือนและการเปิดหน้าจอขึ้นกับการรองรับของ iOS</p>`);}
   function setPref(k,v){prefs[k]=v;try{localStorage.setItem("WerewolfSettings21",JSON.stringify(prefs));}catch(e){notice("บันทึกการตั้งค่าไม่สำเร็จ");}if(k==="awake")keepAwake();unlockAudio();}
   function backupGame(){const a=document.createElement("a");const url=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.href=url;a.download="werewolf-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
   async function restoreGame(input){if(!input.files?.length)return;try{const x=JSON.parse(await input.files[0].text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.roles)||!Array.isArray(x.history)||!Array.isArray(x.queue)||!x.votes||!x.actions||!x.potions||!x.players.every(p=>typeof p.id==="string"&&typeof p.name==="string"&&typeof p.alive==="boolean")||!x.roles.every(r=>typeof r.id==="string"&&typeof r.name==="string")||!["setup","discussion","night","day","ended"].includes(x.phase))throw Error();ask("แทนที่ข้อมูลเกมปัจจุบัน?",()=>{S={...fresh(),...x,version:"2.5",undo:[]};tab="home";commit();if(hasPendingHunter())scheduleHunter();});}catch(e){notice("ไฟล์สำรองไม่ถูกต้อง");}input.value="";}
@@ -4770,7 +4801,7 @@ nav span {
           <h1>🐺 WEREWOLF</h1>
 
           <div class="subtitle">
-            MODERATOR WEB APP V2.5.11
+            MODERATOR WEB APP V2.5.12
           </div>
         </div>
 
